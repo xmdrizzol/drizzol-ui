@@ -1,0 +1,194 @@
+/*
+ * 文章内容排版（编辑器与展示侧统一）
+ *
+ * 这是 m-editor 编辑态与 m-content 展示态共用的排版单一来源。
+ * 修改正文排版（标题/段落/引用/表格/代码块等）请改这里的 @mixin prose。
+ * 全局 _global.scss 中的 blockquote/table/hr 仅为站点级兜底，权重低于本作用域。
+ */
+
+@use './mixin.scss' as *;
+@use './variables.scss' as *;
+
+@mixin prose {
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--dz-text);
+    word-break: break-word;
+
+    // 标题：字号收敛（页面本身已有一级大标题），靠上边距拉开章节节律
+    h1, h2, h3, h4, h5, h6 {
+        margin: 1.6em 0 0.7em;
+        font-weight: 600;
+        color: var(--dz-text-h);
+        line-height: 1.35;
+        // 原生锚点跳转的落点预留固定导航栏高度，避免标题被遮住
+        scroll-margin-top: 76px;
+
+        &:first-child {
+            margin-top: 0;
+        }
+    }
+
+    h1 { font-size: 1.375em; }   // 22px
+    h2 { font-size: 1.1875em; }  // 19px
+    h3 { font-size: 1.0625em; }  // 17px
+    h4 { font-size: 1em; }       // 16px
+    h5 { font-size: 0.9375em; }
+    h6 { font-size: 0.875em; color: var(--dz-text-d); }
+
+    // h2 带品牌渐变饰条，作为章节锚点
+    h2 {
+        position: relative;
+        padding-left: 14px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 1.05em;
+            border-radius: 99px;
+            background: linear-gradient(180deg, var(--dz-primary), var(--dz-link));
+        }
+    }
+
+    // 强调
+    strong {
+        font-weight: 600;
+        color: var(--dz-text-h);
+    }
+
+    // 链接：品牌橙 + 悬停下划线（不改变布局）
+    a {
+        color: var(--dz-link);
+        text-underline-offset: 3px;
+
+        &:hover {
+            color: var(--dz-link-hover);
+            text-decoration: underline;
+        }
+    }
+
+    // 段落与列表（行高回继承，覆盖 wangEditor 的 p/li/blockquote/td/th { line-height: 1.5 }）
+    p {
+        margin: 0 0 1.1em;
+        line-height: inherit;
+    }
+
+    ul, ol {
+        padding-left: 1.5em;
+        margin: 0 0 1.1em;
+    }
+
+    li {
+        margin: 4px 0;
+        line-height: inherit;
+    }
+
+    // 无序列表圆点用主色，低调提亮
+    ul li::marker {
+        color: var(--dz-primary);
+    }
+
+    img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    // 引用：半透明主色罩 + 左侧主色条
+    blockquote {
+        margin: 0 0 1.1em;
+        padding: 12px 16px;
+        border-left: 3px solid var(--dz-primary);
+        background: color-mix(in srgb, var(--dz-primary) 6%, transparent);
+        color: var(--dz-text-d);
+        border-radius: 0 8px 8px 0;
+        line-height: inherit;
+
+        p {
+            margin: 0;
+        }
+    }
+
+    // 表格
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0 0 1.1em;
+        font-size: 14px;
+    }
+
+    th,
+    td {
+        border: 1px solid var(--dz-border);
+        padding: 8px 12px;
+        text-align: left;
+        color: var(--dz-text);
+        line-height: inherit;
+    }
+
+    th {
+        background: var(--dz-bg-secondary);
+        font-weight: 600;
+        color: var(--dz-text-h);
+    }
+
+    tr:nth-child(even) td {
+        background: var(--dz-bg-secondary);
+    }
+
+    // 分割线：两端渐隐的呼吸线
+    hr {
+        border: none;
+        height: 1px;
+        margin: 2em auto;
+        background: linear-gradient(90deg, transparent, var(--dz-border) 18%, var(--dz-border) 82%, transparent);
+    }
+
+    // 行内代码：中性灰底（恢复原样式）
+    code {
+        font-family: var(--dz-ff-mono);
+        font-size: 0.9em;
+        background: var(--dz-code-bg);
+        color: var(--dz-text);
+        padding: 2px 6px;
+        border-radius: 4px;
+    }
+
+    // ==================== 深色代码块（编辑器/展示侧共用） ====================
+
+    pre {
+        margin: 0;
+        overflow-x: auto;
+
+        @include scrollbars;
+    }
+
+    pre > code {
+        display: block;
+        margin: 16px 0;
+        background: #1e1e1e; // 与展示侧 shiki dark-plus 一致
+        color: #d4d4d4;
+        border: 1px solid var(--dz-border);
+        border-radius: 8px;
+        padding: 16px;
+        font-family: var(--dz-ff-mono);
+        font-size: 14px;
+        line-height: 1.6;
+        text-shadow: none; // 覆盖 wangEditor 的 text-shadow: 0 1px #fff
+        white-space: pre;
+        tab-size: 4;
+    }
+
+    // 展示侧：外层是 pre.shiki（自带内联深色背景），内层 code 复位避免双重盒子
+    .code-block-body pre > code {
+        margin: 0;
+        background: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+    }
+}

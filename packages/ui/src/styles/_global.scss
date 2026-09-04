@@ -1,0 +1,200 @@
+@use './mixin.scss' as *;
+@use './variables' as *;
+
+html {
+
+    // 小屏适配
+    @include mobile {
+        font-size: 14px !important;
+    }
+
+    scroll-behavior: smooth;
+    font-size: 16px;
+}
+
+body {
+    @include scrollbars;
+
+    font-family: var(--dz-ff-sans);
+    margin: 0;
+    padding: 0;
+    background: var(--dz-bg);
+}
+
+* {
+    box-sizing: border-box;
+    background-color: transparent;
+    // transition: background-color 0.2s ease-in-out;
+}
+
+code {
+    font-family: var(--dz-ff-mono) !important;
+    text-shadow: none !important;
+
+    span {
+        font-family: var(--dz-ff-mono) !important;
+    }
+}
+
+// ==================== 代码高亮 (Shiki) ====================
+
+.code-block-wrapper {
+    margin: 0 0 16px;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--dz-border);
+
+    .code-block-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 6px 12px;
+        background: #2d2d2d;
+        border-bottom: 1px solid #3d3d3d;
+        user-select: none;
+
+        .code-block-lang {
+            font-size: 12px;
+            color: #999;
+            text-transform: lowercase;
+        }
+    }
+
+    .code-copy-btn {
+        font-size: 12px;
+        color: #999;
+        background: none;
+        border: 1px solid #555;
+        border-radius: 4px;
+        padding: 2px 8px;
+        cursor: pointer;
+        transition: all 0.15s;
+        font-family: inherit;
+
+        &:hover {
+            color: #ccc;
+            border-color: #777;
+        }
+
+        &.is-copied {
+            color: #4caf50;
+            border-color: #4caf50;
+        }
+    }
+
+    .code-block-body {
+        pre {
+            margin: 0;
+            border-radius: 0;
+            padding: 16px;
+            overflow-x: auto;
+            color: #D4D4D4;
+
+            @include scrollbars;
+
+            code {
+                display: block;
+                background: none;
+                padding: 0;
+                border: none;
+                overflow: visible;
+                font-size: 14px;
+                line-height: 1.6;
+
+                span {
+                    color: #D4D4D4;
+                }
+            }
+        }
+    }
+}
+
+a {
+    // text-decoration: none;
+    color: var(--dz-link);
+
+    &:hover {
+        color: var(--dz-link-hover);
+    }
+
+    &:visited {
+        color: var(--dz-link-visited);
+    }
+
+    span {
+        color: var(--dz-link);
+    }
+}
+
+hr {
+    border: none;
+    border-bottom: 1px solid var(--dz-border);
+    margin: 16px 0;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 0 16px;
+    font-size: 14px;
+
+    th,
+    td {
+        border: 1px solid var(--dz-border);
+        padding: 8px 12px;
+        text-align: left;
+    }
+
+    th {
+        background: var(--dz-bg-secondary);
+        font-weight: 600;
+        color: var(--dz-text-h);
+    }
+
+    td {
+        color: var(--dz-text);
+    }
+
+    tr:nth-child(even) td {
+        background: var(--dz-bg-secondary);
+    }
+}
+
+// 文章内容排版请改 styles/_prose.scss 的 @mixin prose，此处为全局兜底
+blockquote {
+    margin: 0 0 16px;
+    padding: 8px 16px;
+    border-left: 4px solid var(--dz-primary);
+    background: var(--dz-primary-hover-2);
+    color: var(--dz-text-d);
+    border-radius: 0 4px 4px 0;
+
+    p {
+        margin: 0;
+    }
+}
+
+// ==================== element-plus ====================
+
+.el-drawer{
+    background-color: var(--dz-bg);
+
+    &__header{
+        color: var(--dz-text);
+    }
+}
+
+// 全局的内容布局
+.content {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px 16px;
+}
+
+.title {
+    margin: 32px 0;
+}
+
+.fixed-rb {
+    @include fixed(null, 16px, 16px, null)
+}

@@ -1,0 +1,284 @@
+@use "./variables" as *;
+
+// ========================================
+// 1. 淡入淡出动画
+// ========================================
+
+/**
+ * 淡入动画
+ * @param {Time} $duration - 动画时长
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin fade-in($duration: $anim-duration-base, $easing: $ease-out-back) {
+  animation: fadeIn $duration $easing forwards;
+}
+
+/**
+ * 淡出动画
+ * @param {Time} $duration - 动画时长
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin fade-out($duration: $anim-duration-base, $easing: $ease-in-back) {
+  animation: fadeOut $duration $easing forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+// ========================================
+// 2. 滑动动画（上下左右）
+// ========================================
+
+/**
+ * 从上往下滑入
+ * @param {Time} $duration - 动画时长
+ * @param {Length} $offset - 初始偏移量
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin slide-down-in($duration: $anim-duration-base, $offset: -8px, $easing: $ease-out-back) {
+  animation: slideDownIn $duration $easing forwards;
+  --slide-offset: #{$offset};
+}
+
+/**
+ * 从下往上滑出
+ * @param {Time} $duration - 动画时长
+ * @param {Length} $offset - 初始偏移量
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin slide-up-out($duration: $anim-duration-base, $offset: -8px, $easing: $ease-in-back) {
+  animation: slideDownIn $duration $easing forwards reverse;
+  --slide-offset: #{$offset};
+}
+
+/**
+ * 从下往上滑入
+ * @param {Time} $duration - 动画时长
+ * @param {Length} $offset - 初始偏移量
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin slide-up-in($duration: $anim-duration-base, $offset: 8px, $easing: $ease-out-back) {
+  animation: slideUpIn $duration $easing forwards;
+  --slide-offset: #{$offset};
+}
+
+/**
+ * 从左往右滑入
+ * @param {Time} $duration - 动画时长
+ * @param {Length} $offset - 初始偏移量
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin slide-right-in($duration: $anim-duration-base, $offset: -8px, $easing: $ease-out-back) {
+  animation: slideRightIn $duration $easing forwards;
+  --slide-offset: #{$offset};
+}
+
+/**
+ * 从右往左滑入
+ * @param {Time} $duration - 动画时长
+ * @param {Length} $offset - 初始偏移量
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin slide-left-in($duration: $anim-duration-base, $offset: 8px, $easing: $ease-out-back) {
+  animation: slideLeftIn $duration $easing forwards;
+  --slide-offset: #{$offset};
+}
+
+@keyframes slideDownIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--slide-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUpIn {
+  from {
+    opacity: 0;
+    transform: translateY(var(--slide-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRightIn {
+  from {
+    opacity: 0;
+    transform: translateX(var(--slide-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideLeftIn {
+  from {
+    opacity: 0;
+    transform: translateX(var(--slide-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// ========================================
+// 3. 缩放动画
+// ========================================
+
+/**
+ * 放大进入
+ * @param {Time} $duration - 动画时长
+ * @param {Number} $scale - 初始缩放比例
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin zoom-in($duration: $anim-duration-base, $scale: 0.95, $easing: $ease-out-back) {
+  animation: zoomIn $duration $easing forwards;
+  --zoom-scale: #{$scale};
+}
+
+/**
+ * 缩小退出
+ * @param {Time} $duration - 动画时长
+ * @param {Number} $scale - 最终缩放比例
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin zoom-out($duration: $anim-duration-base, $scale: 0.95, $easing: $ease-in-back) {
+  animation: zoomOut $duration $easing forwards;
+  --zoom-scale: #{$scale};
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(var(--zoom-scale));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(var(--zoom-scale));
+  }
+}
+
+// ========================================
+// 4. 组合动画（最常用）
+// ========================================
+
+/**
+ * 淡入+缩放（Dropdown/弹窗首选）
+ * @param {Time} $duration - 动画时长
+ * @param {Number} $scale - 初始缩放比例
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin fade-zoom-in($duration: $anim-duration-base, $scale: 0.95, $easing: $ease-out-back) {
+  animation: fadeZoomIn $duration $easing forwards;
+  --zoom-scale: #{$scale};
+}
+
+/**
+ * 淡出+缩放
+ * @param {Time} $duration - 动画时长
+ * @param {Number} $scale - 最终缩放比例
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin fade-zoom-out($duration: $anim-duration-base, $scale: 0.95, $easing: $ease-in-back) {
+  animation: fadeZoomOut $duration $easing forwards;
+  --zoom-scale: #{$scale};
+}
+
+/**
+ * 淡入+上滑（卡片/列表首选）
+ * @param {Time} $duration - 动画时长
+ * @param {Length} $offset - 初始偏移量
+ * @param {Easing} $easing - 缓动函数
+ */
+@mixin fade-slide-up($duration: $anim-duration-base, $offset: 12px, $easing: $ease-out-back) {
+  animation: fadeSlideUp $duration $easing forwards;
+  --slide-offset: #{$offset};
+}
+
+@keyframes fadeZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(var(--zoom-scale));
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeZoomOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(var(--zoom-scale));
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(var(--slide-offset));
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// ========================================
+// 5. 循环动画
+// ========================================
+
+/**
+ * 呼吸动画
+ * @param {Time} $duration - 一个周期时长
+ */
+@mixin pulse($duration: 2s) {
+  animation: pulse $duration ease-in-out infinite;
+}
+
+/**
+ * 旋转动画
+ * @param {Time} $duration - 旋转一周时长
+ */
+@mixin spin($duration: 1s) {
+  animation: spin $duration linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

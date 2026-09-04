@@ -1,0 +1,8 @@
+/* 演示站样式：页面基础外观 */
+body {
+    margin: 0;
+    background: var(--dz-bg);
+    color: var(--dz-text);
+    font-family: var(--dz-ff-sans);
+    transition: background 0.3s, color 0.3s;
+}

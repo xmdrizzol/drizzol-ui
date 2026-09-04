@@ -1,0 +1,29 @@
+{
+  "name": "drizzol-ui-workspace",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "playground"
+  ],
+  "scripts": {
+    "dev": "npm -w playground run dev",
+    "build": "npm -w @drizzol/ui run build",
+    "build:ui": "npm -w @drizzol/ui run build",
+    "test": "npm -w @drizzol/ui run test",
+    "typecheck": "npm -w playground run typecheck",
+    "changeset": "changeset",
+    "version-packages": "changeset version",
+    "release": "npm run build && changeset publish",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.28.1",
+    "@commitlint/cli": "^21.2.1",
+    "@commitlint/config-conventional": "^21.2.0",
+    "husky": "^9.1.7",
+    "typescript": "~6.0.3",
+    "vue-tsc": "~3.2.8"
+  }
+}

@@ -1,0 +1,306 @@
+/*
+ * 字体
+ */
+$ff-sans: Droid Serif, PingFang SC, Hiragino Sans GB, Droid Sans Fallback, Microsoft YaHei, sans-serif;
+$ff-mono: ui-monospace, "Menlo", "Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+
+/*
+ * 字体大小
+ */
+$fs-xxs: 0.75rem; // 12px
+$fs-xs: 0.875rem; // 14px
+$fs-sm: 1rem; // 16px
+$fs-md: 1.125rem; // 18px
+$fs-lg: 1.25rem; // 20px
+$fs-xl: 1.5rem; // 24px
+$fs-xxl: 2rem; // 32px
+
+/*
+ * 字重
+ */
+$fw-regular: 400;
+$fw-medium: 500;
+$fw-semibold: 600;
+$fw-bold: 700;
+
+/*
+ * 边距
+ */
+$space-xxs: 0.25rem; // 4px
+$space-xs: 0.5rem; // 8px
+$space-sm: 0.75rem; // 12px
+$space-md: 1rem; // 16px
+$space-lg: 1.5rem; // 24px
+
+/*
+ * 圆角
+ */
+$border-radius-xs: 0.25rem; // 4px
+$border-radius-sm: 0.375rem; // 6px
+$border-radius-md: 0.5rem; // 8px
+$border-radius-lg: 0.75rem; // 12px
+
+/*
+ * 宽度
+ */
+$w-screen: 100vw;
+$w-100: 100%;
+$w-80: 80%;
+$w-75: 75%;
+$w-66: 66%;
+$w-60: 60%;
+$w-50: 50%;
+$w-40: 40%;
+$w-33: 33%;
+$w-25: 25%;
+$w-20: 20%;
+
+/*
+ * 高度
+ */
+$h-screen: 100vh;
+$h-full: 100%;
+
+// ========================================
+// 动画变量
+// ========================================
+$anim-duration-fast: 0.18s; // 快速动画（按钮、hover）
+$anim-duration-base: 0.5s; // 基础动画（Dropdown、弹窗）
+$anim-duration-slow: 0.7s; // 慢速动画（页面过渡）
+
+// 缓动函数（Animate.css 经典贝塞尔曲线）
+$ease-normal: ease;
+$ease-out-back: cubic-bezier(0.175, 0.885, 0.32, 1.275); // 带轻微回弹
+$ease-in-back: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+$ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+$ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$ease-in: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+
+// =====================================================================
+// 颜色系统（Ant Design 风格 10 级色板）
+// =====================================================================
+
+// --------------------------------------------
+// 浅色 Primary 色板（蓝）
+// --------------------------------------------
+$light-primary-1: #e6f4ff;
+$light-primary-2: #bae0ff;
+$light-primary-3: #91caff;
+$light-primary-4: #69b1ff;
+$light-primary-5: #4096ff;
+$light-primary-6: #1677ff;
+$light-primary-7: #0958d9;
+$light-primary-8: #003eb3;
+$light-primary-9: #002c8c;
+$light-primary-10: #001d66;
+
+// --------------------------------------------
+// 深色 Primary 色板（蓝，色阶反向）
+// 比旧版（#1668dc 系）更亮更通透，深底上不发闷
+// --------------------------------------------
+$dark-primary-1: #0e1a2b;
+$dark-primary-2: #12233c;
+$dark-primary-3: #1b3a63;
+$dark-primary-4: #1f4f8f;
+$dark-primary-5: #2e6fd4;
+$dark-primary-6: #3b82f6;
+$dark-primary-7: #609df8;
+$dark-primary-8: #8db8fa;
+$dark-primary-9: #bcd3fc;
+$dark-primary-10: #dbeafe;
+
+// --------------------------------------------
+// 浅色 Gray 色板（中性灰）
+// --------------------------------------------
+$light-gray-1: #ffffff;
+$light-gray-2: #fafafa;
+$light-gray-3: #f5f5f5;
+$light-gray-4: #f0f0f0;
+$light-gray-5: #d9d9d9;
+$light-gray-6: #bfbfbf;
+$light-gray-7: #8c8c8c;
+$light-gray-8: #595959;
+$light-gray-9: #434343;
+$light-gray-10: #262626;
+
+// --------------------------------------------
+// 深色 Gray 色板（中性灰，色阶反向）
+// --------------------------------------------
+$dark-gray-1: #1f2027;
+$dark-gray-2: #2a2c36;
+$dark-gray-3: #363945;
+$dark-gray-4: #424552;
+$dark-gray-5: #585b6a;
+$dark-gray-6: #767986;
+$dark-gray-7: #9a9dab;
+$dark-gray-8: #bcbfca;
+$dark-gray-9: #d9dbe3;
+$dark-gray-10: #f0f1f5;
+
+/*
+ * 语义色（独立，不在色板内）
+ */
+$light-link: #fdae6d;
+$light-link-hover: #ffc89b;
+$light-link-visited: #ff7146;
+$dark-link: #fdae6d;
+$dark-link-hover: #ffc89b;
+$dark-link-visited: #ff7146;
+
+/*
+ * 顶部
+ */
+
+/*
+ * 阴影
+ */
+$light-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$light-shadow-md: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.1);
+$light-shadow-lg: 0 6px 12px 0 rgba(0, 0, 0, 0.2), 0 14px 28px 0 rgba(0, 0, 0, 0.15);
+$light-shadow-xl: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+$light-shadow-xxl: 0 10px 28px 0 rgba(0, 0, 0, 0.25), 0 20px 48px 0 rgba(0, 0, 0, 0.2);
+
+$dark-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+$dark-shadow-md: 0 4px 6px 0 rgba(0, 0, 0, 0.2), 0 10px 20px 0 rgba(0, 0, 0, 0.1);
+$dark-shadow-lg: 0 6px 12px 0 rgba(0, 0, 0, 0.2), 0 14px 28px 0 rgba(0, 0, 0, 0.15);
+$dark-shadow-xl: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 20px 40px 0 rgba(0, 0, 0, 0.2);
+$dark-shadow-xxl: 0 10px 28px 0 rgba(0, 0, 0, 0.25), 0 20px 48px 0 rgba(0, 0, 0, 0.2);
+
+/*
+ * 遮罩
+ */
+$light-mask: rgba(0, 0, 0, 0.5);
+$dark-mask: rgba(17, 17, 17, 0.6);
+
+// =====================================================================
+// 全局 CSS 变量
+// =====================================================================
+
+/*
+ * 默认：浅色主题
+ */
+:root {
+  // 字体
+  --dz-ff-sans: #{$ff-sans};
+  --dz-ff-mono: #{$ff-mono};
+
+
+
+  // Primary 色板
+  --dz-primary-1: #{$light-primary-1};
+  --dz-primary-2: #{$light-primary-2};
+  --dz-primary-3: #{$light-primary-3};
+  --dz-primary-4: #{$light-primary-4};
+  --dz-primary-5: #{$light-primary-5};
+  --dz-primary-6: #{$light-primary-6};
+  --dz-primary-7: #{$light-primary-7};
+  --dz-primary-8: #{$light-primary-8};
+  --dz-primary-9: #{$light-primary-9};
+  --dz-primary-10: #{$light-primary-10};
+
+  // Gray 色板
+  --dz-gray-1: #{$light-gray-1};
+  --dz-gray-2: #{$light-gray-2};
+  --dz-gray-3: #{$light-gray-3};
+  --dz-gray-4: #{$light-gray-4};
+  --dz-gray-5: #{$light-gray-5};
+  --dz-gray-6: #{$light-gray-6};
+  --dz-gray-7: #{$light-gray-7};
+  --dz-gray-8: #{$light-gray-8};
+  --dz-gray-9: #{$light-gray-9};
+  --dz-gray-10: #{$light-gray-10};
+
+  // 语义别名
+  --dz-primary: var(--dz-primary-6);
+  --dz-primary-hover: var(--dz-primary-5);
+  --dz-primary-hover-2: var(--dz-primary-1);
+  --dz-primary-active: var(--dz-primary-7);
+  --dz-text-h: var(--dz-gray-10);
+  --dz-text: var(--dz-gray-9);
+  --dz-text-d: var(--dz-gray-7);
+  --dz-text-l: var(--dz-gray-6);
+  --dz-bg: var(--dz-gray-1);
+  --dz-bg-secondary: var(--dz-gray-2);
+  --dz-border: var(--dz-gray-4);
+  --dz-code-bg: var(--dz-gray-3);
+
+  // 链接
+  --dz-link: #{$light-link};
+  --dz-link-hover: #{$light-link-hover};
+  --dz-link-visited: #{$light-link-visited};
+
+  // 阴影
+  --dz-shadow-sm: #{$light-shadow-sm};
+  --dz-shadow-md: #{$light-shadow-md};
+  --dz-shadow-lg: #{$light-shadow-lg};
+  --dz-shadow-xl: #{$light-shadow-xl};
+  --dz-shadow-xxl: #{$light-shadow-xxl};
+
+  // 遮罩
+  --dz-mask: #{$light-mask};
+}
+
+/*
+ * 深色主题
+ */
+:root.dark {
+  // Primary 色板
+  --dz-primary-1: #{$dark-primary-1};
+  --dz-primary-2: #{$dark-primary-2};
+  --dz-primary-3: #{$dark-primary-3};
+  --dz-primary-4: #{$dark-primary-4};
+  --dz-primary-5: #{$dark-primary-5};
+  --dz-primary-6: #{$dark-primary-6};
+  --dz-primary-7: #{$dark-primary-7};
+  --dz-primary-8: #{$dark-primary-8};
+  --dz-primary-9: #{$dark-primary-9};
+  --dz-primary-10: #{$dark-primary-10};
+
+  // Gray 色板
+  --dz-gray-1: #{$dark-gray-1};
+  --dz-gray-2: #{$dark-gray-2};
+  --dz-gray-3: #{$dark-gray-3};
+  --dz-gray-4: #{$dark-gray-4};
+  --dz-gray-5: #{$dark-gray-5};
+  --dz-gray-6: #{$dark-gray-6};
+  --dz-gray-7: #{$dark-gray-7};
+  --dz-gray-8: #{$dark-gray-8};
+  --dz-gray-9: #{$dark-gray-9};
+  --dz-gray-10: #{$dark-gray-10};
+
+  // 语义别名（深色映射关系不同：hover 提亮、active 用更浅一档，符合暗色界面惯例）
+  --dz-primary: var(--dz-primary-6);
+  --dz-primary-hover: var(--dz-primary-7);
+  // 主色罩：半透明主色直接叠在底面上，页面底/卡片底不同也能自适应，不会发闷
+  --dz-primary-hover-2: color-mix(in srgb, var(--dz-primary-6) 18%, transparent);
+  --dz-primary-active: var(--dz-primary-7);
+  --dz-text-h: var(--dz-gray-10);
+  --dz-text: var(--dz-gray-9);
+  --dz-text-d: var(--dz-gray-7);
+  --dz-text-l: var(--dz-gray-6);
+  --dz-bg: var(--dz-gray-1);
+  --dz-bg-secondary: var(--dz-gray-2);
+  --dz-border: var(--dz-gray-4);
+  --dz-code-bg: var(--dz-gray-2);
+
+  // 链接
+  --dz-link: #{$dark-link};
+  --dz-link-hover: #{$dark-link-hover};
+  --dz-link-visited: #{$dark-link-visited};
+
+  // 阴影
+  --dz-shadow-sm: #{$dark-shadow-sm};
+  --dz-shadow-md: #{$dark-shadow-md};
+  --dz-shadow-lg: #{$dark-shadow-lg};
+  --dz-shadow-xl: #{$dark-shadow-xl};
+  --dz-shadow-xxl: #{$dark-shadow-xxl};
+
+  // 遮罩
+  --dz-mask: #{$dark-mask};
+
+  // ==========================
+  // elementPlus 深色主题
+  // ==========================
+  --el-drawer-bg-color: var(--dz-bg);
+
+}

@@ -1,0 +1,93 @@
+/* 滚动条 */
+@mixin scrollbars($size: 0.25rem, $track-color: transparent, $thumb-color: var(--dz-primary), $hover-color: var(--dz-primary-hover)) {
+    &::-webkit-scrollbar {
+        width: $size; // 滚动条宽度
+        height: $size; // 滚动条高度
+    }
+
+    &::-webkit-scrollbar-track {
+        background: $track-color; // 轨道背景色
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $thumb-color; // 滑块颜色
+        border-radius: 99px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: $hover-color; // 滑块悬停颜色
+    }
+}
+
+/* 隐藏滚动条 */
+@mixin hide-scrollbars {
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* 小屏适配 */
+@mixin mobile {
+    @media screen and (max-width: 768px) {
+        @content;
+    }
+}
+
+/* 大屏适配 */
+@mixin desktop {
+    @media screen and (min-width: 768px) {
+        @content;
+    }
+}
+
+/* 文本省略 */
+@mixin text-ellipsis($lines: 1) {
+    @if $lines == 1 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    } @else {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: $lines;
+        -webkit-box-orient: vertical;
+    }
+}
+
+/* 绝对定位 */
+@mixin absolute($top: null, $right: null, $bottom: null, $left: null) {
+    position: absolute;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+/* 相对定位 */
+@mixin relative($top: null, $right: null, $bottom: null, $left: null) {
+    position: relative;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+/* 固定定位 */
+@mixin fixed($top: null, $right: null, $bottom: null, $left: null) {
+    position: fixed;
+    top: $top;
+    right: $right;
+    bottom: $bottom;
+    left: $left;
+}
+
+/* 弹性布局 */
+@mixin flex($justify: null, $align: null, $direction: null) {
+    display: flex;
+    justify-content: $justify;
+    align-items: $align;
+    flex-direction: $direction;
+}
