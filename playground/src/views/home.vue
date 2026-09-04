@@ -4,6 +4,9 @@
             <p class="home__kicker">DRIZZOL UI · VUE 3</p>
             <h1 class="home__title">组件、工具与主题的<br />统一基准</h1>
             <p class="home__desc">Vue 3 组件库 —— 16+ 组件、工具函数、深浅双主题样式体系，开箱即用。</p>
+            <div class="home__badges">
+                <span v-for="b in badges" :key="b" class="home__badge">{{ b }}</span>
+            </div>
         </section>
 
         <div class="home__features">
@@ -26,6 +29,8 @@
 </template>
 
 <script setup lang="ts">
+const badges = ['Vue 3.5', 'TypeScript', 'Vite', 'Element Plus', 'CSS 变量双主题']
+
 const features = [
     { icon: 'dz-icon-fd-paw', title: '16+ 组件', desc: 'DCard/DButton/DForm/DModal/DUpload/DCropper/DVideo 等，全部 D 前缀、--dz-* 变量。' },
     { icon: 'dz-icon-fd-moon', title: '深浅双主题', desc: 'CSS 变量双色板 + <html class="dark"> 切换，跟随系统或手动三态。' },
@@ -82,6 +87,23 @@ const code = [
         max-width: 520px;
         color: var(--dz-text-d);
         font-size: 0.9375rem;
+    }
+
+    &__badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+    &__badge {
+        padding: 3px 10px;
+        border: 1px solid var(--dz-border);
+        border-radius: 99px;
+        background: var(--dz-bg);
+        font-size: 0.75rem;
+        font-family: var(--dz-ff-mono);
+        color: var(--dz-text-d);
     }
 
     &__features {
