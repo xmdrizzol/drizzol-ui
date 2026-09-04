@@ -93,7 +93,7 @@ configureRequest({
 
 ## 样式与主题
 
-- 组件 CSS 随包导出于 `dist/style.css`（已含 `--dz-*` 变量定义），保持 px 单位——pxtorem 等转换属宿主项目决策
+- 组件 CSS 随包导出于 `dist/style.css`（已含 `--dz-*` 变量定义与基础排版：h1~h6/p/code/pre/kbd 字号阶梯与边距），保持 px 单位——pxtorem 等转换属宿主项目决策
 - 主题切换：`<html>` 挂 `dark` class（`applyTheme` 三态：auto/light/dark，localStorage 持久化）
 - 自定义品牌色：改 `_variables.scss` 的 `$light-primary-*` / `$dark-primary-*` 两套 10 级色板重新编译，或直接在宿主覆盖 `--dz-primary` 等 CSS 变量
 - SCSS 源文件随包输出（`@drizzol/ui/styles`），`@mixin prose` 正文排版、`mobile`/`flex` 等 mixin 可被宿主 `@use`

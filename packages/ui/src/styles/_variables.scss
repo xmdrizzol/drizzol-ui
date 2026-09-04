@@ -184,6 +184,25 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-ff-sans: #{$ff-sans};
   --dz-ff-mono: #{$ff-mono};
 
+  // 字号阶梯（排版基础，见 _typography.scss）
+  --dz-fs-xxs: #{$fs-xxs};
+  --dz-fs-xs: #{$fs-xs};
+  --dz-fs-sm: #{$fs-sm};
+  --dz-fs-md: #{$fs-md};
+  --dz-fs-lg: #{$fs-lg};
+  --dz-fs-xl: #{$fs-xl};
+  --dz-fs-xxl: #{$fs-xxl};
+
+  // 字重
+  --dz-fw-regular: #{$fw-regular};
+  --dz-fw-medium: #{$fw-medium};
+  --dz-fw-semibold: #{$fw-semibold};
+  --dz-fw-bold: #{$fw-bold};
+
+  // 行高（与正文排版 _prose.scss 一致）
+  --dz-line-height: 1.8;
+  --dz-leading-tight: 1.35;
+
 
 
   // Primary 色板

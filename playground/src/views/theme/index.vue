@@ -19,6 +19,39 @@
         </section>
 
         <section class="theme-demo__section">
+            <h2>排版基础（与博客正文语系一致）</h2>
+            <div class="theme-demo__type">
+                <h1>标题一 h1 — 22px</h1>
+                <h2>标题二 h2 — 19px（章节锚点）</h2>
+                <h3>标题三 h3 — 17px</h3>
+                <h4>标题四 h4 — 16px</h4>
+                <h5>标题五 h5 — 15px</h5>
+                <h6>标题六 h6 — 14px</h6>
+                <p>
+                    段落 p：行高 <code>--dz-line-height: 1.8</code>；<small>小字 small</small>、
+                    <strong>强调 strong</strong>、<kbd>Ctrl + K</kbd>、行内代码
+                    <code>const x = 1</code>。
+                </p>
+                <ul>
+                    <li>无序列表：圆点使用主色</li>
+                    <li>行距节奏与正文一致</li>
+                </ul>
+                <blockquote>引用：半透明主色罩 + 左侧主色条（博客正文同款）。</blockquote>
+                <pre><code>// 深色代码块（#1e1e1e，与 shiki dark-plus 一致）
+const hello = 'Drizzol UI'</code></pre>
+                <table>
+                    <thead>
+                        <tr><th>表头 th</th><th>斑马纹</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>奇数行 td</td><td>背景为页面底</td></tr>
+                        <tr><td>偶数行 td</td><td>背景为 --dz-bg-secondary</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="theme-demo__section">
             <h2>语义变量</h2>
             <ul class="theme-demo__list">
                 <li v-for="name in semanticVars" :key="name" class="theme-demo__list-item">
@@ -156,6 +189,13 @@ const shadowVars = [
             font-size: 0.75rem;
             color: var(--dz-text-l);
         }
+    }
+
+    &__type {
+        padding: 20px 24px;
+        border: 1px solid var(--dz-border);
+        border-radius: 12px;
+        background: var(--dz-bg-secondary);
     }
 }
 </style>
