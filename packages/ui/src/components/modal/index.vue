@@ -25,7 +25,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { pxToRem } from '@/utils/pxToRem'
+import { pxToRem } from '@ui/utils/pxToRem'
 
 const props = withDefaults(defineProps<{
   visible: boolean

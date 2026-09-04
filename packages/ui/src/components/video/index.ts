@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Video from './index.vue'
 
 /** d-video 组件 */

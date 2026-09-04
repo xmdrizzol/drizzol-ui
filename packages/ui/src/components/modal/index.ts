@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Modal from './index.vue'
 
 /** d-modal 组件 */

@@ -1,10 +1,10 @@
 // 工具函数单测
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { pxToRem } from '@/utils/pxToRem'
-import { formatDate } from '@/utils/formatDate'
-import { debounce, throttle } from '@/utils/throttle-debounce'
-import { applyTheme, initTheme, isSystemDarkMode, THEME_KEY, Theme } from '@/utils/theme'
-import { getFileAccessUrl, configureFileAccessPrefix } from '@/utils/file'
+import { pxToRem } from '@ui/utils/pxToRem'
+import { formatDate } from '@ui/utils/formatDate'
+import { debounce, throttle } from '@ui/utils/throttle-debounce'
+import { applyTheme, initTheme, isSystemDarkMode, THEME_KEY, Theme } from '@ui/utils/theme'
+import { getFileAccessUrl, configureFileAccessPrefix } from '@ui/utils/file'
 
 describe('pxToRem', () => {
   it('数字按 16 基准换算', () => {

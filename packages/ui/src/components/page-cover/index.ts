@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import PageCover from './index.vue'
 
 /** d-page-cover 组件 */

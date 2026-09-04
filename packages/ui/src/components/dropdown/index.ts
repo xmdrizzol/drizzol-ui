@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Dropdown from './index.vue'
 
 /** d-dropdown 组件 */

@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Card from './index.vue'
 
 /** d-card 组件 */

@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Sort from './index.vue'
 
 export interface SortFilterParams {

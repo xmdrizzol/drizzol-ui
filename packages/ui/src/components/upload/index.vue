@@ -62,10 +62,10 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import { uploadFile } from '@/utils/file-api'
-import { getFileAccessUrl } from '@/utils/file'
-import type { FileCategory } from '@/types/api'
-import DIcon from '@/components/icon'
+import { uploadFile } from '@ui/utils/file-api'
+import { getFileAccessUrl } from '@ui/utils/file'
+import type { FileCategory } from '@ui/types/api'
+import DIcon from '@ui/components/icon'
 import { showUploadNotification } from './upload-notify'
 import type { UploadNotifyControl } from './upload-notify'
 
@@ -236,7 +236,7 @@ defineExpose({ openPicker, clearFile, fileInputRef })
 </script>
 
 <style scoped lang="scss">
-@use '@/styles/mixin' as *;
+@use '@ui/styles/mixin' as *;
 
 .d-upload {
     position: relative;

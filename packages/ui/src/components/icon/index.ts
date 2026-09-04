@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Icon from './index.vue'
 import Sprite from './symbols.vue'
 

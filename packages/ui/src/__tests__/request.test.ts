@@ -8,8 +8,8 @@ vi.mock('element-plus', () => ({
 
 import { ElMessage } from 'element-plus'
 import axios from 'axios'
-import { createRequest, configureRequest, getBaseUrl } from '@/utils/request'
-import request from '@/utils/request'
+import { createRequest, configureRequest, getBaseUrl } from '@ui/utils/request'
+import request from '@ui/utils/request'
 
 /** 构造返回成功响应的 adapter */
 function okAdapter(data: any) {

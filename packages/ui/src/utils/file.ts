@@ -1,4 +1,4 @@
-import type { FileCategory } from '@/types/api'
+import type { FileCategory } from '@ui/types/api'
 
 /** 文件访问前缀（拼接规则与后端契约一致，可通过 configureFileAccessPrefix 调整） */
 let accessPrefix = '/api/general/file/access/'

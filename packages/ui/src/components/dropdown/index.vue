@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted, onUnmounted } from 'vue'
-import { useClickOutside } from '@/composables/useClickOutside'
+import { useClickOutside } from '@ui/composables/useClickOutside'
 import gsap from 'gsap'
 const TRIGGER = ['click', 'hover'] as const
 const PLACEMENT = ['top', 'bottom', 'left', 'right'] as const

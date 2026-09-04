@@ -17,7 +17,7 @@ import { ref, watch } from 'vue'
 import 'cropperjs'
 import type CropperCanvas from '@cropper/element-canvas';
 import type CropperImage from '@cropper/element-image';
-import { uploadImage } from '@/utils/file-api'
+import { uploadImage } from '@ui/utils/file-api'
 
 const props = withDefaults(defineProps<{
     imgUrl: string,

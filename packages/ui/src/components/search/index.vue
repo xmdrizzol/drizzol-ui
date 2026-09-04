@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import { debounce } from '@/utils/throttle-debounce'
+import { debounce } from '@ui/utils/throttle-debounce'
 
 withDefaults(defineProps<{
     placeholder?: string

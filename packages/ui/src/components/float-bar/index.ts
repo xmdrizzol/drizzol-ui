@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import FloatBar from './index.vue'
 
 /** d-float-bar 组件 */

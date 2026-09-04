@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
-import DIcon from '@/components/icon'
+import DIcon from '@ui/components/icon'
 
 const props = defineProps<{
     showCatalog?: boolean

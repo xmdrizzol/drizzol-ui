@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import FormItem from './index.vue'
 
 /** d-form-item 组件 */

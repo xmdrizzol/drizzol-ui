@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import PageHero from './index.vue'
 
 /** d-page-hero 组件 */

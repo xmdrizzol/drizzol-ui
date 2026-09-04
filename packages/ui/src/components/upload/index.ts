@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Upload from './index.vue'
 
 /** d-upload 组件 */

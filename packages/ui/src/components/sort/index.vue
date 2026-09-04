@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import DIcon from '@/components/icon'
+import DIcon from '@ui/components/icon'
 import type { SortFilterParams, SortStatusOption } from './index'
 
 defineProps<{
@@ -65,7 +65,7 @@ function setField(key: keyof SortFilterParams, value: string) {
 </script>
 
 <style scoped lang="scss">
-@use '@/styles/mixin' as *;
+@use '@ui/styles/mixin' as *;
 
 .d-sort {
     @include flex(flex-start, center);

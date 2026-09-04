@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { useScrollListener } from '@/composables/useScrollListen'
+import { useScrollListener } from '@ui/composables/useScrollListen'
 
 const props = withDefaults(defineProps<{
     src: string

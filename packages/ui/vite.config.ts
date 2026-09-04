@@ -6,7 +6,8 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      '@': path.resolve(import.meta.dirname, './src')
+      '@': path.resolve(import.meta.dirname, './src'),
+      '@ui': path.resolve(import.meta.dirname, './src')
     }
   },
   css: {

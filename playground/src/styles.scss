@@ -6,3 +6,36 @@ body {
     font-family: var(--dz-ff-sans);
     transition: background 0.3s, color 0.3s;
 }
+
+/* 组件文档页公共头（16 个组件页共用） */
+.component-page {
+    &__head {
+        margin-bottom: 28px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--dz-border);
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1.75rem;
+        color: var(--dz-text-h);
+    }
+
+    &__desc {
+        margin: 8px 0 0;
+        color: var(--dz-text-d);
+        line-height: 1.7;
+    }
+
+    &__tag {
+        display: inline-block;
+        margin-left: 10px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: var(--dz-primary-hover-2);
+        color: var(--dz-primary);
+        font-size: 0.75rem;
+        font-family: var(--dz-ff-mono);
+        vertical-align: middle;
+    }
+}

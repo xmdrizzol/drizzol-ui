@@ -1,4 +1,4 @@
-import { withInstall } from '@/with-install'
+import { withInstall } from '@ui/with-install'
 import Cropper from './index.vue'
 
 /** d-cropper 组件 */

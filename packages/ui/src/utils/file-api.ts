@@ -1,7 +1,7 @@
 // 文件上传 API（与后端契约：POST /api/general/file/upload[/image]）
 import request from './request'
 import type { AxiosRequestConfig } from 'axios'
-import type { ApiResponse, FileCategory } from '@/types/api'
+import type { ApiResponse, FileCategory } from '@ui/types/api'
 
 /** 上传响应 */
 export interface UploadFileResponse {

@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import DPageCover from '@/components/page-cover'
+import DPageCover from '@ui/components/page-cover'
 
 withDefaults(
     defineProps<{
@@ -41,7 +41,7 @@ withDefaults(
 </script>
 
 <style scoped lang="scss">
-@use '@/styles/variables' as *;
+@use '@ui/styles/variables' as *;
 
 .d-page-hero {
     position: relative;
