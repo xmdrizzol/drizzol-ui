@@ -6,7 +6,7 @@
         </header>
 
         <demo-block title="基础用法" anchor-id="demo"
-            code='<d-button type="primary" icon="dz-icon-add">主要按钮</d-button>
+            code='<d-button type="primary" icon="add">主要按钮</d-button>
 <d-button round>圆角按钮</d-button>
 <d-button plain>朴素按钮</d-button>
 <d-button link>链接按钮</d-button>'>
@@ -16,7 +16,7 @@
             <d-button plain>朴素按钮</d-button>
             <d-button link>链接按钮</d-button>
             <d-button type="primary" size="small">小按钮</d-button>
-            <d-button type="primary" icon="dz-icon-add">带图标</d-button>
+            <d-button type="primary" icon="add">带图标</d-button>
         </demo-block>
     </div>
 </template>

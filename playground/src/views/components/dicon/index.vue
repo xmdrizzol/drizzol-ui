@@ -7,7 +7,7 @@
 
         <demo-block title="图标列表" anchor-id="demo"
             code='<d-icon-sprite />  <!-- App.vue 根节点一次 -->
-<d-icon name="dz-icon-fd-sunny" size="1.5" />'>
+<d-icon name="fd-sunny" size="1.5" />'>
             <div class="component-page__icons">
                 <div v-for="name in iconNames" :key="name" class="component-page__icon">
                     <d-icon :name="name" size="1.5" />
@@ -22,9 +22,9 @@
 import DemoBlock from '@/components/demo-block'
 
 const iconNames = [
-    'dz-icon-user', 'dz-icon-heart', 'dz-icon-star', 'dz-icon-menu', 'dz-icon-close',
-    'dz-icon-arrow-forward', 'dz-icon-arrow-dropup', 'dz-icon-fd-sunny', 'dz-icon-fd-moon',
-    'dz-icon-fd-rocket', 'dz-icon-fd-book', 'dz-icon-fd-gamepad',
+    'user', 'heart', 'star', 'menu', 'close',
+    'arrow-forward', 'arrow-dropup', 'fd-sunny', 'fd-moon',
+    'fd-rocket', 'fd-book', 'fd-gamepad',
 ]
 </script>
 

@@ -36,7 +36,7 @@ app.mount('#app')
 <template>
   <d-icon-sprite />
   <d-card is-hover>
-    <d-button type="primary" icon="dz-icon-add">新增</d-button>
+    <d-button type="primary" icon="add">新增</d-button>
   </d-card>
 </template>
 ```

@@ -7,7 +7,7 @@
             <div class="default-layout__brand">
                 <router-link to="/" class="default-layout__link">
                     <span class="default-layout__logo">
-                        <d-icon name="dz-icon-fd-book" size="1.35" />
+                        <d-icon name="fd-book" size="1.35" />
                     </span>
                     <span class="default-layout__name">Drizzol UI</span>
                 </router-link>

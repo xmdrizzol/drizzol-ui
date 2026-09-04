@@ -32,10 +32,10 @@
 const badges = ['Vue 3.5', 'TypeScript', 'Vite', 'Element Plus', 'CSS 变量双主题']
 
 const features = [
-    { icon: 'dz-icon-fd-paw', title: '16+ 组件', desc: 'DCard/DButton/DForm/DModal/DUpload/DCropper/DVideo 等，全部 D 前缀、--dz-* 变量。' },
-    { icon: 'dz-icon-fd-moon', title: '深浅双主题', desc: 'CSS 变量双色板 + <html class="dark"> 切换，跟随系统或手动三态。' },
-    { icon: 'dz-icon-fd-cafe', title: '工具函数', desc: 'request 拦截器、theme、cookie、pxToRem、debounce、文件访问等开箱即用。' },
-    { icon: 'dz-icon-fd-glasses', title: '可测试', desc: 'vitest 单测 + 组件挂载冒烟，pre-commit 自动回归。' },
+    { icon: 'fd-paw', title: '16+ 组件', desc: 'DCard/DButton/DForm/DModal/DUpload/DCropper/DVideo 等，全部 D 前缀、--dz-* 变量。' },
+    { icon: 'fd-moon', title: '深浅双主题', desc: 'CSS 变量双色板 + <html class="dark"> 切换，跟随系统或手动三态。' },
+    { icon: 'fd-cafe', title: '工具函数', desc: 'request 拦截器、theme、cookie、pxToRem、debounce、文件访问等开箱即用。' },
+    { icon: 'fd-glasses', title: '可测试', desc: 'vitest 单测 + 组件挂载冒烟，pre-commit 自动回归。' },
 ]
 
 const code = [

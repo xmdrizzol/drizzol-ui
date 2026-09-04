@@ -75,9 +75,10 @@ describe('组件冒烟', () => {
     expect(wrapper.find('.d-layout').attributes('style')).toContain('row')
   })
 
-  it('DIcon 渲染 svg use 引用 dz-icon 符号', () => {
-    const wrapper = mount(DIcon, { props: { name: 'dz-icon-menu' } })
-    expect(wrapper.html()).toContain('dz-icon-menu')
+  it('DIcon 渲染 svg use 引用 dz-icon 符号（name 传裸名）', () => {
+    const wrapper = mount(DIcon, { props: { name: 'menu' } })
+    const href = wrapper.find('use').attributes('href') ?? wrapper.find('use').attributes('xlink:href')
+    expect(href).toBe('#dz-icon-menu')
   })
 
   it('DIconSprite 渲染雪碧图', () => {
