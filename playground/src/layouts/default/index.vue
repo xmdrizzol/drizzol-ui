@@ -64,6 +64,12 @@ const navGroups: { label: string; items: { path: string; label: string }[] }[] =
         ],
     },
     {
+        label: '布局',
+        items: [
+            { path: '/components/dlayout', label: 'DLayout 布局' },
+        ],
+    },
+    {
         label: '基础组件',
         items: [
             { path: '/components/dcard', label: 'DCard 卡片' },

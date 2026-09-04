@@ -31,6 +31,7 @@ vi.stubGlobal('ResizeObserver', class {
 
 import DIcon from '@ui/components/icon'
 import { DIconSprite } from '@ui/components/icon'
+import { DLayout, DHeader, DAside, DMain, DFooter } from '@ui/components/layout'
 import DCard from '@ui/components/card'
 import DButton from '@ui/components/button'
 import DInput from '@ui/components/input'
@@ -48,6 +49,32 @@ import DSearch from '@ui/components/search'
 import DSort from '@ui/components/sort'
 
 describe('组件冒烟', () => {
+  it('DLayout 布局组合渲染', () => {
+    const wrapper = mount(DLayout, {
+      slots: {
+        default: () => [
+          h(DHeader, { height: 56 }, { default: () => 'header' }),
+          h(DMain, null, { default: () => 'main' }),
+          h(DFooter, { height: 48 }, { default: () => 'footer' }),
+        ],
+      },
+    })
+    expect(wrapper.find('.d-layout').exists()).toBe(true)
+    expect(wrapper.find('.d-header').exists()).toBe(true)
+    expect(wrapper.find('.d-main').exists()).toBe(true)
+    expect(wrapper.find('.d-footer').exists()).toBe(true)
+  })
+
+  it('DLayout 含 DAside 时自动水平排列', async () => {
+    const wrapper = mount(DLayout, {
+      slots: {
+        default: () => [h(DAside, { width: 200 }, { default: () => 'aside' }), h(DMain)],
+      },
+    })
+    await flushPromises()
+    expect(wrapper.find('.d-layout').attributes('style')).toContain('row')
+  })
+
   it('DIcon 渲染 svg use 引用 dz-icon 符号', () => {
     const wrapper = mount(DIcon, { props: { name: 'dz-icon-menu' } })
     expect(wrapper.html()).toContain('dz-icon-menu')

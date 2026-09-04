@@ -51,6 +51,7 @@ import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
 
 | 组件 | 说明 |
 | --- | --- |
+| `DLayout` / `DHeader` / `DAside` / `DMain` / `DFooter` | 布局系统（容器 + 头/侧/内容/脚，存在侧栏时自动水平排列） |
 | `DIcon` / `DIconSprite` | 图标（内联 52 个 symbol 雪碧图，根节点渲染一次 sprite） |
 | `DCard` | 卡片（`is-hover` 悬浮） |
 | `DButton` | 按钮（type/link/round/block/plain/small） |
