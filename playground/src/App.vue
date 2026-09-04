@@ -4,10 +4,12 @@
 
     <header class="app-header">
         <div class="app-header__brand">
-            <span class="app-header__logo">
-                <d-icon name="dz-icon-fd-book" size="1.35" />
-            </span>
-            <span class="app-header__name">Drizzol UI</span>
+            <router-link to="/" class="app-header__link">
+                <span class="app-header__logo">
+                    <d-icon name="dz-icon-fd-book" size="1.35" />
+                </span>
+                <span class="app-header__name">Drizzol UI</span>
+            </router-link>
             <span class="app-header__version">v{{ version }}</span>
         </div>
         <button class="app-header__theme" :title="themeMeta.label" @click="cycleTheme">
@@ -19,97 +21,100 @@
         <aside class="app-sidebar">
             <nav v-for="group in navGroups" :key="group.label" class="app-sidebar__group">
                 <p class="app-sidebar__group-title">{{ group.label }}</p>
-                <button
+                <router-link
                     v-for="item in group.items"
-                    :key="item.key + item.anchor"
-                    :class="['app-sidebar__item', { 'is-active': active === item.key }]"
-                    @click="goTo(item.key, item.anchor)"
+                    :key="item.path + (item.hash || '')"
+                    :to="{ path: item.path, hash: item.hash || undefined }"
+                    custom
+                    v-slot="{ navigate }"
                 >
-                    {{ item.label }}
-                </button>
+                    <a
+                        class="app-sidebar__item"
+                        :class="{ 'is-active': isActive(item) }"
+                        @click="navigate"
+                    >
+                        {{ item.label }}
+                    </a>
+                </router-link>
             </nav>
         </aside>
 
         <main class="app-main">
-            <component :is="currentView" />
+            <router-view />
         </main>
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import { applyTheme, Theme, THEME_KEY } from '@drizzol/ui'
-import Home from './views/home.vue'
-import ThemeDemo from './views/theme-demo.vue'
-import BasicDemo from './views/basic-demo.vue'
-import AdvancedDemo from './views/advanced-demo.vue'
 
-type ViewKey = 'home' | 'theme' | 'basic' | 'advanced'
+const route = useRoute()
 
 interface NavItem {
-    key: ViewKey
+    path: string
+    hash?: string
     label: string
-    /** 页面内锚点（为空则不滚动） */
-    anchor?: string
 }
 
 const navGroups: { label: string; items: NavItem[] }[] = [
     {
         label: '概况',
         items: [
-            { key: 'home', label: '总览' },
-            { key: 'theme', label: '主题色板' },
+            { path: '/', label: '总览' },
+            { path: '/theme', label: '主题色板' },
         ],
     },
     {
         label: '基础组件',
         items: [
-            { key: 'basic', label: 'DCard 卡片', anchor: 'fc-dcard' },
-            { key: 'basic', label: 'DButton 按钮', anchor: 'fc-dbutton' },
-            { key: 'basic', label: 'DInput 输入框', anchor: 'fc-dinput' },
-            { key: 'basic', label: 'DForm 表单', anchor: 'fc-dform' },
-            { key: 'basic', label: 'DModal 弹窗', anchor: 'fc-dmodal' },
-            { key: 'basic', label: 'DDropdown 下拉', anchor: 'fc-ddropdown' },
-            { key: 'basic', label: 'DIcon 图标', anchor: 'fc-dicon' },
+            { path: '/components/basic', hash: '#fc-dcard', label: 'DCard 卡片' },
+            { path: '/components/basic', hash: '#fc-dbutton', label: 'DButton 按钮' },
+            { path: '/components/basic', hash: '#fc-dinput', label: 'DInput 输入框' },
+            { path: '/components/basic', hash: '#fc-dform', label: 'DForm 表单' },
+            { path: '/components/basic', hash: '#fc-dmodal', label: 'DModal 弹窗' },
+            { path: '/components/basic', hash: '#fc-ddropdown', label: 'DDropdown 下拉' },
+            { path: '/components/basic', hash: '#fc-dicon', label: 'DIcon 图标' },
         ],
     },
     {
         label: '增强组件',
         items: [
-            { key: 'advanced', label: 'DSearch 搜索', anchor: 'fc-dsearch' },
-            { key: 'advanced', label: 'DSort 排序', anchor: 'fc-dsort' },
-            { key: 'advanced', label: 'DFloatBar 浮动条', anchor: 'fc-dfloatbar' },
-            { key: 'advanced', label: 'DPageHero 横幅', anchor: 'fc-dpagehero' },
-            { key: 'advanced', label: 'DPageCover 封面', anchor: 'fc-dpagecover' },
-            { key: 'advanced', label: 'DVideo 播放器', anchor: 'fc-dvideo' },
-            { key: 'advanced', label: 'DCropper 裁剪', anchor: 'fc-dcropper' },
-            { key: 'advanced', label: 'DUpload 上传', anchor: 'fc-dupload' },
+            { path: '/components/advanced', hash: '#fc-dsearch', label: 'DSearch 搜索' },
+            { path: '/components/advanced', hash: '#fc-dsort', label: 'DSort 排序' },
+            { path: '/components/advanced', hash: '#fc-dfloatbar', label: 'DFloatBar 浮动条' },
+            { path: '/components/advanced', hash: '#fc-dpagehero', label: 'DPageHero 横幅' },
+            { path: '/components/advanced', hash: '#fc-dpagecover', label: 'DPageCover 封面' },
+            { path: '/components/advanced', hash: '#fc-dvideo', label: 'DVideo 播放器' },
+            { path: '/components/advanced', hash: '#fc-dcropper', label: 'DCropper 裁剪' },
+            { path: '/components/advanced', hash: '#fc-dupload', label: 'DUpload 上传' },
         ],
     },
 ]
 
-const views: Record<ViewKey, any> = {
-    home: Home,
-    theme: ThemeDemo,
-    basic: BasicDemo,
-    advanced: AdvancedDemo,
+/** 逐项匹配：path 一致且（带 hash 的条目需 hash 一致，不带 hash 的条目要求无 hash） */
+function isActive(item: NavItem): boolean {
+    if (route.path !== item.path) return false
+    if (item.hash) return route.hash === item.hash
+    return !route.hash
 }
+
+// 路由变化后滚动到锚点（或回顶）
+watch(
+    () => route.fullPath,
+    async () => {
+        await nextTick()
+        if (route.hash) {
+            document.getElementById(route.hash.slice(1))?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        } else {
+            window.scrollTo({ top: 0 })
+        }
+    },
+    { immediate: true }
+)
 
 const version = '0.1.0'
-const active = ref<ViewKey>('home')
-const currentView = computed(() => views[active.value])
-
-/** 切换视图并滚动到组件锚点 */
-function goTo(key: ViewKey, anchor?: string) {
-    active.value = key
-    if (!anchor) {
-        window.scrollTo({ top: 0 })
-        return
-    }
-    nextTick(() => {
-        document.getElementById(anchor)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    })
-}
 
 // 主题三态轮转：auto → light → dark
 const THEME_META: Record<string, { icon: string; label: string }> = {
@@ -148,6 +153,12 @@ function cycleTheme() {
     &__brand {
         @include flex(flex-start, center);
         gap: 10px;
+    }
+
+    &__link {
+        @include flex(flex-start, center);
+        gap: 10px;
+        text-decoration: none;
     }
 
     &__logo {
@@ -204,9 +215,9 @@ function cycleTheme() {
 }
 
 .app-sidebar {
-    width: 224px;
+    width: 232px;
     flex-shrink: 0;
-    padding: 24px 12px 40px;
+    padding: 20px 12px 40px;
     border-right: 1px solid var(--dz-border);
 
     @include mobile {
@@ -219,7 +230,7 @@ function cycleTheme() {
 
     &__group-title {
         margin: 0 10px 6px;
-        font-size: 0.75rem;
+        font-size: 0.72rem;
         font-weight: 600;
         letter-spacing: 1px;
         color: var(--dz-text-l);
@@ -227,20 +238,18 @@ function cycleTheme() {
 
     &__item {
         display: block;
-        width: 100%;
-        padding: 7px 10px;
+        padding: 6px 10px;
         margin-bottom: 2px;
-        border: none;
         border-radius: 6px;
-        background: transparent;
-        text-align: left;
-        font-size: 0.875rem;
+        text-decoration: none;
+        font-size: 0.8125rem;
+        line-height: 1.4;
         color: var(--dz-text-d);
-        cursor: pointer;
-        transition: background 0.2s, color 0.2s;
+        transition: background 0.15s, color 0.15s;
 
         &:hover {
             color: var(--dz-primary);
+            background: var(--dz-bg);
         }
 
         &.is-active {
