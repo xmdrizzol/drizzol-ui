@@ -136,6 +136,7 @@ function handleSelect(item: DMenuItem) {
     }
 
     &__label {
+        color: inherit;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
