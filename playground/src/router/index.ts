@@ -3,6 +3,7 @@ import Home from '@/views/home'
 import Theme from '@/views/theme'
 
 import DLayout from '@/views/components/dlayout'
+import DMenu from '@/views/components/dmenu'
 import DCard from '@/views/components/dcard'
 import DButton from '@/views/components/dbutton'
 import DInput from '@/views/components/dinput'
@@ -34,6 +35,7 @@ const router = createRouter({
     { path: '/', name: 'home', component: Home },
     { path: '/theme', name: 'theme', component: Theme },
     { path: '/components/dlayout', name: 'dlayout', component: DLayout },
+    { path: '/components/dmenu', name: 'dmenu', component: DMenu },
     { path: '/components/dcard', name: 'dcard', component: DCard },
     { path: '/components/dbutton', name: 'dbutton', component: DButton },
     { path: '/components/dinput', name: 'dinput', component: DInput },

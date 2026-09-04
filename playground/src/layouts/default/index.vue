@@ -20,18 +20,7 @@
 
         <div class="default-layout__shell">
             <aside class="default-layout__sidebar">
-                <nav v-for="group in navGroups" :key="group.label" class="default-layout__nav-group">
-                    <p class="default-layout__nav-title">{{ group.label }}</p>
-                    <router-link
-                        v-for="item in group.items"
-                        :key="item.path"
-                        :to="item.path"
-                        class="default-layout__nav-item"
-                        :class="{ 'is-active': route.path === item.path }"
-                    >
-                        {{ item.label }}
-                    </router-link>
-                </nav>
+                <d-menu :groups="navGroups" :model-value="route.path" />
             </aside>
 
             <main class="default-layout__main">
@@ -55,44 +44,50 @@ const route = useRoute()
 
 const version = '0.1.0'
 
-const navGroups: { label: string; items: { path: string; label: string }[] }[] = [
+const navGroups: { label: string; items: { key: string; label: string; to: string }[] }[] = [
     {
         label: '概况',
         items: [
-            { path: '/', label: '总览' },
-            { path: '/theme', label: '主题色板' },
+            { key: '/', label: '总览', to: '/' },
+            { key: '/theme', label: '主题色板', to: '/theme' },
         ],
     },
     {
         label: '布局',
         items: [
-            { path: '/components/dlayout', label: 'DLayout 布局' },
+            { key: '/components/dlayout', label: 'DLayout 布局', to: '/components/dlayout' },
+        ],
+    },
+    {
+        label: '导航',
+        items: [
+            { key: '/components/dmenu', label: 'DMenu 菜单', to: '/components/dmenu' },
         ],
     },
     {
         label: '基础组件',
         items: [
-            { path: '/components/dcard', label: 'DCard 卡片' },
-            { path: '/components/dbutton', label: 'DButton 按钮' },
-            { path: '/components/dinput', label: 'DInput 输入框' },
-            { path: '/components/dform', label: 'DForm 表单' },
-            { path: '/components/dformitem', label: 'DFormItem 表单项' },
-            { path: '/components/dmodal', label: 'DModal 弹窗' },
-            { path: '/components/ddropdown', label: 'DDropdown 下拉' },
-            { path: '/components/dicon', label: 'DIcon 图标' },
+            { key: '/components/dcard', label: 'DCard 卡片', to: '/components/dcard' },
+            { key: '/components/dbutton', label: 'DButton 按钮', to: '/components/dbutton' },
+            { key: '/components/dinput', label: 'DInput 输入框', to: '/components/dinput' },
+            { key: '/components/dform', label: 'DForm 表单', to: '/components/dform' },
+            { key: '/components/dformitem', label: 'DFormItem 表单项', to: '/components/dformitem' },
+            { key: '/components/dmodal', label: 'DModal 弹窗', to: '/components/dmodal' },
+            { key: '/components/ddropdown', label: 'DDropdown 下拉', to: '/components/ddropdown' },
+            { key: '/components/dicon', label: 'DIcon 图标', to: '/components/dicon' },
         ],
     },
     {
         label: '增强组件',
         items: [
-            { path: '/components/dsearch', label: 'DSearch 搜索' },
-            { path: '/components/dsort', label: 'DSort 排序' },
-            { path: '/components/dfloatbar', label: 'DFloatBar 浮动条' },
-            { path: '/components/dpagehero', label: 'DPageHero 横幅' },
-            { path: '/components/dpagecover', label: 'DPageCover 封面' },
-            { path: '/components/dvideo', label: 'DVideo 播放器' },
-            { path: '/components/dcropper', label: 'DCropper 裁剪' },
-            { path: '/components/dupload', label: 'DUpload 上传' },
+            { key: '/components/dsearch', label: 'DSearch 搜索', to: '/components/dsearch' },
+            { key: '/components/dsort', label: 'DSort 排序', to: '/components/dsort' },
+            { key: '/components/dfloatbar', label: 'DFloatBar 浮动条', to: '/components/dfloatbar' },
+            { key: '/components/dpagehero', label: 'DPageHero 横幅', to: '/components/dpagehero' },
+            { key: '/components/dpagecover', label: 'DPageCover 封面', to: '/components/dpagecover' },
+            { key: '/components/dvideo', label: 'DVideo 播放器', to: '/components/dvideo' },
+            { key: '/components/dcropper', label: 'DCropper 裁剪', to: '/components/dcropper' },
+            { key: '/components/dupload', label: 'DUpload 上传', to: '/components/dupload' },
         ],
     },
 ]

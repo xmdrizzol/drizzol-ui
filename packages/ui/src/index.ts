@@ -4,6 +4,7 @@ import './styles/index.scss'
 
 import { DIcon, DIconSprite } from './components/icon'
 import { DLayout, DHeader, DAside, DMain, DFooter } from './components/layout'
+import { DMenu } from './components/menu'
 import { DCard } from './components/card'
 import { DButton } from './components/button'
 import { DInput } from './components/input'
@@ -22,7 +23,7 @@ import { DSort } from './components/sort'
 
 /** 全部组件（插件安装时按序注册） */
 const components = [
-  DIcon, DIconSprite, DLayout, DHeader, DAside, DMain, DFooter, DCard, DButton, DInput, DForm, DFormItem,
+  DIcon, DIconSprite, DLayout, DHeader, DAside, DMain, DFooter, DMenu, DCard, DButton, DInput, DForm, DFormItem,
   DModal, DDropdown, DUpload, DCropper, DVideo, DPageHero, DPageCover,
   DFloatBar, DSearch, DSort
 ]
@@ -39,6 +40,7 @@ export default { install }
 // 组件具名导出
 export * from './components/icon'
 export * from './components/layout'
+export * from './components/menu'
 export * from './components/card'
 export * from './components/button'
 export * from './components/input'

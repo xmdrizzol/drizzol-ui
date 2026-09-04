@@ -39,7 +39,11 @@
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "element-plus": "^2.8.0"
+    "element-plus": "^2.8.0",
+    "vue-router": "^5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue-router": { "optional": true }
   },
   "dependencies": {
     "@cropper/element-canvas": "^2.1.1",

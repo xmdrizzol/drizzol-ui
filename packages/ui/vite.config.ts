@@ -29,6 +29,7 @@ export default defineConfig({
       external: [
         'vue',
         'element-plus',
+        'vue-router',
         'axios',
         'js-cookie',
         'gsap',

@@ -32,6 +32,7 @@ vi.stubGlobal('ResizeObserver', class {
 import DIcon from '@ui/components/icon'
 import { DIconSprite } from '@ui/components/icon'
 import { DLayout, DHeader, DAside, DMain, DFooter } from '@ui/components/layout'
+import { DMenu } from '@ui/components/menu'
 import DCard from '@ui/components/card'
 import DButton from '@ui/components/button'
 import DInput from '@ui/components/input'
@@ -73,6 +74,55 @@ describe('组件冒烟', () => {
     })
     await flushPromises()
     expect(wrapper.find('.d-layout').attributes('style')).toContain('row')
+  })
+
+  it('DMenu 平铺模式渲染与选中事件', async () => {
+    const wrapper = mount(DMenu, {
+      props: {
+        items: [
+          { key: 'home', label: '总览' },
+          { key: 'theme', label: '主题色板' },
+          { key: 'destroy', label: '禁用项', disabled: true },
+        ],
+      },
+    })
+    expect(wrapper.findAll('.d-menu__item')).toHaveLength(3)
+    await wrapper.findAll('button')[0].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['home'])
+    expect(wrapper.emitted('select')?.[0][0]).toMatchObject({ key: 'home' })
+    // 禁用项不响应
+    await wrapper.findAll('button')[2].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.length).toBe(1)
+  })
+
+  it('DMenu 分组模式渲染小标题', () => {
+    const wrapper = mount(DMenu, {
+      props: {
+        groups: [
+          { label: '概况', items: [{ key: 'home', label: '总览' }] },
+          { label: '组件', items: [{ key: 'dcard', label: 'DCard' }] },
+        ],
+      },
+    })
+    expect(wrapper.findAll('.d-menu__group-title')).toHaveLength(2)
+    expect(wrapper.text()).toContain('概况')
+    expect(wrapper.text()).toContain('DCard')
+  })
+
+  it('DMenu 安装 router 后带 to 条目渲染 router-link', async () => {
+    const { createRouter, createMemoryHistory } = await import('vue-router')
+    const router = createRouter({
+      history: createMemoryHistory(),
+      routes: [{ path: '/', component: { template: '<div />' } }, { path: '/theme', component: { template: '<div />' } }],
+    })
+    const wrapper = mount(DMenu, {
+      props: {
+        items: [{ key: 'theme', label: '主题色板', to: '/theme' }],
+      },
+      global: { plugins: [router] },
+    })
+    expect(wrapper.find('a.d-menu__item').exists()).toBe(true)
+    expect(wrapper.find('a.d-menu__item').attributes('href')).toBe('/theme')
   })
 
   it('DIcon 渲染 svg use 引用 dz-icon 符号（name 传裸名）', () => {
