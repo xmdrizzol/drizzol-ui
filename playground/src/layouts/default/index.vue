@@ -99,9 +99,9 @@ const navGroups: { label: string; items: { path: string; label: string }[] }[] =
 
 // 主题三态轮转：auto → light → dark
 const THEME_META: Record<string, { icon: string; label: string }> = {
-    [Theme.Auto]: { icon: 'dz-icon-contrast', label: '主题：跟随系统' },
-    [Theme.Light]: { icon: 'dz-icon-fd-sunny', label: '主题：浅色' },
-    [Theme.Dark]: { icon: 'dz-icon-fd-moon', label: '主题：深色' },
+    [Theme.Auto]: { icon: 'contrast', label: '主题：跟随系统' },
+    [Theme.Light]: { icon: 'fd-sunny', label: '主题：浅色' },
+    [Theme.Dark]: { icon: 'fd-moon', label: '主题：深色' },
 }
 const ORDER = [Theme.Auto, Theme.Light, Theme.Dark]
 
