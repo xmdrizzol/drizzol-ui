@@ -48,6 +48,14 @@ import DPageCover from '@ui/components/page-cover'
 import DFloatBar from '@ui/components/float-bar'
 import DSearch from '@ui/components/search'
 import DSort from '@ui/components/sort'
+import { DRow, DCol } from '@ui/components/grid'
+import { DTag } from '@ui/components/tag'
+import { DBadge } from '@ui/components/badge'
+import { DSkeleton } from '@ui/components/skeleton'
+import { DEmpty } from '@ui/components/empty'
+import { DPagination } from '@ui/components/pagination'
+import { DCodeBlock } from '@ui/components/code-block'
+import { DTabs } from '@ui/components/tabs'
 
 describe('组件冒烟', () => {
   it('DLayout 布局组合渲染', () => {
@@ -233,5 +241,73 @@ describe('组件冒烟', () => {
     })
     expect(wrapper.find('.d-sort').exists()).toBe(true)
     expect(wrapper.find('.d-sort__select').exists()).toBe(true)
+  })
+})
+
+describe('数据展示组件冒烟', () => {
+  it('DRow/DCol 栅格渲染与 gutter 内边距', () => {
+    const wrapper = mount(DRow, {
+      props: { gutter: 16 },
+      slots: { default: () => h(DCol, { span: 12 }, { default: () => '内容' }) },
+    })
+    expect(wrapper.find('.d-row').attributes('style')).toContain('-8px')
+    const col = wrapper.find('.d-col')
+    expect(col.classes()).toContain('d-col--span-12')
+    expect(col.attributes('style')).toContain('8px')
+  })
+
+  it('DTag 语义类型与关闭事件', async () => {
+    const wrapper = mount(DTag, { props: { type: 'success', closable: true }, slots: { default: '标签' } })
+    expect(wrapper.find('.d-tag--success').exists()).toBe(true)
+    await wrapper.find('.d-tag__close').trigger('click')
+    expect(wrapper.emitted('close')).toBeTruthy()
+  })
+
+  it('DBadge 数值截断与隐藏', () => {
+    expect(mount(DBadge, { props: { value: 120 } }).text()).toContain('99+')
+    expect(mount(DBadge, { props: { value: 0 } }).find('.d-badge__content').exists()).toBe(false)
+    expect(mount(DBadge, { props: { value: 5, dot: true } }).find('.is-dot').exists()).toBe(true)
+  })
+
+  it('DSkeleton 行数与标题', () => {
+    const wrapper = mount(DSkeleton, { props: { rows: 4, title: true } })
+    expect(wrapper.findAll('.d-skeleton__row')).toHaveLength(4)
+    expect(wrapper.find('.d-skeleton__title').exists()).toBe(true)
+  })
+
+  it('DEmpty 描述与内容插槽', () => {
+    const wrapper = mount(DEmpty, { props: { description: '没有内容' }, slots: { default: () => h('button', '去创建') } })
+    expect(wrapper.text()).toContain('没有内容')
+    expect(wrapper.text()).toContain('去创建')
+  })
+
+  it('DPagination 页码窗口与切换', async () => {
+    const wrapper = mount(DPagination, { props: { total: 236, pageSize: 10, modelValue: 1 } })
+    expect(wrapper.text()).toContain('…')
+    await wrapper.findAll('button')[2].trigger('click') // 第 2 页
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([2])
+    expect(wrapper.findAll('.is-active')).toHaveLength(1)
+  })
+
+  it('DCodeBlock 渲染代码与复制按钮', () => {
+    const wrapper = mount(DCodeBlock, { props: { code: 'const a = 1', language: 'ts' } })
+    expect(wrapper.find('code').text()).toContain('const a = 1')
+    expect(wrapper.find('.d-code-block__copy').exists()).toBe(true)
+  })
+
+  it('DTabs 标签切换与同名插槽内容', async () => {
+    const wrapper = mount(DTabs, {
+      props: {
+        tabs: [{ key: 't1', label: '标签一' }, { key: 't2', label: '标签二' }, { key: 't3', label: '禁用', disabled: true }],
+        modelValue: 't1',
+      },
+      slots: { t1: () => '内容一', t2: () => '内容二' },
+    })
+    expect(wrapper.text()).toContain('内容一')
+    await wrapper.findAll('button')[1].trigger('click')
+    expect(wrapper.emitted('update:modelValue')?.[0]).toEqual(['t2'])
+    // 受控组件：父级响应 v-model 后才切换内容
+    await wrapper.setProps({ modelValue: 't2' })
+    expect(wrapper.text()).toContain('内容二')
   })
 })

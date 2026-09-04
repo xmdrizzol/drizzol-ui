@@ -56,12 +56,15 @@ const navGroups: { label: string; items: { key: string; label: string; to: strin
         label: '布局',
         items: [
             { key: '/components/dlayout', label: 'DLayout 布局', to: '/components/dlayout' },
+            { key: '/components/dgrid', label: 'DGrid 栅格', to: '/components/dgrid' },
         ],
     },
     {
         label: '导航',
         items: [
             { key: '/components/dmenu', label: 'DMenu 菜单', to: '/components/dmenu' },
+            { key: '/components/dtabs', label: 'DTabs 标签页', to: '/components/dtabs' },
+            { key: '/components/dpagination', label: 'DPagination 分页', to: '/components/dpagination' },
         ],
     },
     {
@@ -75,6 +78,16 @@ const navGroups: { label: string; items: { key: string; label: string; to: strin
             { key: '/components/dmodal', label: 'DModal 弹窗', to: '/components/dmodal' },
             { key: '/components/ddropdown', label: 'DDropdown 下拉', to: '/components/ddropdown' },
             { key: '/components/dicon', label: 'DIcon 图标', to: '/components/dicon' },
+        ],
+    },
+    {
+        label: '数据展示',
+        items: [
+            { key: '/components/dtag', label: 'DTag 标签', to: '/components/dtag' },
+            { key: '/components/dbadge', label: 'DBadge 徽标', to: '/components/dbadge' },
+            { key: '/components/dskeleton', label: 'DSkeleton 骨架屏', to: '/components/dskeleton' },
+            { key: '/components/dempty', label: 'DEmpty 空状态', to: '/components/dempty' },
+            { key: '/components/dcodeblock', label: 'DCodeBlock 代码块', to: '/components/dcodeblock' },
         ],
     },
     {

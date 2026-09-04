@@ -248,6 +248,11 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-link-hover: #{$light-link-hover};
   --dz-link-visited: #{$light-link-visited};
 
+  // 语义色（标签/徽标/状态提示等）
+  --dz-success: #52c41a;
+  --dz-warning: #faad14;
+  --dz-danger: #f5222d;
+
   // 阴影
   --dz-shadow-sm: #{$light-shadow-sm};
   --dz-shadow-md: #{$light-shadow-md};
@@ -306,6 +311,11 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-link: #{$dark-link};
   --dz-link-hover: #{$dark-link-hover};
   --dz-link-visited: #{$dark-link-visited};
+
+  // 语义色（深色下提亮一档，保证彩度）
+  --dz-success: #67c23a;
+  --dz-warning: #e6a23c;
+  --dz-danger: #f56c6c;
 
   // 阴影
   --dz-shadow-sm: #{$dark-shadow-sm};

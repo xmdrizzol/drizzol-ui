@@ -53,6 +53,14 @@ import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
 | --- | --- |
 | `DLayout` / `DHeader` / `DAside` / `DMain` / `DFooter` | 布局系统（容器 + 头/侧/内容/脚，存在侧栏时自动水平排列） |
 | `DMenu` | 导航菜单（分组/平铺、图标、路由链接、禁用、激活高亮；vue-router 为可选依赖） |
+| `DTabs` | 标签页（v-model 激活 key，内容按 key 同名插槽） |
+| `DPagination` | 分页（页码窗口 + 省略号，total/pageCount 两种模式） |
+| `DRow` / `DCol` | 24 分栏栅格（gutter 列间距、span/offset、xs~xl 响应式断点） |
+| `DTag` | 语义标签（default/primary/success/warning/danger/info，round/small/closable） |
+| `DBadge` | 角标（数值截断 max+、红点、零值/隐藏策略） |
+| `DSkeleton` | 骨架屏（rows/title/avatar，流光动画） |
+| `DEmpty` | 空状态（占位图标 + 描述 + 操作区插槽） |
+| `DCodeBlock` | 代码块（语言标识 + 复制按钮，深色高亮风格） |
 | `DIcon` / `DIconSprite` | 图标（内联 52 个 symbol 雪碧图，根节点渲染一次 sprite） |
 | `DCard` | 卡片（`is-hover` 悬浮） |
 | `DButton` | 按钮（type/link/round/block/plain/small） |

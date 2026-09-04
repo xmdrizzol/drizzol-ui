@@ -4,6 +4,15 @@ import Theme from '@/views/theme'
 
 import DLayout from '@/views/components/dlayout'
 import DMenu from '@/views/components/dmenu'
+import DGrid from '@/views/components/dgrid'
+import DTag from '@/views/components/dtag'
+import DBadge from '@/views/components/dbadge'
+import DSkeleton from '@/views/components/dskeleton'
+import DEmpty from '@/views/components/dempty'
+import DPagination from '@/views/components/dpagination'
+import DCodeBlock from '@/views/components/dcodeblock'
+import DTabs from '@/views/components/dtabs'
+
 import DCard from '@/views/components/dcard'
 import DButton from '@/views/components/dbutton'
 import DInput from '@/views/components/dinput'
@@ -36,6 +45,15 @@ const router = createRouter({
     { path: '/theme', name: 'theme', component: Theme },
     { path: '/components/dlayout', name: 'dlayout', component: DLayout },
     { path: '/components/dmenu', name: 'dmenu', component: DMenu },
+    { path: '/components/dgrid', name: 'dgrid', component: DGrid },
+    { path: '/components/dtag', name: 'dtag', component: DTag },
+    { path: '/components/dbadge', name: 'dbadge', component: DBadge },
+    { path: '/components/dskeleton', name: 'dskeleton', component: DSkeleton },
+    { path: '/components/dempty', name: 'dempty', component: DEmpty },
+    { path: '/components/dpagination', name: 'dpagination', component: DPagination },
+    { path: '/components/dcodeblock', name: 'dcodeblock', component: DCodeBlock },
+    { path: '/components/dtabs', name: 'dtabs', component: DTabs },
+
     { path: '/components/dcard', name: 'dcard', component: DCard },
     { path: '/components/dbutton', name: 'dbutton', component: DButton },
     { path: '/components/dinput', name: 'dinput', component: DInput },
