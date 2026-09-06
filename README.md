@@ -121,6 +121,14 @@ configureRequest({
 3. 构建并发布：`npm run release`（`npm run build && changeset publish`）
 4. 发布需 npmjs 账号（`npm login`），产物由 `files: ["dist"]` 控制
 
+## 贡献
+
+欢迎 Issue 与 PR！提交前请阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)：
+
+- Bug 报告请附版本、复现步骤与期望/实际行为（[Issue 模板](./.github/ISSUE_TEMPLATE/bug_report.md)）
+- PR 走 fork + 分支，**不要直接 push main**；提交遵循 Conventional Commits
+- `npm test` / `npm run typecheck` 必须通过；发布物改动需附 changeset
+
 ## 许可与致谢
 
 本库源码基于 [MIT](./LICENSE) 许可开源。
@@ -138,7 +146,6 @@ npm run build      # 构建库（es + cjs + d.ts + styles）
 npm test           # vitest 单测 + 组件冒烟
 ```
 
-> Windows 下若配置了本地代理（如 Clash 7890）且未启动，npm 命令需去掉代理环境变量：`env -u HTTPS_PROXY -u HTTP_PROXY npm install`
 
 ## 仓库约定
 

@@ -1,6 +1,6 @@
 # 插件开发规范
 
-Drizzol UI 采用「核心包 + 独立插件包」的体系：核心包 `@drizzol/ui` 提供组件、工具、样式、类型；**领域性的组件**（富文本编辑器、评论、相册浏览等）做成可选的独立包，需要时按装。
+Drizzol UI 采用「核心包 + 独立插件包」的体系：核心包 `@drizzol/ui` 提供组件、工具、样式、类型；**领域性的组件**（富文本编辑器、评论、相册浏览等）做成可选的独立包，需要时安装。
 
 ## 为什么独立成包
 
@@ -43,8 +43,7 @@ packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑�
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "element-plus": "^2.8.0",
-    "@drizzol/ui": "^0.1.0"
+    "@drizzol/ui": "^0.2.0"
   },
   "dependencies": {
     "@wangeditor/editor": "^5.1.23"
@@ -94,7 +93,7 @@ import { DEditor } from '@drizzol/ui-editor'
 
 - 样式变量与主题：`setTimeout` 外一律 `var(--dz-*)`；深浅主题自动适配
 - `withInstall`、`request`/`configureRequest`、`theme`、`pxToRem`、`debounce`、`useClickOutside` 等
-- 弹层：直接用 `DModal` / `DDropdown`（或 element-plus 的 ElMessage/ElNotification）
+- 弹层与提示：直接用 `DModal` / `DDropdown` / `DMessage` / `DNotification` / `DConfirm`
 - 上传：`uploadFile` / `getFileAccessUrl` / `DCropper` 与文件接口契约
 
 插件如需扩展主题变量（如编辑器的 `--dz-editor-*`），在插件样式的 `:root` / `:root.dark` 内声明，沿用 `--dz-<plugin>-*` 命名。
@@ -105,15 +104,6 @@ import { DEditor } from '@drizzol/ui-editor'
 - 插件对核心包声明宽 peer 段（如 `^0.1.0`），核心包 minor/breaking 发版时同步检查插件兼容性
 - 发布：`npm run release`（会构建全部包后依次 publish）
 - 新增插件后：根 `package.json` 的 build/test 脚本无需改动（`npm -w` 逐包执行），README 插件列表加一条
-
-## 以 m-editor 为样板的二期步骤（从 drizzol-nook 迁移）
-
-1. 建 `packages/ui-editor/`：拷 `src/components/m-editor`（改 `d-` 前缀）、`m-content`、`m-anchor` 及 `custom-types.d.ts`（wangEditor Slate 类型扩展）
-2. 宏系统独立为插件模块：`use-macro-settings`（模块级单例保留）、`register-macro-menu.ts`（**Boot.registerMenu 必须在模块顶层注册**，多实例会 Duplicated key）
-3. 排版：`@mixin prose` 已随核心包 `styles/_prose.scss` 输出，编辑器与展示侧共用；wangEditor 深色主题的 `--w-e-*` 变量移到插件内（核心包已删）
-4. 快捷键匹配用自实现纯函数（**勿用 is-hotkey**，见核心包 CLAUDE 踩坑）
-5. 宏设置 UI 可导出为插件组件 `DEditorMacroSettings`，宿主放账号页任意位置
-6. 冒烟测试 `packages/ui-editor/src/__tests__/`；README 插件清单登记
 
 ## 测试与维护
 

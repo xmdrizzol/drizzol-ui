@@ -32,7 +32,7 @@
 
 ## 维护规则
 
-- 通用组件/工具/样式**只在本库维护**；宿主项目（drizzol-nook 等）只消费发版产物
+- 通用组件/工具/样式**只在本库维护**；宿主项目只消费发版产物
 - 宿主发现缺陷：改库 → 补测试 → `npm run changeset` → 发版 → 宿主升级；不得绕过库直接改宿主内的拷贝
 - 0.x 阶段版本：patch=修复，minor=新增能力/新组件，破坏性变更限期 deprecation 后升 major
 - 新组件发布前必须：README 组件清单登记 + 冒烟测试 + `--dz-*` 变量核查（grep `--primary` 等裸变量为零）
@@ -41,8 +41,7 @@
 ## 踩坑记录
 
 - **is-hotkey 不要用**：vite dev 预打包把 CJS default 解析成 exports 对象，运行时抛 TypeError（仅 dev 崩）。快捷键匹配需自写纯函数
-- **v-html 注入内容无 scope 属性**：富文本展示侧（如 m-content，二期插件）排版样式必须非 scoped 或 `:deep`
+- **v-html 注入内容无 scope 属性**：富文本等 v-html 注入内容的排版样式必须非 scoped 或 `:deep`
 - **`@use` 循环风险**：`additionalData` 注入的 mixin/animations 文件名与组件内 `@use` 的路径一致；库内新增 scss 文件时勿与注入项同名
-- **Windows 代理**：本机 npm 配置了 7890 代理未开时，命令行需 `env -u HTTPS_PROXY -u HTTP_PROXY npm ...` 直连镜像
 - **gsap 已移除（教训保留）**：被打断的 gsap tween 中间值会污染下段动画（DDropdown 连点下坠），且其 No-Charge 许可禁止再分发进产物。组件动画一律用 Vue `<Transition>` + CSS 过渡实现，不要再引入 gsap
 - **后台渲染冻结 rAF 时勿以 DOM 判断开闭**：rAF 冻结后 Vue Transition/gsap 停摆，`display` 永远不落地，DOM 读数全是假象；应读 Vue 组件响应式状态（沿 `#app.__vue_app__._instance` 组件树找 setupState）或用 mock 回调的单测
