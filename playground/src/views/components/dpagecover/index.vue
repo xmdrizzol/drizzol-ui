@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DPageCover<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DPageCover<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">封面组件：带滚动视差；height / overlayOpacity 可配置。</p>
         </header>
 

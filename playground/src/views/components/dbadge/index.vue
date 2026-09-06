@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DBadge<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DBadge<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">角标：数值（超 max 显示 max+）、红点、隐藏/零值策略由 showZero 控制，红色圆点带页面底色描边。</p>
         </header>
 

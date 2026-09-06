@@ -9,9 +9,9 @@
   ],
   "scripts": {
     "dev": "npm -w playground run dev",
-    "build": "npm -w @drizzol/ui run build",
-    "build:ui": "npm -w @drizzol/ui run build",
-    "test": "npm -w @drizzol/ui run test",
+    "build": "npm -w @xmdrizzol/drizzol-ui run build",
+    "build:ui": "npm -w @xmdrizzol/drizzol-ui run build",
+    "test": "npm -w @xmdrizzol/drizzol-ui run test",
     "typecheck": "npm -w playground run typecheck",
     "changeset": "changeset",
     "version-packages": "changeset version",

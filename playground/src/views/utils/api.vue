@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">网络·文件·存储<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">网络·文件·存储<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
                 依赖后端契约或有副作用的工具（请求层、文件上传/访问、Cookie）以用法示例为主；
                 <code>getFileAccessUrl</code> 与 cookie 读写为纯前端、可现场试。请求层约定与后端字段可在宿主项目按需改 <code>baseURL</code> / 前缀。
@@ -82,10 +82,10 @@ import {
     setCookie, getCookie, setJSONCookie, getJSONCookie, removeCookie,
     setUserCookie, removeUserCookie, isLogin,
     isMobile, isTablet, isDesktop,
-} from '@drizzol/ui'
+} from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
-const requestDoc = `import { request } from '@drizzol/ui'
+const requestDoc = `import { request } from '@xmdrizzol/drizzol-ui'
 
 // 响应拦截器已解包 res.data，业务码约定 code === 200 为成功
 const list = await request.get('/posts', { params: { page: 1 } })
@@ -93,7 +93,7 @@ await request.post('/posts', { title: 'hi' })
 
 // 非 2xx 统一 DMessage.error 报错；502 提示“服务器错误”；401 触发登出（见下）`
 
-const configureDoc = `import { configureRequest, getBaseUrl, Theme } from '@drizzol/ui'
+const configureDoc = `import { configureRequest, getBaseUrl, Theme } from '@xmdrizzol/drizzol-ui'
 
 configureRequest({
   baseURL: '/api',
@@ -117,7 +117,7 @@ interface ApiResponse<T> {
 const res = await request.get<ApiResponse<Post[]>>('/posts')
 const posts = res.data`
 
-const uploadDoc = `import { uploadFile, uploadImage } from '@drizzol/ui'
+const uploadDoc = `import { uploadFile, uploadImage } from '@xmdrizzol/drizzol-ui'
 
 // POST /general/file/upload（字段 File + CustomCategory）
 const { data } = await uploadFile({ file: rawFile, category: 'image' })

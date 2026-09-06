@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { applyTheme, Theme, THEME_KEY } from '@drizzol/ui'
+import { applyTheme, Theme, THEME_KEY } from '@xmdrizzol/drizzol-ui'
 
 const route = useRoute()
 

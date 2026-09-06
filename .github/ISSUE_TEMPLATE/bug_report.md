@@ -8,7 +8,7 @@ assignees: ''
 
 **版本信息**
 
-- `@drizzol/ui` 版本：
+- `@xmdrizzol/drizzol-ui` 版本：
 - Vue 版本：
 - 浏览器与操作系统：
 

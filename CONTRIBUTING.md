@@ -43,7 +43,7 @@ husky 会在 `commit-msg` 校验格式、在 `pre-commit` 运行 typecheck + 全
 
 **Bug 报告必须包含**：
 
-1. `@drizzol/ui` 版本与 Vue / Element Plus 版本（如仍在使用 EP 宿主环境）
+1. `@xmdrizzol/drizzol-ui` 版本与 Vue / Element Plus 版本（如仍在使用 EP 宿主环境）
 2. 浏览器与操作系统
 3. **最小复现步骤**（或可运行的最小示例/仓库链接）
 4. 期望行为 与 实际行为
@@ -57,7 +57,7 @@ husky 会在 `commit-msg` 校验格式、在 `pre-commit` 运行 typecheck + 全
 2. 一个 PR 聚焦一件事；大改动建议先开 Issue 讨论
 3. 提交信息遵循 Conventional Commits（PR 内多个 commit 会在合并时压缩）
 4. **必须通过**：`npm test`、`npm run typecheck`；UI 改动请附演示站截图
-5. 涉及 `@drizzol/ui` 发布产物的改动**必须附 changeset**；破坏性变更需说明迁移方式
+5. 涉及 `@xmdrizzol/drizzol-ui` 发布产物的改动**必须附 changeset**；破坏性变更需说明迁移方式
 6. PR 描述写清：改了什么、为什么、如何验证；关联 Issue 用 `Closes #xx`
 7. 通过 Review 后由维护者合并（squash）
 

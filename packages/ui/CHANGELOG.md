@@ -1,4 +1,4 @@
-# @drizzol/ui
+# @xmdrizzol/drizzol-ui
 
 ## 0.2.0
 

@@ -39,11 +39,11 @@ const features = [
 ]
 
 const code = [
-    "npm i @drizzol/ui vue",
+    "npm i @xmdrizzol/drizzol-ui vue",
     "",
     "// main.ts",
-    "import DrizzolUi from '@drizzol/ui'",
-    "import '@drizzol/ui/style.css'",
+    "import DrizzolUi from '@xmdrizzol/drizzol-ui'",
+    "import '@xmdrizzol/drizzol-ui/style.css'",
     "app.use(DrizzolUi) // 全量注册",
     "",
     "// App.vue 根节点渲染一次雪碧图",

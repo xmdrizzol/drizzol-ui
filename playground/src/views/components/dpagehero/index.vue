@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DPageHero<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DPageHero<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">页面横幅组件：title / en / subtitle / cover / height 全参数化；封面缺省时渲染深色渐变遮罩。</p>
         </header>
 

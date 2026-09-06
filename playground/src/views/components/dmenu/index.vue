@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DMenu<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DMenu<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">导航菜单：分组标题 + 条目（图标 / 路由链接 / 禁用），激活项高亮；支持平铺 items 或分组 groups 两种数据，本页侧边栏即由它驱动。</p>
         </header>
 
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { DMessage } from '@drizzol/ui'
+import { DMessage } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 const route = useRoute()

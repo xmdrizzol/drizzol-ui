@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DForm<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DForm<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">表单组件：DForm + DFormItem 字段校验（required / min / max / validator），支持整体校验与重置。</p>
         </header>
 
@@ -32,7 +32,7 @@ await formRef.value.validate()'>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DMessage } from '@drizzol/ui'
+import { DMessage } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 const formModel = ref({ name: '', bio: '' })

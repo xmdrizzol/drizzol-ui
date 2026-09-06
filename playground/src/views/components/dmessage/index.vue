@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DMessage<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DMessage<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
                 消息提示：顶部居中 toast，自动消失。命令式调用
                 <code>DMessage.success/error/warning/info(text)</code>，返回句柄可手动关闭；样式随主题变量。
@@ -9,7 +9,7 @@
         </header>
 
         <demo-block title="基础用法" anchor-id="demo"
-            code="import { DMessage } from '@drizzol/ui'
+            code="import { DMessage } from '@xmdrizzol/drizzol-ui'
 DMessage.success('已保存')
 DMessage.error('请求失败')
 DMessage.warning('磁盘空间不足')
@@ -36,7 +36,7 @@ handle.close()">
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { DMessage } from '@drizzol/ui'
+import { DMessage } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 // 常驻提示：duration 0 + 句柄手动关闭

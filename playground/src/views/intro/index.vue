@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">介绍<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">介绍<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
                 Drizzol UI 是一套 Vue 3 组件库，统一维护组件、工具函数与样式/主题基准，
                 可作为个人与小型项目的前端基建直接消费。本页说明技术栈、版本要求、内置第三方库与图标许可合规。
@@ -70,12 +70,12 @@
 </template>
 
 <script setup lang="ts">
-const installDoc = `npm i @drizzol/ui vue
+const installDoc = `npm i @xmdrizzol/drizzol-ui vue
 
 // main.ts
 import { createApp } from 'vue'
-import DrizzolUi from '@drizzol/ui'
-import '@drizzol/ui/style.css'
+import DrizzolUi from '@xmdrizzol/drizzol-ui'
+import '@xmdrizzol/drizzol-ui/style.css'
 
 const app = createApp(App)
 app.use(DrizzolUi)   // 全量注册 d-* 组件

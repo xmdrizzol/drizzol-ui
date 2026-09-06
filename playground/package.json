@@ -9,7 +9,7 @@
     "typecheck": "vue-tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@drizzol/ui": "*",
+    "@xmdrizzol/drizzol-ui": "*",
     "vue": "^3.5.32",
     "vue-router": "^5.0.6"
   },

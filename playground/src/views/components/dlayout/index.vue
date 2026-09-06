@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DLayout<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DLayout<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">布局系统：DLayout 容器 + DHeader / DAside / DMain / DFooter 组合出「头部 + 侧边 + 内容 + 底部」完整页面骨架。</p>
         </header>
 

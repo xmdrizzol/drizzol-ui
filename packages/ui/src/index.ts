@@ -1,4 +1,4 @@
-// @drizzol/ui 入口：全量安装插件 + 具名导出
+// @xmdrizzol/drizzol-ui 入口：全量安装插件 + 具名导出
 import type { App } from 'vue'
 import './styles/index.scss'
 

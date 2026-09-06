@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DCodeBlock<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DCodeBlock<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">代码块：语言标识 + 一键复制（深色高亮风格，与正文深色代码块一致）；也接受默认插槽传入预高亮 HTML。</p>
         </header>
 
@@ -19,7 +19,7 @@ import DemoBlock from '@/components/demo-block'
 
 const demoCode = [
     'import { createApp } from \'vue\'',
-    "import DrizzolUi from '@drizzol/ui'",
+    "import DrizzolUi from '@xmdrizzol/drizzol-ui'",
     '',
     "const app = createApp(App)",
     'app.use(DrizzolUi) // 全量注册 d-* 组件',

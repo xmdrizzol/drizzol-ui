@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DDrawer<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DDrawer<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
                 抽屉：从右 / 左 / 上 / 下四个方向滑出，<code>v-model:visible</code> 开合，Esc / 遮罩 / 关闭按钮均可关闭，
                 支持 <code>before-close</code> 关闭前回调、header / footer 插槽与嵌套。
@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { DMessage, DConfirm } from '@drizzol/ui'
+import { DMessage, DConfirm } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 // 基本用法

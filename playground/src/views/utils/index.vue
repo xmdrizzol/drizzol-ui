@@ -1,16 +1,16 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">工具函数<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">工具函数<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
-                库随组件一并导出的工具与组合式函数，宿主可直接 <code>import &#123; … &#125; from '@drizzol/ui'</code>。
+                库随组件一并导出的工具与组合式函数，宿主可直接 <code>import &#123; … &#125; from '@xmdrizzol/drizzol-ui'</code>。
                 本页演示纯函数、防抖/节流、主题与组合式函数；网络层（request/文件契约）另见 README。
             </p>
         </header>
 
         <!-- pxToRem / formatDate -->
         <demo-block title="pxToRem" anchor-id="pxtorem" desc="像素按 16 基准转 rem，接受 number 或带 px 的字符串。"
-            code="import { pxToRem } from '@drizzol/ui'
+            code="import { pxToRem } from '@xmdrizzol/drizzol-ui'
 pxToRem(24)      // '1.5rem'
 pxToRem('40px')  // '2.5rem'">
             <div class="demo-block__stack utils-row">
@@ -20,7 +20,7 @@ pxToRem('40px')  // '2.5rem'">
         </demo-block>
 
         <demo-block title="formatDate" anchor-id="formatdate" desc="UTC 字符串转本地 YYYY-MM-DD HH:mm，缺时缀按 UTC 解析，非法值原样返回。"
-            code="import { formatDate } from '@drizzol/ui'
+            code="import { formatDate } from '@xmdrizzol/drizzol-ui'
 formatDate('2026-05-29T12:00:00')  // 本地时区格式化
 formatDate('')                     // ''
 formatDate('not-a-date')           // 'not-a-date'（原样）">
@@ -33,7 +33,7 @@ formatDate('not-a-date')           // 'not-a-date'（原样）">
         <!-- debounce / throttle -->
         <demo-block title="debounce / throttle" anchor-id="debounce"
             desc="快速点击对比：debounce 停止触发 delay 后只执行一次（immediate 则只首触发、不尾重复）；throttle 每 interval 至多一次。"
-            code="import { debounce, throttle } from '@drizzol/ui'
+            code="import { debounce, throttle } from '@xmdrizzol/drizzol-ui'
 const d = debounce(fn, 500)         // 尾部执行
 const dLeading = debounce(fn, 500, true) // 仅首触发一次
 const t = throttle(fn, 500)         // 每 500ms 至多一次
@@ -57,7 +57,7 @@ d.cancel()                          // 可取消">
         <!-- theme -->
         <demo-block title="theme" anchor-id="theme"
             desc="applyTheme 三态切换，只在 &lt;html&gt; 上 toggle dark 类、保留宿主其它类；结果持久化到 localStorage。"
-            code="import { applyTheme, initTheme, watchSystemTheme, Theme } from '@drizzol/ui'
+            code="import { applyTheme, initTheme, watchSystemTheme, Theme } from '@xmdrizzol/drizzol-ui'
 applyTheme(Theme.Dark)   // 'auto' | 'light' | 'dark'
 initTheme()              // 启动时读取已存偏好，否则跟随系统
 const stop = watchSystemTheme()  // auto 下随系统变化，返回销毁函数">
@@ -73,7 +73,7 @@ const stop = watchSystemTheme()  // auto 下随系统变化，返回销毁函数
         <!-- composables -->
         <demo-block title="useIsMobile" anchor-id="useismobile"
             desc="响应式移动端判定（innerWidth ≤ 768，随 resize 自动更新，卸载即解绑）。拖动窗口宽度可看变化。"
-            code="import { useIsMobile } from '@drizzol/ui'
+            code="import { useIsMobile } from '@xmdrizzol/drizzol-ui'
 const isMobile = useIsMobile()  // Ref<boolean>，响应式">
             <div class="demo-block__stack utils-row">
                 <span class="utils-out">isMobile =</span>
@@ -84,7 +84,7 @@ const isMobile = useIsMobile()  // Ref<boolean>，响应式">
 
         <demo-block title="useInView" anchor-id="useinview"
             desc="元素进入视口时返回 true（仅首次）。滚动到下方让卡片进入视口即可点亮。"
-            code="import { useInView } from '@drizzol/ui'
+            code="import { useInView } from '@xmdrizzol/drizzol-ui'
 const boxRef = ref<HTMLElement | null>(null)
 const inView = useInView(boxRef)  // 元素晚于挂载出现也能观察">
             <div class="demo-block__stack">
@@ -104,7 +104,7 @@ import {
     pxToRem, formatDate, debounce, throttle,
     applyTheme, Theme,
     useIsMobile, useInView,
-} from '@drizzol/ui'
+} from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 // pxToRem

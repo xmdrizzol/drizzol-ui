@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DNotification<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DNotification<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
                 通知：右上角堆叠，正文支持文本或 VNode（可渲染进度条等动态内容）；
                 <code>duration: 0</code> 常驻，返回句柄 <code>close()</code> 手动关闭。
@@ -9,7 +9,7 @@
         </header>
 
         <demo-block title="基础用法" anchor-id="demo"
-            code="import { DNotification } from '@drizzol/ui'
+            code="import { DNotification } from '@xmdrizzol/drizzol-ui'
 DNotification({ title: '提示', message: '有一条新消息', type: 'info' })">
             <div class="component-page__row">
                 <d-button @click="plain">纯文本通知</d-button>
@@ -36,7 +36,7 @@ handle.close()">
 
 <script setup lang="ts">
 import { h, defineComponent, ref } from 'vue'
-import { DNotification } from '@drizzol/ui'
+import { DNotification } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 function plain() {

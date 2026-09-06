@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DFloatBar<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DFloatBar<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">浮动条组件：右下角浮动按钮；滚动超过 threshold 显示返回顶部，目录按钮通过 catalog 事件交给宿主。</p>
         </header>
 
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { DMessage } from '@drizzol/ui'
+import { DMessage } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 function onCatalog() {

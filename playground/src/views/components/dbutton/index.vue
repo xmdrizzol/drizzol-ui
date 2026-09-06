@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DButton<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DButton<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">按钮组件：type / round / plain / link / block / size 六种形态，支持图标插槽。</p>
         </header>
 

@@ -9,7 +9,7 @@ export default defineConfig({
       // 演示站自身的 @ 指向本工程 src（与 drizzol-nook 惯例一致）
       '@': path.resolve(import.meta.dirname, './src'),
       // 库源码与样式的源码别名（dev 直接消费源码）
-      '@drizzol/ui': path.resolve(import.meta.dirname, '../packages/ui/src/index.ts'),
+      '@xmdrizzol/drizzol-ui': path.resolve(import.meta.dirname, '../packages/ui/src/index.ts'),
       '@ui': path.resolve(import.meta.dirname, '../packages/ui/src'),
     }
   },

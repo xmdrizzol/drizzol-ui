@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DIcon<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DIcon<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">图标组件：内联 SVG 雪碧图（id 前缀 dz-icon-）；在根组件渲染一次 &lt;d-icon-sprite /&gt; 后任意使用。下方列表由雪碧图实时读取，共 {{ iconNames.length }} 个。</p>
         </header>
 

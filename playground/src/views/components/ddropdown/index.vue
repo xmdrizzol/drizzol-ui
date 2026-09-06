@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DDropdown<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DDropdown<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">下拉菜单组件：click / hover 两种触发方式；菜单插槽自定义内容，CSS 过渡，点击外部自动关闭。</p>
         </header>
 

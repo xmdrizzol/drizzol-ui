@@ -1,6 +1,6 @@
 # 插件开发规范
 
-Drizzol UI 采用「核心包 + 独立插件包」的体系：核心包 `@drizzol/ui` 提供组件、工具、样式、类型；**领域性的组件**（富文本编辑器、评论、相册浏览等）做成可选的独立包，需要时安装。
+Drizzol UI 采用「核心包 + 独立插件包」的体系：核心包 `@xmdrizzol/drizzol-ui` 提供组件、工具、样式、类型；**领域性的组件**（富文本编辑器、评论、相册浏览等）做成可选的独立包，需要时安装。
 
 ## 为什么独立成包
 
@@ -11,13 +11,13 @@ Drizzol UI 采用「核心包 + 独立插件包」的体系：核心包 `@drizzo
 ## 包结构约定
 
 ```
-packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑器插件为例）
+packages/ui-editor/                 # 插件包 @xmdrizzol/drizzol-ui-editor（以编辑器插件为例）
 ├── package.json
-├── vite.config.ts                  # 同核心包的 lib 配置 + external（含 @drizzol/ui）
+├── vite.config.ts                  # 同核心包的 lib 配置 + external（含 @xmdrizzol/drizzol-ui）
 ├── tsconfig.json / tsconfig.build.json
 └── src/
     ├── index.ts                    # 插件入口：install(app) + 具名导出（同核心包模式）
-    ├── with-install.ts?            # 不必重复：从 '@drizzol/ui' 导入 withInstall
+    ├── with-install.ts?            # 不必重复：从 '@xmdrizzol/drizzol-ui' 导入 withInstall
     ├── components/                 # 插件组件（d- 前缀延续，如 d-editor / d-content）
     └── utils/ / composables/       # 插件私有能力（或在插件内用核心包 utils）
 ```
@@ -26,7 +26,7 @@ packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑�
 
 ```json
 {
-  "name": "@drizzol/ui-editor",
+  "name": "@xmdrizzol/drizzol-ui-editor",
   "version": "0.1.0",
   "type": "module",
   "main": "./dist/index.cjs",
@@ -43,7 +43,7 @@ packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑�
   },
   "peerDependencies": {
     "vue": "^3.5.0",
-    "@drizzol/ui": "^0.2.0"
+    "@xmdrizzol/drizzol-ui": "^0.2.0"
   },
   "dependencies": {
     "@wangeditor/editor": "^5.1.23"
@@ -53,7 +53,7 @@ packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑�
 
 要点：
 
-- `@drizzol/ui` 必须是 **peerDependency**（复用同一实例与样式变量；避免两套 vue 运行时）
+- `@xmdrizzol/drizzol-ui` 必须是 **peerDependency**（复用同一实例与样式变量；避免两套 vue 运行时）
 - 插件自带依赖写入 `dependencies`（编辑器插件：`@wangeditor/editor`、`@wangeditor/editor-for-vue`、`shiki`）
 - 插件入口**只 install 自己的组件**；核心库的全量安装不受影响
 - 样式拷贝脚本可参照核心包 `scripts/copy-styles.mjs` 在插件内放一份（拷插件自己的 `src/styles` → `dist/styles`）
@@ -63,7 +63,7 @@ packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑�
 ```ts
 // src/index.ts
 import type { App } from 'vue'
-import { withInstall } from '@drizzol/ui'
+import { withInstall } from '@xmdrizzol/drizzol-ui'
 import Editor from './components/editor'
 
 const DEditor = withInstall(Editor, 'DEditor')
@@ -80,16 +80,16 @@ export default { install }
 
 ```ts
 // 全量插件
-import DrizzolEditor from '@drizzol/ui-editor'
+import DrizzolEditor from '@xmdrizzol/drizzol-ui-editor'
 app.use(DrizzolEditor)
 
 // 具名导入
-import { DEditor } from '@drizzol/ui-editor'
+import { DEditor } from '@xmdrizzol/drizzol-ui-editor'
 ```
 
 ## 共享能力（不要重复造）
 
-插件直接 `import { ... } from '@drizzol/ui'`：
+插件直接 `import { ... } from '@xmdrizzol/drizzol-ui'`：
 
 - 样式变量与主题：`setTimeout` 外一律 `var(--dz-*)`；深浅主题自动适配
 - `withInstall`、`request`/`configureRequest`、`theme`、`pxToRem`、`debounce`、`useClickOutside` 等
@@ -107,6 +107,6 @@ import { DEditor } from '@drizzol/ui-editor'
 
 ## 测试与维护
 
-- 插件包自带 vitest（环境依赖 jsdom），`npm -w @drizzol/ui-editor test`
+- 插件包自带 vitest（环境依赖 jsdom），`npm -w @xmdrizzol/drizzol-ui-editor test`
 - 核心包更新 API 时，插件包 CI/本地需同步验证
 - 插件禁止修改核心包源码；需要核心能力时向核心包提变更

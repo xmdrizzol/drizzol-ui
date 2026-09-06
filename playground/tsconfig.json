@@ -4,7 +4,7 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.playground.tsbuildinfo",
     "types": ["vite/client"],
     "paths": {
-      "@drizzol/ui": ["../packages/ui/src/index.ts"],
+      "@xmdrizzol/drizzol-ui": ["../packages/ui/src/index.ts"],
       "@/*": ["./src/*"],
       "@ui/*": ["../packages/ui/src/*"]
     },

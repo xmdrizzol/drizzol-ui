@@ -4,7 +4,7 @@
 
 ## 项目结构
 
-- `packages/ui/` — `@drizzol/ui` 核心库（组件 + 工具 + 样式 + 类型），唯一发布包
+- `packages/ui/` — `@xmdrizzol/drizzol-ui` 核心库（组件 + 工具 + 样式 + 类型），唯一发布包
 - `playground/` — 演示站（npm workspace，`vite` alias 直接消费库源码）
 - `docs/PLUGIN.md` — 插件包开发规范
 - `.changeset/` — changesets 版本管理
@@ -36,7 +36,7 @@
 - 宿主发现缺陷：改库 → 补测试 → `npm run changeset` → 发版 → 宿主升级；不得绕过库直接改宿主内的拷贝
 - 0.x 阶段版本：patch=修复，minor=新增能力/新组件，破坏性变更限期 deprecation 后升 major
 - 新组件发布前必须：README 组件清单登记 + 冒烟测试 + `--dz-*` 变量核查（grep `--primary` 等裸变量为零）
-- 插件包对 `@drizzol/ui` 使用同主版本 peer 段；插件不修改核心包源码
+- 插件包对 `@xmdrizzol/drizzol-ui` 使用同主版本 peer 段；插件不修改核心包源码
 
 ## 踩坑记录
 

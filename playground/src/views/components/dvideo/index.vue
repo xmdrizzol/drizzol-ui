@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DVideo<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DVideo<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">视频播放器组件（ArtPlayer 封装）：容器即尺寸盒（aspect-ratio），切换 src 复用实例；ready/play/pause/ended 事件透传。</p>
         </header>
 
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { DMessage } from '@drizzol/ui'
+import { DMessage } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 function onVideoReady() {

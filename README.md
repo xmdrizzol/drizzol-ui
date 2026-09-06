@@ -1,6 +1,6 @@
 # Drizzol UI
 
-Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基于 `@drizzol/ui`，可作为个人/小型项目前端基建直接使用。
+Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基于 `@xmdrizzol/drizzol-ui`，可作为个人/小型项目前端基建直接使用。
 
 - 组件全部 `D` 前缀（`DButton` → 模板 `<d-button>`）
 - 样式全部走 `--dz-*` CSS 变量（深浅双主题 `:root.dark`）
@@ -10,18 +10,18 @@ Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基
 ## 安装
 
 ```bash
-npm i @drizzol/ui vue
+npm i @xmdrizzol/drizzol-ui vue
 ```
 
-`vue` 为 peerDependency（宿主自行安装；`vue-router` 可选）。提示/通知/确认/抽屉均为**库内自研**（`message` / `notification` / `confirm` / `DDrawer`），不依赖任何第三方 UI 库。
+`vue` 为 peerDependency（宿主自行安装；`vue-router` 可选）。
 
 ## 快速开始
 
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import DrizzolUi from '@drizzol/ui'
-import '@drizzol/ui/style.css'
+import DrizzolUi from '@xmdrizzol/drizzol-ui'
+import '@xmdrizzol/drizzol-ui/style.css'
 
 const app = createApp(App)
 app.use(DrizzolUi) // 全量注册 d-* 组件
@@ -41,7 +41,7 @@ app.mount('#app')
 也可以按需具名导入（配合 tree-shaking）：
 
 ```ts
-import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
+import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 ```
 
 ## 组件清单
@@ -77,7 +77,7 @@ import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
 | `DSearch` | 搜索框（防抖） |
 | `DSort` | 排序筛选（字段/时间范围/状态选项可配） |
 
-## 工具函数（`import { ... } from '@drizzol/ui'`）
+## 工具函数（`import { ... } from '@xmdrizzol/drizzol-ui'`）
 
 | 分类 | 导出 |
 | --- | --- |
@@ -90,7 +90,7 @@ import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
 ### 请求配置示例
 
 ```ts
-import { configureRequest } from '@drizzol/ui'
+import { configureRequest } from '@xmdrizzol/drizzol-ui'
 
 configureRequest({
   baseURL: '/api',
@@ -105,10 +105,10 @@ configureRequest({
 - 组件 CSS 随包导出于 `dist/style.css`（已含 `--dz-*` 变量定义与基础排版：h1~h6/p/code/pre/kbd 字号阶梯与边距），保持 px 单位——pxtorem 等转换属宿主项目决策
 - 主题切换：`<html>` 挂 `dark` class（`applyTheme` 三态：auto/light/dark，localStorage 持久化）
 - 自定义品牌色：改 `_variables.scss` 的 `$light-primary-*` / `$dark-primary-*` 两套 10 级色板重新编译，或直接在宿主覆盖 `--dz-primary` 等 CSS 变量
-- SCSS 源文件随包输出（`@drizzol/ui/styles`），`@mixin prose` 正文排版、`mobile`/`flex` 等 mixin 可被宿主 `@use`
+- SCSS 源文件随包输出（`@xmdrizzol/drizzol-ui/styles`），`@mixin prose` 正文排版、`mobile`/`flex` 等 mixin 可被宿主 `@use`
 
 ```scss
-@use '@drizzol/ui/styles/_mixin.scss' as *;
+@use '@xmdrizzol/drizzol-ui/styles/_mixin.scss' as *;
 // vite 可选：与库一致的 additionalData 全局注入
 ```
 
@@ -116,7 +116,7 @@ configureRequest({
 
 仓库使用 [changesets](https://github.com/changesets/changesets) 管理语义化版本：
 
-1. 改动后写变更集：`npm run changeset`，选择影响包（`@drizzol/ui`、插件包）与 bump 类型（0.x 阶段：patch=修复/文档，minor=新增能力）
+1. 改动后写变更集：`npm run changeset`，选择影响包（`@xmdrizzol/drizzol-ui`、插件包）与 bump 类型（0.x 阶段：patch=修复/文档，minor=新增能力）
 2. 发版前：`npm run version-packages`（自动版本号 + CHANGELOG），提交生成的变更
 3. 构建并发布：`npm run release`（`npm run build && changeset publish`）
 4. 发布需 npmjs 账号（`npm login`），产物由 `files: ["dist"]` 控制

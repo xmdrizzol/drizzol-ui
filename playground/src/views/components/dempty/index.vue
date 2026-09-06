@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DEmpty<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DEmpty<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">空状态：占位图标 + 描述 + 底部插槽（放置"去创建"等操作入口），icon 可换裸名。</p>
         </header>
 

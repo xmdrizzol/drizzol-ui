@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DModal<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DModal<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">弹窗组件：Teleport 到 body；过渡动画内建；maskClosable 控制点击遮罩关闭，footer 插槽自定义操作区。</p>
         </header>
 

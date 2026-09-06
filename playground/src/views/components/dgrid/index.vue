@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DRow / DCol<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DRow / DCol<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">24 分栏栅格：DRow 提供 gutter 列间距与对齐，DCol 支持 span/offset 与 xs/sm/md/lg/xl 响应式断点。</p>
         </header>
 

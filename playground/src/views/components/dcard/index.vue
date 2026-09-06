@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DCard<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DCard<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">容器基础组件：背景、边框、圆角、阴影全部由主题变量驱动；is-hover 开启悬浮上浮。</p>
         </header>
 

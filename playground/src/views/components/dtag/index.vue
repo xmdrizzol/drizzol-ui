@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DTag<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DTag<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">语义标签：default / primary / success / warning / danger / info，支持 round / small / closable。</p>
         </header>
 

@@ -1,7 +1,7 @@
 <template>
     <div class="component-page">
         <header class="component-page__head">
-            <h1 class="component-page__title">DInput<span class="component-page__tag">@drizzol/ui</span></h1>
+            <h1 class="component-page__title">DInput<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">输入框组件：text / password / textarea / number 四种类型，v-model 双向绑定，暴露 focus 方法。</p>
         </header>
 
