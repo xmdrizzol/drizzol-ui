@@ -121,6 +121,14 @@ configureRequest({
 3. 构建并发布：`npm run release`（`npm run build && changeset publish`）
 4. 发布需 npmjs 账号（`npm login`），产物由 `files: ["dist"]` 控制
 
+## 许可与致谢
+
+本库源码基于 [MIT](./LICENSE) 许可开源。
+
+- 内置图标来自 [Lucide](https://lucide.dev)（ISC 许可），经 Iconify 拉取后内联
+- 运行时依赖 axios / js-cookie / cropperjs / artplayer 均为 MIT
+- 各依赖与图标的详细许可说明见「介绍」页（文档站 `/intro`）
+
 ## 本地开发
 
 ```bash
