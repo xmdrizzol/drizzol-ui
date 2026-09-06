@@ -19,7 +19,7 @@
         </section>
 
         <section class="theme-demo__section">
-            <h2>排版基础（与博客正文语系一致）</h2>
+            <h2>排版基础（全局内容排版语系）</h2>
             <div class="theme-demo__type">
                 <h1>标题一 h1 — 22px</h1>
                 <h2>标题二 h2 — 19px（章节锚点）</h2>
@@ -36,7 +36,7 @@
                     <li>无序列表：圆点使用主色</li>
                     <li>行距节奏与正文一致</li>
                 </ul>
-                <blockquote>引用：半透明主色罩 + 左侧主色条（博客正文同款）。</blockquote>
+                <blockquote>引用：半透明主色罩 + 左侧主色条（内容排版同款）。</blockquote>
                 <pre><code>// 深色代码块（#1e1e1e，与 shiki dark-plus 一致）
 const hello = 'Drizzol UI'</code></pre>
                 <table>

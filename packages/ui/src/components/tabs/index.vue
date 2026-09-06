@@ -76,7 +76,9 @@ function select(tab: DTabItem) {
                 position: absolute;
                 left: 12px;
                 right: 12px;
-                bottom: -1px;
+                // 贴着 bar 边框线上方，不要 -1px 叠进边框：bar 是 overflow-x 滚动容器
+                // （另一轴随之变 auto），任何 1px 纵向溢出都会带出纵向滚动条
+                bottom: 0;
                 height: 2px;
                 border-radius: 99px;
                 background: var(--dz-primary);

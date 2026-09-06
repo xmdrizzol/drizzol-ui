@@ -28,13 +28,14 @@ import { DPageCover } from './components/page-cover'
 import { DFloatBar } from './components/float-bar'
 import { DSearch } from './components/search'
 import { DSort } from './components/sort'
+import { DDrawer } from './components/drawer'
 
 /** 全部组件（插件安装时按序注册） */
 const components = [
   DIcon, DIconSprite, DLayout, DHeader, DAside, DMain, DFooter, DRow, DCol, DMenu, DTabs, DPagination,
   DTag, DBadge, DSkeleton, DEmpty, DCodeBlock, DCard, DButton, DInput, DForm, DFormItem,
   DModal, DDropdown, DUpload, DCropper, DVideo, DPageHero, DPageCover,
-  DFloatBar, DSearch, DSort
+  DFloatBar, DSearch, DSort, DDrawer
 ]
 
 /**
@@ -73,6 +74,12 @@ export * from './components/page-cover'
 export * from './components/float-bar'
 export * from './components/search'
 export * from './components/sort'
+export * from './components/drawer'
+
+// 命令式提示（message / notification / confirm）
+export * from './components/message'
+export * from './components/notification'
+export * from './components/confirm'
 
 // 工具与组合式函数
 export * from './utils'

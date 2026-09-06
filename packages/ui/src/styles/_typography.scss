@@ -1,13 +1,13 @@
 /*
  * 基础排版（全局生效）：标题/段落/列表/行内代码等内容语系
  *
- * 数值与 _prose.scss 的 @mixin prose（博客正文展示排版）保持同一套：
+ * 数值与 _prose.scss 的 @mixin prose（内容展示排版）保持同一套：
  * 标题字阶 22/19/17/16/15/14px、行高 1.8、段落 1.1em 间距、行内代码灰底、
- * 深色代码块 #1e1e1e/#d4d4d4、引用主色罩、斑马纹表格与渐隐分割线。
+ * 深色代码块（--dz-code-block-*）、引用主色罩、斑马纹表格与渐隐分割线。
  * 两处改动需同步；正文精细排版请用 @mixin prose（面向富文本内容区）。
  */
 
-// 标题：字阶收敛，靠上边距拉开章节节律（与文章内容展示一致）
+// 标题：字阶收敛，靠上边距拉开层级节律（与内容展示一致）
 h1, h2, h3, h4, h5, h6 {
     margin: 1.6em 0 0.7em;
     font-weight: var(--dz-fw-semibold);
@@ -44,7 +44,7 @@ ul, ol {
 }
 
 li {
-    margin: 4px 0;
+    margin: 8px 0;
     line-height: var(--dz-line-height);
 }
 
@@ -99,8 +99,8 @@ pre {
 pre > code {
     display: block;
     margin: 16px 0;
-    background: #1e1e1e;
-    color: #d4d4d4;
+    background: var(--dz-code-block-bg);
+    color: var(--dz-code-block-text);
     border: 1px solid var(--dz-border);
     border-radius: 8px;
     padding: 16px;

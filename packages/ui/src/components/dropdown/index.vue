@@ -3,20 +3,21 @@
     <div class="d-dropdown-trigger" @click="handleClick" ref="triggerRef">
       <slot></slot>
     </div>
-    <div class="d-dropdown-menu" ref="menuRef" :style="menuStyle">
-      <div class="d-dropdown__arrow" ref="arrowRef" :style="arrowStyle"></div>
+    <Transition name="d-dropdown">
+      <div class="d-dropdown-menu" v-show="visible" ref="menuRef" :style="[menuStyle, offsetVars]">
+        <div class="d-dropdown__arrow" ref="arrowRef" :style="arrowStyle"></div>
 
-      <slot name="menu">
-        <div>默认菜单</div>
-      </slot>
-    </div>
+        <slot name="menu">
+          <div>默认菜单</div>
+        </slot>
+      </div>
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
 import { useClickOutside } from '@ui/composables/useClickOutside'
-import gsap from 'gsap'
 const TRIGGER = ['click', 'hover'] as const
 const PLACEMENT = ['top', 'bottom', 'left', 'right'] as const
 
@@ -26,19 +27,19 @@ type Placement = typeof PLACEMENT[number]
 
 // 定义 props
 const props = withDefaults(defineProps<{
-  /** 触发方式 */
-  trigger?: Trigger
-  /** 弹出位置 */
-  placement?: Placement,
-  /** 偏移量 */
-  offset?: number,
-  /** hover模式关闭延迟(ms) */
-  hoverCloseDelay?: number
+    /** 触发方式 */
+    trigger?: Trigger
+    /** 弹出位置 */
+    placement?: Placement,
+    /** 偏移量 */
+    offset?: number,
+    /** hover模式关闭延迟(ms) */
+    hoverCloseDelay?: number
 }>(), {
-  trigger: 'click',
-  placement: 'bottom',
-  offset: 8,
-  hoverCloseDelay: 300
+    trigger: 'click',
+    placement: 'bottom',
+    offset: 8,
+    hoverCloseDelay: 300
 })
 
 const visible = ref(false)
@@ -49,6 +50,8 @@ const arrowRef = ref<HTMLElement | null>(null)
 
 const menuStyle = reactive({ top: '0px', left: '0px' })
 const arrowStyle = reactive({ top: '0px', left: '0px' })
+// 进出场滑动距离交给 CSS 变量，offset prop 保持可用
+const offsetVars = computed(() => ({ '--dz-dd-offset': props.offset + 'px' }))
 
 let closeTimer: ReturnType<typeof setTimeout> | null = null // hover 模式关闭定时器
 let resizeObserver: ResizeObserver | null = null
@@ -69,40 +72,23 @@ function updatePosition() {
     }
 }
 
-// 统一动画管理
-const playOpenAnimation = () => {
-  updatePosition()
-
-  // 先清除任何正在进行的动画和关闭定时器
-  gsap.killTweensOf(menuRef.value)
-  if (closeTimer) {
-    clearTimeout(closeTimer)
-    closeTimer = null
-  }
-
-  gsap.to(menuRef.value as HTMLElement, {
-    y: props.offset,
-    duration: 0.6,
-    autoAlpha: 1,
-    ease: 'back.out(3.6)',
-    onStart: () => {
-      visible.value = true
+// 开合只翻转 visible，进出场动画由 <Transition> + CSS 过渡完成：
+// 纯 CSS 中断天然平滑（无需 kill/续接补间），也去掉了一个非 MIT 的运行时依赖
+function openMenu() {
+    if (closeTimer) {
+        clearTimeout(closeTimer)
+        closeTimer = null
     }
-  })
+    updatePosition()
+    visible.value = true
 }
 
-const playCloseAnimation = () => {
-  gsap.killTweensOf(menuRef.value)
-
-  gsap.to(menuRef.value as HTMLElement, {
-    y: 0,
-    duration: 0.6,
-    autoAlpha: 0,
-    ease: 'back.in(3.2)',
-    onComplete: () => {
-      visible.value = false
+function closeMenu() {
+    if (closeTimer) {
+        clearTimeout(closeTimer)
+        closeTimer = null
     }
-  })
+    visible.value = false
 }
 
 // 点击外部关闭下拉框
@@ -111,7 +97,7 @@ const { addListener, removeListener } = useClickOutside(
   () => {
     if (visible.value) {
       removeListener()
-      playCloseAnimation()
+      closeMenu()
     }
   }
 )
@@ -122,10 +108,10 @@ const handleClick = () => {
 
   if (!visible.value) {
     addListener()
-    playOpenAnimation()
+    openMenu()
   } else {
     removeListener()
-    playCloseAnimation()
+    closeMenu()
   }
 }
 
@@ -133,7 +119,7 @@ const handleClick = () => {
 const handleMouseEnter = () => {
   if (props.trigger !== 'hover') return
 
-  playOpenAnimation()
+  openMenu()
 }
 
 
@@ -142,7 +128,7 @@ const handleMouseLeave = () => {
 
   // 鼠标离开：延迟关闭，可被再次进入取消
   closeTimer = setTimeout(() => {
-    playCloseAnimation()
+    closeMenu()
   }, props.hoverCloseDelay)
 }
 
@@ -162,7 +148,8 @@ onUnmounted(() => {
   if (closeTimer) {
     clearTimeout(closeTimer)
   }
-  gsap.killTweensOf(menuRef.value)
+  // 打开状态下卸载时，务必移除全局点击监听，避免泄漏
+  removeListener()
 })
 
 // TODO: 切换弹出位置
@@ -189,12 +176,9 @@ onUnmounted(() => {
     border-radius: 6px;
     box-shadow: var(--dz-shadow-md);
     user-select: none;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(0);
     will-change: transform, opacity; // 性能优化
 
-    .arrow {
+    .d-dropdown__arrow {
       @include absolute;
 
       width: 0;
@@ -203,5 +187,17 @@ onUnmounted(() => {
       border-bottom-color: var(--dz-bg);
     }
   }
+}
+
+// 进出场：淡入 + 自 offset 距离下滑落位（closed 时上抬、open 落回原位）
+.d-dropdown-enter-active,
+.d-dropdown-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.d-dropdown-enter-from,
+.d-dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--dz-dd-offset, 6px)));
 }
 </style>

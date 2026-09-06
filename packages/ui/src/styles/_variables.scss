@@ -137,15 +137,37 @@ $dark-gray-8: #bcbfca;
 $dark-gray-9: #d9dbe3;
 $dark-gray-10: #f0f1f5;
 
-/*
- * 语义色（独立，不在色板内）
- */
-$light-link: #fdae6d;
-$light-link-hover: #ffc89b;
-$light-link-visited: #ff7146;
-$dark-link: #fdae6d;
-$dark-link-hover: #ffc89b;
-$dark-link-visited: #ff7146;
+// --------------------------------------------
+// 语义色板补集：实心填充前景 / 媒体浮层 / 代码块（恒定深色）
+// --------------------------------------------
+// 实心色块（primary/danger 按钮与徽标、深色图片浮层）上的文字与图标，两主题恒为白
+$light-on-fill: #ffffff;
+$dark-on-fill: #ffffff;
+
+// 覆盖在图片/媒体上的黑色半透明浮层（缩略图关闭按钮等）
+$light-scrim: rgba(0, 0, 0, 0.5);
+$light-scrim-strong: rgba(0, 0, 0, 0.7);
+$dark-scrim: rgba(0, 0, 0, 0.55);
+$dark-scrim-strong: rgba(0, 0, 0, 0.75);
+
+// 页面横幅的图片压暗渐变（保证标题可读性，不随主题变化）
+$hero-scrim: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.55) 0%,
+    rgba(0, 0, 0, 0.28) 55%,
+    rgba(0, 0, 0, 0.38) 100%
+);
+
+// 代码块（恒定深色，两种主题一致，营造编辑器观感）
+// DCodeBlock 组件与 Shiki 高亮展示侧（.code-block-wrapper）共用同一深色语言
+$code-block-bg: #1e1e1e; // 主体背景
+$code-block-head-bg: #2d2d2d; // 头部背景
+$code-block-head-border: #3d3d3d; // 头部分割线
+$code-block-border: #555; // 复制按钮边框
+$code-block-border-hover: #777; // 复制按钮边框 hover
+$code-block-text: #d4d4d4; // 正文
+$code-block-text-d: #9ca3af; // 弱化文字（语言标识等）
+$code-block-copied: #4caf50; // 复制成功提示
 
 /*
  * 顶部
@@ -243,15 +265,29 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-border: var(--dz-gray-4);
   --dz-code-bg: var(--dz-gray-3);
 
-  // 链接
-  --dz-link: #{$light-link};
-  --dz-link-hover: #{$light-link-hover};
-  --dz-link-visited: #{$light-link-visited};
+  // 链接：随主色系（hover 加深一档；深色主题 hover 提亮）
+  --dz-link: var(--dz-primary);
+  --dz-link-hover: var(--dz-primary-7);
+  --dz-link-visited: var(--dz-primary-6);
 
   // 语义色（标签/徽标/状态提示等）
   --dz-success: #52c41a;
   --dz-warning: #faad14;
   --dz-danger: #f5222d;
+
+  // 实心填充前景 / 媒体浮层 / 代码块（恒定，不随主题反转）
+  --dz-on-fill: #{$light-on-fill};
+  --dz-scrim: #{$light-scrim};
+  --dz-scrim-strong: #{$light-scrim-strong};
+  --dz-hero-scrim: #{$hero-scrim};
+  --dz-code-block-bg: #{$code-block-bg};
+  --dz-code-block-head-bg: #{$code-block-head-bg};
+  --dz-code-block-head-border: #{$code-block-head-border};
+  --dz-code-block-border: #{$code-block-border};
+  --dz-code-block-border-hover: #{$code-block-border-hover};
+  --dz-code-block-text: #{$code-block-text};
+  --dz-code-block-text-d: #{$code-block-text-d};
+  --dz-code-block-copied: #{$code-block-copied};
 
   // 阴影
   --dz-shadow-sm: #{$light-shadow-sm};
@@ -307,15 +343,20 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-border: var(--dz-gray-4);
   --dz-code-bg: var(--dz-gray-2);
 
-  // 链接
-  --dz-link: #{$dark-link};
-  --dz-link-hover: #{$dark-link-hover};
-  --dz-link-visited: #{$dark-link-visited};
+  // 链接：随主色系（深色下 hover 提亮）
+  --dz-link: var(--dz-primary);
+  --dz-link-hover: var(--dz-primary-7);
+  --dz-link-visited: var(--dz-primary-6);
 
   // 语义色（深色下提亮一档，保证彩度）
   --dz-success: #67c23a;
   --dz-warning: #e6a23c;
   --dz-danger: #f56c6c;
+
+  // 实心填充前景 / 媒体浮层（代码块恒定深色，无需随主题变化）
+  --dz-on-fill: #{$dark-on-fill};
+  --dz-scrim: #{$dark-scrim};
+  --dz-scrim-strong: #{$dark-scrim-strong};
 
   // 阴影
   --dz-shadow-sm: #{$dark-shadow-sm};
@@ -326,10 +367,4 @@ $dark-mask: rgba(17, 17, 17, 0.6);
 
   // 遮罩
   --dz-mask: #{$dark-mask};
-
-  // ==========================
-  // elementPlus 深色主题
-  // ==========================
-  --el-drawer-bg-color: var(--dz-bg);
-
 }

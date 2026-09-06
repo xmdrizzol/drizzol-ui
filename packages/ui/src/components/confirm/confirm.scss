@@ -1,0 +1,17 @@
+// confirm 命令式渲染，样式需全局
+.d-confirm__message {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: var(--dz-text);
+}
+
+.d-confirm__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+}

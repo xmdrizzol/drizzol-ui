@@ -49,7 +49,9 @@ export function uploadImage(params: { file: Blob }): Promise<ApiResponse<UploadF
     const formData = new FormData()
     formData.append('File', file, `${Date.now()}.png`)
 
+    // Content-Type 置空：交给浏览器/axios 生成带 boundary 的 multipart 头，
+    // 手动写成 'multipart/form-data' 会顶掉 boundary 导致后端解析失败
     return request.post('/general/file/upload/image', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: { 'Content-Type': undefined },
     })
 }

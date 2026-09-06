@@ -58,7 +58,8 @@ useScrollListener(() => {
         left: 0;
         width: 100%;
         height: 100%;
-        background: #fff;
+        // 跟随页面底色的“揭幕”层：深色主题下保持同色，避免出现白色雾面
+        background: var(--dz-bg);
         opacity: v-bind(overlayOpacity);
         z-index: 1;
     }

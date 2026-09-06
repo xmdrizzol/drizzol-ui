@@ -22,21 +22,19 @@ export function isSystemDarkMode(): boolean {
 
 /**
  * 应用主题
+ * 用 classList.toggle 而非整串覆盖 className：宿主可能在 <html> 上挂有其它类
+ * （语言标记、UA 检测、no-js 等），赋值 className 会把它们一并抹掉。
  */
 export function applyTheme(theme: Theme) {
   const root = document.documentElement
 
-  if (theme === Theme.Auto) {
-    const isDark = isSystemDarkMode()
-    root.className = isDark ? 'dark' : ''
-  }
-  else if (theme === Theme.Dark) {
-    root.className = 'dark'
-  }
-  else if (theme === Theme.Light) {
-    root.className = ''
-  }
-  // // 保存到本地存储
+  let dark = false
+  if (theme === Theme.Auto) dark = isSystemDarkMode()
+  else if (theme === Theme.Dark) dark = true
+  else if (theme === Theme.Light) dark = false
+
+  root.classList.toggle('dark', dark)
+  // 保存到本地存储
   localStorage.setItem(THEME_KEY, theme)
 }
 

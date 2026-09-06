@@ -51,35 +51,35 @@ async function handleCopy() {
     border: 1px solid var(--dz-border);
     border-radius: 8px;
     overflow: hidden;
-    background: #1e1e1e;
+    background: var(--dz-code-block-bg);
 
     &__header {
         @include flex(space-between, center);
         padding: 8px 14px;
-        background: rgba(255, 255, 255, 0.05);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        background: color-mix(in srgb, var(--dz-code-block-text) 6%, transparent);
+        border-bottom: 1px solid color-mix(in srgb, var(--dz-code-block-text) 8%, transparent);
     }
 
     &__lang {
         font-size: 0.75rem;
         font-family: var(--dz-ff-mono);
-        color: #9ca3af;
+        color: var(--dz-code-block-text-d);
         letter-spacing: 0.5px;
     }
 
     &__copy {
         padding: 2px 10px;
-        border: 1px solid rgba(255, 255, 255, 0.16);
+        border: 1px solid color-mix(in srgb, var(--dz-code-block-text) 16%, transparent);
         border-radius: 4px;
         background: transparent;
-        color: #d4d4d4;
+        color: var(--dz-code-block-text);
         font-size: 0.75rem;
         cursor: pointer;
         transition: all 0.15s;
 
         &:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
+            background: color-mix(in srgb, var(--dz-code-block-text) 10%, transparent);
+            color: var(--dz-on-fill);
         }
     }
 
@@ -91,11 +91,14 @@ async function handleCopy() {
         code {
             display: block;
             background: transparent;
+            // 复位全局 pre > code 的边框/外边距，避免组件内部出现双重盒子
+            margin: 0;
+            border: none;
             padding: 0;
             border-radius: 0;
             font-size: 0.8125rem;
             line-height: 1.7;
-            color: #d4d4d4;
+            color: var(--dz-code-block-text);
             white-space: pre;
             tab-size: 4;
         }

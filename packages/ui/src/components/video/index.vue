@@ -53,7 +53,8 @@ const player = shallowRef<Artplayer>()
 /** 解析主题色：props.theme 优先，否则读取全局 CSS 变量 --dz-primary */
 function resolveTheme(): string {
     if (props.theme) return props.theme
-    return getComputedStyle(document.documentElement).getPropertyValue('--dz-primary').trim() || '#409eff'
+    // 兜底为库浅色主色（_variables.scss 的 $light-primary-6）
+    return getComputedStyle(document.documentElement).getPropertyValue('--dz-primary').trim() || '#1677ff'
 }
 
 function createPlayer() {

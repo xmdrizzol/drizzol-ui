@@ -1,7 +1,8 @@
 // 上传进度通知
 import { defineComponent, h, ref } from 'vue'
-import { ElMessageBox, ElNotification } from 'element-plus'
-import type { NotificationHandle } from 'element-plus'
+import { DConfirm } from '@ui/components/confirm'
+import { DNotification } from '@ui/components/notification'
+import type { NotificationHandle } from '@ui/components/notification'
 
 export interface UploadNotifyControl {
     /** 更新进度（0-100） */
@@ -29,7 +30,7 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
 
     // 右上角 ×：先确认再取消
     const handleCloseClick = () => {
-        ElMessageBox.confirm('确定要取消当前上传吗？', '取消上传', {
+        DConfirm('确定要取消当前上传吗？', '取消上传', {
             type: 'warning',
             confirmButtonText: '取消上传',
             cancelButtonText: '继续上传',
@@ -43,7 +44,7 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
             })
     }
 
-    handle = ElNotification({
+    handle = DNotification({
         title: '',
         // 渲染函数组件：内部读取响应式 progress，进度变化时重渲染进度条
         message: h(defineComponent({

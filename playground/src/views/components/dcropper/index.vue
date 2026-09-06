@@ -21,7 +21,7 @@ const { displayUrl, fileRef } = await cropper.value.getImgUrl()'>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@drizzol/ui'
 import DemoBlock from '@/components/demo-block'
 
 const coverSvg = 'data:image/svg+xml;utf8,' + encodeURIComponent(
@@ -35,7 +35,7 @@ const cropperRef = ref<{ getImgUrl: () => Promise<{ displayUrl: string; fileRef:
 
 async function handleCrop() {
     const res = await cropperRef.value?.getImgUrl()
-    ElMessage.success(res ? `上传成功：${res.fileRef}` : '未获取到裁剪结果')
+    DMessage.success(res ? `上传成功：${res.fileRef}` : '未获取到裁剪结果')
 }
 </script>
 

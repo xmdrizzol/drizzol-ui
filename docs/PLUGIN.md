@@ -47,7 +47,7 @@ packages/ui-editor/                 # 插件包 @drizzol/ui-editor（以编辑�
     "@drizzol/ui": "^0.1.0"
   },
   "dependencies": {
-    "gsap": "^3.15.0"
+    "@wangeditor/editor": "^5.1.23"
   }
 }
 ```

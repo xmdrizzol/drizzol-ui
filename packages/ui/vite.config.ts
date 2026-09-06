@@ -28,11 +28,9 @@ export default defineConfig({
     rollupOptions: {
       external: [
         'vue',
-        'element-plus',
         'vue-router',
         'axios',
         'js-cookie',
-        'gsap',
         'cropperjs',
         'artplayer',
         '@cropper/element-canvas',

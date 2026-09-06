@@ -65,12 +65,7 @@ withDefaults(
         position: absolute;
         inset: 0;
         z-index: 1;
-        background: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.55) 0%,
-            rgba(0, 0, 0, 0.28) 55%,
-            rgba(0, 0, 0, 0.38) 100%
-        );
+        background: var(--dz-hero-scrim);
     }
 
     &__inner {
@@ -84,7 +79,7 @@ withDefaults(
         @include flex(flex-start, center);
         flex-direction: column;
         text-align: center;
-        color: #fff;
+        color: var(--dz-on-fill);
 
         @include mobile {
             min-height: 260px;
@@ -103,10 +98,14 @@ withDefaults(
 
     &__title {
         margin-top: $space-md;
+        // 必须显式声明：全局排版给 h1~h6 设了 var(--dz-text-h)，元素选择器直接命中
+        // 会压过 __inner 的继承，浅色主题下标题变成深灰、压在深色蒙版图片上不可读。
+        // 文字压在恒定深色的 hero-scrim 上，跟随恒白的 --dz-on-fill（两主题同为 #fff）
+        color: var(--dz-on-fill);
         font-size: clamp(2rem, 4.5vw, 3rem);
         font-weight: $fw-semibold;
         letter-spacing: 2px;
-        text-shadow: 0 2px 16px rgba(0, 0, 0, 0.35);
+        text-shadow: 0 2px 16px color-mix(in srgb, var(--dz-scrim-strong) 50%, transparent);
 
         @include fade-in(1s, $ease-out);
     }

@@ -108,9 +108,11 @@ function handleSelect(item: DMenuItem) {
         box-sizing: border-box;
         transition: background 0.15s, color 0.15s;
 
+        // hover 用中性灰而非 --dz-bg：侧边栏透明露出 body（同为 --dz-bg）、演示页卡片底也是
+        // --dz-bg，白上白会完全不可见；gray-4 在浅/深主题、任意承载面上都可见
         &:hover {
             color: var(--dz-primary);
-            background: var(--dz-bg);
+            background: var(--dz-gray-4);
         }
 
         &.is-active {

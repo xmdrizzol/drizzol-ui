@@ -15,11 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@drizzol/ui'
 import DemoBlock from '@/components/demo-block'
 
 function onCatalog() {
-    ElMessage.info('目录事件（示例）')
+    DMessage.info('目录事件（示例）')
 }
 </script>
 

@@ -24,7 +24,8 @@
 - **颜色/主题**：`_variables.scss` 的 `:root` / `:root.dark` 双色板是唯一色值来源；新组件配色只用 `var(--dz-*)`
 - **组件导出**：每组件 `index.ts` 用 `withInstall(Comp, 'DComp')` 导出具名 + default，并由库入口 `src/index.ts` 登记进 `components` 数组（全量安装）与 `export *`（具名导入）；图标组件例外（`DIcon` + `DIconSprite`）
 - **样式注入**：`vite.config.ts`（库+playground）的 scss `additionalData` 全局注入 `_mixin.scss`/`_animations.scss`，**库内组件不得自行 `@use '@/styles/mixin'` 重复引入**（保留 `_variables` 的 `@use` 亦可，但注意别形成循环）
-- **依赖**：`vue`/`element-plus` 为 peer（宿主安装）；axios/js-cookie/gsap/cropperjs/artplayer 为运行时依赖并列入 vite `external`
+- **依赖**：`vue` 为 peer（宿主安装，vue-router 可选）；axios/js-cookie/cropperjs/artplayer 为运行时依赖并列入 vite `external`；**不依赖任何第三方 UI 库**（提示/通知/确认/抽屉为自研四件套（DMessage/DNotification/DConfirm/DDrawer，命令式组件同走 D 前缀））
+- **许可合规**：内置图标一律取自 **Lucide（ISC）**，经 Iconify API 拉取 SVG 后并入 `icon/symbols.vue`；**禁止**从 iconfont.cn 等用户上传平台下载内联（再分发授权不可确认），**禁止**内置第三方品牌 logo（github/discord/qq 等商标）。运行时依赖（axios/js-cookie/cropperjs/artplayer）全部 MIT；**勿引入非宽松许可的依赖**（gsap 曾因 No-Charge 许可被移除）
 - **工具函数**：库构建后 `import.meta.env` 不复存在——request 的 baseURL、file 前缀等一律运行时配置（`configureRequest`/`configureFileAccessPrefix`）
 - **语言**：注释、回复、文档一律中文（JSDoc 风格）；命令、路径、标识符保留原文
 - **测试**：新增/修改组件必须同步冒烟测试（`src/__tests__/components.smoke.test.ts`）；纯函数改动补单测
@@ -43,3 +44,5 @@
 - **v-html 注入内容无 scope 属性**：富文本展示侧（如 m-content，二期插件）排版样式必须非 scoped 或 `:deep`
 - **`@use` 循环风险**：`additionalData` 注入的 mixin/animations 文件名与组件内 `@use` 的路径一致；库内新增 scss 文件时勿与注入项同名
 - **Windows 代理**：本机 npm 配置了 7890 代理未开时，命令行需 `env -u HTTPS_PROXY -u HTTP_PROXY npm ...` 直连镜像
+- **gsap 已移除（教训保留）**：被打断的 gsap tween 中间值会污染下段动画（DDropdown 连点下坠），且其 No-Charge 许可禁止再分发进产物。组件动画一律用 Vue `<Transition>` + CSS 过渡实现，不要再引入 gsap
+- **后台渲染冻结 rAF 时勿以 DOM 判断开闭**：rAF 冻结后 Vue Transition/gsap 停摆，`display` 永远不落地，DOM 读数全是假象；应读 Vue 组件响应式状态（沿 `#app.__vue_app__._instance` 组件树找 setupState）或用 mock 回调的单测

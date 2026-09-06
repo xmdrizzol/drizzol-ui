@@ -20,14 +20,22 @@ export function debounce<T extends (...args: any[]) => any>(
       timer = null
     }
 
-    // 立即执行模式
-    if (immediate && !isInvoked) {
-      fn.apply(this, args)
-      isInvoked = true
+    // 立即执行模式：只在 leading 边缘触发一次，尾部的定时器仅用于重置冷却标记
+    // （不再执行 fn），避免同一次连点里 leading + trailing 跑两遍
+    if (immediate) {
+      const callNow = !isInvoked
+      if (callNow) {
+        isInvoked = true
+        fn.apply(this, args)
+      }
+      timer = setTimeout(() => {
+        isInvoked = false
+        timer = null
+      }, delay)
       return
     }
 
-    // 延迟执行
+    // 延迟执行（尾触发）
     timer = setTimeout(() => {
       fn.apply(this, args)
       isInvoked = false

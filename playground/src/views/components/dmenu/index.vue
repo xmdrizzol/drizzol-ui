@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@drizzol/ui'
 import DemoBlock from '@/components/demo-block'
 
 const route = useRoute()
@@ -61,7 +61,7 @@ const flatItems = [
 ]
 
 function onSelect(item: any) {
-    ElMessage.info(`选中：${item.label}`)
+    DMessage.info(`选中：${item.label}`)
 }
 </script>
 

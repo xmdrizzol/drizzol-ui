@@ -1,7 +1,7 @@
 // 网络请求：axios 封装（响应拦截器解包 res.data，401 白名单策略）
 import axios from 'axios'
 import type { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@ui/components/message'
 
 /**
  * 自定义 axios 实例
@@ -67,7 +67,7 @@ function setupInterceptors(instance: CustomAxiosInstance, cfg: RequestConfig) {
 
       // 网络/服务器错误
       if (status === 502) {
-        ElMessage.error('服务器错误')
+        DMessage.error('服务器错误')
         return Promise.reject({ code: 502, msg: '服务器错误' })
       }
 
@@ -77,18 +77,18 @@ function setupInterceptors(instance: CustomAxiosInstance, cfg: RequestConfig) {
         const noLogoutApis = cfg.noLogoutApis ?? DEFAULT_CONFIG.noLogoutApis
 
         if (noLogoutApis.some(api => url.includes(api))) {
-          ElMessage.error(errorMsg)
+          DMessage.error(errorMsg)
         } else if (!isLoggingOut) {
           isLoggingOut = true
           cfg.onUnauthorized?.()
-          ElMessage.error(errorMsg)
+          DMessage.error(errorMsg)
         }
 
         return Promise.reject({ code: 401, msg: errorMsg })
       }
 
       // 其他状态码
-      ElMessage.error(data?.msg || '请求失败')
+      DMessage.error(data?.msg || '请求失败')
       return Promise.reject(data)
     }
   )

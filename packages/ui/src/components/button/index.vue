@@ -1,5 +1,5 @@
 <template>
-    <button :class="buttonClass" ref="buttonRef">
+    <button type="button" :class="buttonClass">
         <d-icon class="icon" v-if="icon" :name="icon" :size="iconSize" />
         <span>
             <slot>按钮</slot>
@@ -8,10 +8,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed } from 'vue'
 import DIcon from '../icon'
 
-const TYPE = ['default', 'primary'] as const
+const TYPE = ['default', 'primary', 'success', 'warning', 'danger', 'info'] as const
 type Type = typeof TYPE[number]
 const props = withDefaults(defineProps<{
     /** 是否为链接 */
@@ -22,7 +22,7 @@ const props = withDefaults(defineProps<{
     block?: boolean,
     /** 是否为朴素按钮 */
     plain?: boolean,
-    /** 类型 */
+    /** 类型（default 中性 / primary 主色蓝 / success / warning / danger / info） */
     type?: Type,
     /** 图标 */
     icon?: string,
@@ -40,87 +40,129 @@ const props = withDefaults(defineProps<{
     iconSize: 1.025,
     size: 'default'
 })
-const buttonClass = ref(['d-button'])
 
-// 当为链接时，添加d-button-link类
-if (props.link) {
-    buttonClass.value.push('is-link')
-}
-// 当为圆角时，添加is-round类
-if (props.round) {
-    buttonClass.value.push('is-round')
-}
-// 当为块级元素时，添加is-block类
-if (props.block) {
-    buttonClass.value.push('is-block')
-}
-// 当为朴素按钮时，添加is-plain类
-if (props.plain) {
-    buttonClass.value.push('is-plain')
-}
-// 当按钮尺寸为small时，添加m-button--small类
-if (props.size === 'small') {
-    buttonClass.value.push('d-button--small')
-}
+// computed 保证 props 动态变化时类名同步更新
+const buttonClass = computed(() => [
+    'd-button',
+    `d-button--${props.type}`,
+    {
+        'is-link': props.link,
+        'is-round': props.round,
+        'is-block': props.block,
+        'is-plain': props.plain,
+        'is-small': props.size === 'small'
+    }
+])
 
 </script>
 
 <style scoped lang="scss">
 .d-button {
+    // 类型色变量：default 中性白、primary 蓝主色，其余类型由修饰类覆盖；
+    // --dz-btn-color 供 plain / link 形态取前景色
+    --dz-btn-bg: var(--dz-bg);
+    --dz-btn-border: var(--dz-border);
+    --dz-btn-text: var(--dz-text);
+    --dz-btn-color: var(--dz-text);
+    --dz-btn-bg-hover: var(--dz-primary-hover-2);
+    --dz-btn-border-hover: var(--dz-primary);
+    --dz-btn-text-hover: var(--dz-primary);
+
     @include flex(center, center);
 
-    background: var(--dz-primary);
-    border: 1px solid var(--dz-primary);
+    background: var(--dz-btn-bg);
+    border: 1px solid var(--dz-btn-border);
     border-radius: 6px;
+    color: var(--dz-btn-text);
     padding: 0.5rem 1rem;
     cursor: pointer;
     transition: all 0.2s ease-in-out;
+    // button 同样不继承父级字体
+    font-family: inherit;
+    font-size: 0.875rem;
 
     .icon {
         margin-right: 6px;
-
-        color: white;
+        color: inherit;
     }
 
     span {
-        color: white;
+        color: inherit;
     }
 
     &:hover {
-        border-color: var(--dz-primary-hover);
-        background-color: var(--dz-primary-hover);
+        border-color: var(--dz-btn-border-hover);
+        background-color: var(--dz-btn-bg-hover);
+        color: var(--dz-btn-text-hover);
     }
 
-    &--small{
+    &.is-small {
         padding: 0.25rem 0.75rem;
-        font-size: 0.875rem;
     }
+}
 
+// 类型修饰：只翻转变量，形态样式（solid/plain/link）统一消费
+.d-button--primary {
+    --dz-btn-bg: var(--dz-primary);
+    --dz-btn-border: var(--dz-primary);
+    --dz-btn-text: var(--dz-on-fill);
+    --dz-btn-color: var(--dz-primary);
+    --dz-btn-bg-hover: var(--dz-primary-hover);
+    --dz-btn-border-hover: var(--dz-primary-hover);
+    --dz-btn-text-hover: var(--dz-on-fill);
+}
+
+.d-button--success {
+    --dz-btn-bg: var(--dz-success);
+    --dz-btn-border: var(--dz-success);
+    --dz-btn-text: var(--dz-on-fill);
+    --dz-btn-color: var(--dz-success);
+    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-success) 85%, var(--dz-bg));
+    --dz-btn-border-hover: color-mix(in srgb, var(--dz-success) 85%, var(--dz-bg));
+    --dz-btn-text-hover: var(--dz-on-fill);
+}
+
+.d-button--warning {
+    --dz-btn-bg: var(--dz-warning);
+    --dz-btn-border: var(--dz-warning);
+    --dz-btn-text: var(--dz-on-fill);
+    --dz-btn-color: var(--dz-warning);
+    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-warning) 85%, var(--dz-bg));
+    --dz-btn-border-hover: color-mix(in srgb, var(--dz-warning) 85%, var(--dz-bg));
+    --dz-btn-text-hover: var(--dz-on-fill);
+}
+
+.d-button--danger {
+    --dz-btn-bg: var(--dz-danger);
+    --dz-btn-border: var(--dz-danger);
+    --dz-btn-text: var(--dz-on-fill);
+    --dz-btn-color: var(--dz-danger);
+    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-danger) 85%, var(--dz-bg));
+    --dz-btn-border-hover: color-mix(in srgb, var(--dz-danger) 85%, var(--dz-bg));
+    --dz-btn-text-hover: var(--dz-on-fill);
+}
+
+.d-button--info {
+    --dz-btn-bg: var(--dz-gray-7);
+    --dz-btn-border: var(--dz-gray-7);
+    --dz-btn-text: var(--dz-on-fill);
+    --dz-btn-color: var(--dz-gray-7);
+    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-gray-7) 85%, var(--dz-bg));
+    --dz-btn-border-hover: color-mix(in srgb, var(--dz-gray-7) 85%, var(--dz-bg));
+    --dz-btn-text-hover: var(--dz-on-fill);
 }
 
 .is-link {
     border: none;
     padding: 0.25rem;
-    background-color: var(--dz-bg);
+    background: transparent;
+    color: var(--dz-btn-color);
 
-    .icon {
-        color: var(--dz-text);
-    }
-
-    span {
-        color: var(--dz-text);
-    }
-
+    // 纯文字形态：任何状态下都不带背景（覆盖基座 hover 的背景色）；
+    // hover 文字色向底色轻微偏移，保留反馈又不至于过重
     &:hover {
-        .icon {
-            color: var(--dz-primary);
-        }
-
-        span {
-            color: var(--dz-primary);
-        }
-
-        background: var(--dz-bg);
+        background: transparent;
+        color: color-mix(in srgb, var(--dz-btn-color) 78%, var(--dz-bg));
     }
 }
 
@@ -133,21 +175,16 @@ if (props.size === 'small') {
     width: 100%;
 }
 
+// 朴素形态：类型色淡底 + 类型色描边/文字，hover 转实心
 .is-plain {
-    background: var(--dz-bg);
-    border-color: var(--dz-border);
-
-    span {
-        color: var(--dz-text);
-    }
+    background: color-mix(in srgb, var(--dz-btn-color) 10%, var(--dz-bg));
+    border-color: color-mix(in srgb, var(--dz-btn-color) 40%, var(--dz-bg));
+    color: var(--dz-btn-color);
 
     &:hover {
-        border-color: var(--dz-primary-hover);
-        background-color: var(--dz-primary-hover-2);
-
-        span {
-            color: var(--dz-primary);
-        }
+        background: var(--dz-btn-bg);
+        border-color: var(--dz-btn-border);
+        color: var(--dz-btn-text);
     }
 }
 </style>

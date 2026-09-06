@@ -10,23 +10,20 @@ Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基
 ## 安装
 
 ```bash
-npm i @drizzol/ui element-plus vue
+npm i @drizzol/ui vue
 ```
 
-`vue` 与 `element-plus` 为 peerDependencies，宿主自行安装。
+`vue` 为 peerDependency（宿主自行安装；`vue-router` 可选）。提示/通知/确认/抽屉均为**库内自研**（`message` / `notification` / `confirm` / `DDrawer`），不依赖任何第三方 UI 库。
 
 ## 快速开始
 
 ```ts
 // main.ts
 import { createApp } from 'vue'
-import ElementPlus from 'element-plus'
-import 'element-plus/dist/index.css'
 import DrizzolUi from '@drizzol/ui'
 import '@drizzol/ui/style.css'
 
 const app = createApp(App)
-app.use(ElementPlus)
 app.use(DrizzolUi) // 全量注册 d-* 组件
 app.mount('#app')
 ```
@@ -61,13 +58,17 @@ import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
 | `DSkeleton` | 骨架屏（rows/title/avatar，流光动画） |
 | `DEmpty` | 空状态（占位图标 + 描述 + 操作区插槽） |
 | `DCodeBlock` | 代码块（语言标识 + 复制按钮，深色高亮风格） |
-| `DIcon` / `DIconSprite` | 图标（内联 52 个 symbol 雪碧图，根节点渲染一次 sprite） |
+| `DIcon` / `DIconSprite` | 图标（内联 53 个 symbol 雪碧图，源自 [Lucide](https://lucide.dev) ISC 许可，含 4 个 `*-fill` 填充版与状态图标（circle-check/circle-alert 等）；根节点渲染一次 sprite） |
 | `DCard` | 卡片（`is-hover` 悬浮） |
-| `DButton` | 按钮（type/link/round/block/plain/small） |
+| `DButton` | 按钮（type 六色 default/primary/success/warning/danger/info + link/round/plain/block/small，支持图标插槽） |
 | `DInput` | 输入框（text/password/textarea/number） |
-| `DForm` / `DFormItem` | 表单与字段校验（required/min/max/validator） |
+| `DForm` / `DFormItem` | 表单与字段校验（required/min/max/validator，支持分规则文案 requiredMessage/minMessage/maxMessage） |
 | `DModal` | 弹窗（Teleport + 过渡动画，mask 可关） |
-| `DDropdown` | 下拉（click/hover 触发，gsap 过渡） |
+| `DDrawer` | 抽屉（右/左/上/下四方向滑出 `direction`，v-model:visible，Esc 可关） |
+| `DMessage` | 命令式消息 toast（顶部居中，success/error/warning/info，自动消失/句柄关闭） |
+| `DNotification` | 命令式通知（右上角，支持 VNode 正文，句柄关闭） |
+| `DConfirm` | 命令式确认框（基于 DModal，对齐 ElMessageBox 语义） |
+| `DDropdown` | 下拉（click/hover 触发，CSS 过渡动画） |
 | `DUpload` | 上传（进度通知/取消/多文件，对接文件接口契约） |
 | `DCropper` | 图片裁剪（cropperjs，输出尺寸可配） |
 | `DVideo` | 视频播放器（ArtPlayer 封装） |
@@ -80,10 +81,10 @@ import { DCard, DButton, request, applyTheme } from '@drizzol/ui'
 
 | 分类 | 导出 |
 | --- | --- |
-| 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、ElMessage 错误提示 |
+| 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`message.error` 错误提示 |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
 | 文件 | `getFileAccessUrl`、`configureFileAccessPrefix`、`uploadFile`、`uploadImage` |
-| 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（set/get/remove 系列） |
+| 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
 | 组合式 | `useClickOutside`、`useIsMobile`、`useInView`、`useScrollListener` |
 
 ### 请求配置示例

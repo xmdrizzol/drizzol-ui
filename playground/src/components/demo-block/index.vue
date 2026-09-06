@@ -48,7 +48,6 @@ defineProps<{
     &__desc {
         margin: 0;
         font-size: 0.875rem;
-        color: var(--dz-text-l);
     }
 
     &__body {

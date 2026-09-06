@@ -1,6 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/home'
 import Theme from '@/views/theme'
+import Intro from '@/views/intro'
+import Utils from '@/views/utils'
+import UtilsApi from '@/views/utils/api.vue'
 
 import DLayout from '@/views/components/dlayout'
 import DMenu from '@/views/components/dmenu'
@@ -20,6 +23,10 @@ import DForm from '@/views/components/dform'
 import DFormItem from '@/views/components/dformitem'
 import DModal from '@/views/components/dmodal'
 import DDropdown from '@/views/components/ddropdown'
+import DMessage from '@/views/components/dmessage'
+import DNotification from '@/views/components/dnotification'
+import DConfirm from '@/views/components/dconfirm'
+import DDrawer from '@/views/components/ddrawer'
 import DIcon from '@/views/components/dicon'
 import DSearch from '@/views/components/dsearch'
 import DSort from '@/views/components/dsort'
@@ -42,7 +49,10 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/', name: 'home', component: Home },
+    { path: '/intro', name: 'intro', component: Intro },
     { path: '/theme', name: 'theme', component: Theme },
+    { path: '/utils', name: 'utils', component: Utils },
+    { path: '/utils/api', name: 'utils-api', component: UtilsApi },
     { path: '/components/dlayout', name: 'dlayout', component: DLayout },
     { path: '/components/dmenu', name: 'dmenu', component: DMenu },
     { path: '/components/dgrid', name: 'dgrid', component: DGrid },
@@ -61,6 +71,10 @@ const router = createRouter({
     { path: '/components/dformitem', name: 'dformitem', component: DFormItem },
     { path: '/components/dmodal', name: 'dmodal', component: DModal },
     { path: '/components/ddropdown', name: 'ddropdown', component: DDropdown },
+    { path: '/components/dmessage', name: 'dmessage', component: DMessage },
+    { path: '/components/dnotification', name: 'dnotification', component: DNotification },
+    { path: '/components/dconfirm', name: 'dconfirm', component: DConfirm },
+    { path: '/components/ddrawer', name: 'ddrawer', component: DDrawer },
     { path: '/components/dicon', name: 'dicon', component: DIcon },
     { path: '/components/dsearch', name: 'dsearch', component: DSearch },
     { path: '/components/dsort', name: 'dsort', component: DSort },

@@ -60,7 +60,7 @@ const displayValue = computed(() => {
         box-sizing: border-box;
         border-radius: 99px;
         background: var(--dz-danger);
-        color: #fff;
+        color: var(--dz-on-fill);
         font-size: 12px;
         line-height: 20px;
         text-align: center;

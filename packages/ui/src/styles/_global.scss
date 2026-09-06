@@ -45,22 +45,22 @@ code {
         align-items: center;
         justify-content: space-between;
         padding: 6px 12px;
-        background: #2d2d2d;
-        border-bottom: 1px solid #3d3d3d;
+        background: var(--dz-code-block-head-bg);
+        border-bottom: 1px solid var(--dz-code-block-head-border);
         user-select: none;
 
         .code-block-lang {
             font-size: 12px;
-            color: #999;
+            color: var(--dz-code-block-text-d);
             text-transform: lowercase;
         }
     }
 
     .code-copy-btn {
         font-size: 12px;
-        color: #999;
+        color: var(--dz-code-block-text-d);
         background: none;
-        border: 1px solid #555;
+        border: 1px solid var(--dz-code-block-border);
         border-radius: 4px;
         padding: 2px 8px;
         cursor: pointer;
@@ -68,13 +68,13 @@ code {
         font-family: inherit;
 
         &:hover {
-            color: #ccc;
-            border-color: #777;
+            color: var(--dz-code-block-text);
+            border-color: var(--dz-code-block-border-hover);
         }
 
         &.is-copied {
-            color: #4caf50;
-            border-color: #4caf50;
+            color: var(--dz-code-block-copied);
+            border-color: var(--dz-code-block-copied);
         }
     }
 
@@ -84,7 +84,7 @@ code {
             border-radius: 0;
             padding: 16px;
             overflow-x: auto;
-            color: #D4D4D4;
+            color: var(--dz-code-block-text);
 
             @include scrollbars;
 
@@ -98,7 +98,7 @@ code {
                 line-height: 1.6;
 
                 span {
-                    color: #D4D4D4;
+                    color: var(--dz-code-block-text);
                 }
             }
         }
@@ -106,11 +106,13 @@ code {
 }
 
 a {
-    // text-decoration: none;
+    text-decoration: none;
     color: var(--dz-link);
 
     &:hover {
         color: var(--dz-link-hover);
+        text-decoration: underline;
+        text-underline-offset: 3px;
     }
 
     &:visited {
@@ -152,7 +154,7 @@ table {
     }
 }
 
-// 文章内容排版请改 styles/_prose.scss 的 @mixin prose，此处为全局兜底
+// 正文内容排版请改 styles/_prose.scss 的 @mixin prose，此处为全局兜底
 blockquote {
     margin: 0 0 16px;
     padding: 8px 16px;
@@ -163,16 +165,6 @@ blockquote {
 
     p {
         margin: 0;
-    }
-}
-
-// ==================== element-plus ====================
-
-.el-drawer{
-    background-color: var(--dz-bg);
-
-    &__header{
-        color: var(--dz-text);
     }
 }
 

@@ -61,7 +61,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { DMessage } from '@ui/components/message'
+import { DConfirm } from '@ui/components/confirm'
 import { uploadFile } from '@ui/utils/file-api'
 import { getFileAccessUrl } from '@ui/utils/file'
 import type { FileCategory } from '@ui/types/api'
@@ -137,7 +138,7 @@ async function handleChange(e: Event) {
             } else {
                 const file = files[0]
                 if (file.size > props.maxSize) {
-                    ElMessage.warning(`文件大小不能超过 ${formatSize(props.maxSize)}`)
+                    DMessage.warning(`文件大小不能超过 ${formatSize(props.maxSize)}`)
                     return
                 }
                 await doUpload(file)
@@ -145,7 +146,7 @@ async function handleChange(e: Event) {
         } else {
             const file = files[0]
             if (file.size > props.maxSize) {
-                ElMessage.warning(`文件大小不能超过 ${formatSize(props.maxSize)}`)
+                DMessage.warning(`文件大小不能超过 ${formatSize(props.maxSize)}`)
                 return
             }
             emit('select', file)
@@ -193,7 +194,7 @@ async function doUpload(file: File): Promise<void> {
             emit('update:modelValue', res.data.storedFileName)
             emit('upload-success', res.data)
         } else {
-            ElMessage.error(res.msg || '上传失败')
+            DMessage.error(res.msg || '上传失败')
             emit('upload-error', res)
         }
     } catch (err) {
@@ -212,7 +213,7 @@ async function doUpload(file: File): Promise<void> {
  * 组件内取消上传（占位区的 ×）：先确认再 abort
  */
 function handleCancelUpload() {
-    ElMessageBox.confirm('确定要取消当前上传吗？', '取消上传', {
+    DConfirm('确定要取消当前上传吗？', '取消上传', {
         type: 'warning',
         confirmButtonText: '取消上传',
         cancelButtonText: '继续上传',
@@ -321,13 +322,13 @@ defineExpose({ openPicker, clearFile, fileInputRef })
         z-index: 1;
         cursor: pointer;
         border-radius: 50%;
-        background: rgba(0, 0, 0, 0.5);
-        color: #fff;
+        background: var(--dz-scrim);
+        color: var(--dz-on-fill);
         padding: 2px;
         @include flex(center, center);
 
         &:hover {
-            background: rgba(0, 0, 0, 0.7);
+            background: var(--dz-scrim-strong);
         }
     }
 }
@@ -336,7 +337,7 @@ defineExpose({ openPicker, clearFile, fileInputRef })
 <!-- 上传进度通知样式（通知渲染在 body，需全局样式；mixin 由 vite additionalData 注入） -->
 <style lang="scss">
 .d-upload-notify-root {
-    // 隐藏 ElNotification 自带的空标题（进度信息在消息体内）
+    // 通知自带空标题（进度信息在消息体内）
     .el-notification__title {
         display: none;
     }

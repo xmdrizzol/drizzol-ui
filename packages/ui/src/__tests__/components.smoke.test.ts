@@ -1,15 +1,9 @@
 // 组件挂载冒烟测试：16 个组件逐一 mount，断言根类名与基础行为
 import { describe, it, expect, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
-import { h } from 'vue'
+import { h, nextTick } from 'vue'
 
 // 重依赖 mock：artplayer 在 jsdom 下无法真实创建播放器，cropperjs 注册浏览器特定能力
-vi.mock('element-plus', () => ({
-  ElMessage: { error: vi.fn(), success: vi.fn(), warning: vi.fn() },
-  ElMessageBox: { confirm: vi.fn().mockResolvedValue(true) },
-  ElNotification: vi.fn(() => ({ close: vi.fn() })),
-}))
-
 vi.mock('artplayer', () => {
   return {
     default: class MockArtplayer {
@@ -40,6 +34,7 @@ import DForm from '@ui/components/form'
 import DFormItem from '@ui/components/form-item'
 import DModal from '@ui/components/modal'
 import DDropdown from '@ui/components/dropdown'
+
 import DUpload from '@ui/components/upload'
 import DCropper from '@ui/components/cropper'
 import DVideo from '@ui/components/video'
@@ -144,16 +139,43 @@ describe('组件冒烟', () => {
     expect(wrapper.find('symbol').exists()).toBe(true)
   })
 
-  it('DCard 根类名与悬浮修饰', () => {
+  it('DCard 根类名与悬浮修饰', async () => {
     expect(mount(DCard).find('.d-card').exists()).toBe(true)
     expect(mount(DCard, { props: { isHover: true } }).find('.is-hover').exists()).toBe(true)
+    // isHover 动态变化时类名同步更新
+    const wrapper = mount(DCard)
+    expect(wrapper.classes()).not.toContain('is-hover')
+    await wrapper.setProps({ isHover: true })
+    expect(wrapper.classes()).toContain('is-hover')
   })
 
   it('DButton 变体渲染', () => {
     const wrapper = mount(DButton, { props: { type: 'primary', round: true }, slots: { default: '按钮' } })
     expect(wrapper.classes()).toContain('d-button')
     expect(wrapper.classes()).toContain('is-round')
+    expect(wrapper.classes()).toContain('d-button--primary')
     expect(wrapper.text()).toContain('按钮')
+  })
+
+  it('DButton 六种类型生成对应修饰类', async () => {
+    for (const type of ['default', 'primary', 'success', 'warning', 'danger', 'info'] as const) {
+      const w = mount(DButton, { props: { type }, slots: { default: '按钮' } })
+      expect(w.classes()).toContain(`d-button--${type}`)
+      w.unmount()
+    }
+  })
+
+  it('DButton 变体响应式更新且原生 type=button', async () => {
+    const wrapper = mount(DButton, { slots: { default: '按钮' } })
+    // 原生按钮固定 type=button，避免置于 form 内触发表单提交
+    expect(wrapper.attributes('type')).toBe('button')
+    expect(wrapper.classes()).not.toContain('is-round')
+    await wrapper.setProps({ round: true, link: true, size: 'small' })
+    expect(wrapper.classes()).toContain('is-round')
+    expect(wrapper.classes()).toContain('is-link')
+    expect(wrapper.classes()).toContain('is-small')
+    await wrapper.setProps({ round: false })
+    expect(wrapper.classes()).not.toContain('is-round')
   })
 
   it('DInput 输入 emit update:modelValue', async () => {
@@ -178,11 +200,89 @@ describe('组件冒烟', () => {
     expect(wrapper.find('label').text()).toBe('名称')
   })
 
+  it('DForm 必填校验：0/false 不视为空值，空串/空数组视为空值', async () => {
+    const wrapper = mount(DForm, {
+      props: {
+        model: { count: 0, flag: false, name: '', tags: [] },
+        rules: {
+          count: { required: true },
+          flag: { required: true },
+          name: { required: true, message: '必填' },
+          tags: { required: true },
+        },
+      },
+      slots: {
+        default: () => [
+          h(DFormItem, { prop: 'count' }),
+          h(DFormItem, { prop: 'flag' }),
+          h(DFormItem, { prop: 'name' }),
+          h(DFormItem, { prop: 'tags' }),
+        ],
+      },
+    })
+    const items = wrapper.findAllComponents(DFormItem)
+    expect((items[0].vm as any).validate()).toBe(true)
+    expect((items[1].vm as any).validate()).toBe(true)
+    expect((items[2].vm as any).validate()).toBe(false)
+    expect((items[3].vm as any).validate()).toBe(false)
+  })
+
+  it('DForm 校验文案：优先分规则 message，number 值不崩溃', async () => {
+    const wrapper = mount(DForm, {
+      props: {
+        model: { name: '', age: 12, count: 12345 },
+        rules: {
+          name: { required: true, min: 2, requiredMessage: '请输入名称', minMessage: '至少 2 个字' },
+          age: { min: 3, max: 10 },
+          count: { min: 3, max: 10 },
+        },
+      },
+      slots: {
+        default: () => [
+          h(DFormItem, { prop: 'name' }),
+          h(DFormItem, { prop: 'age' }),
+          h(DFormItem, { prop: 'count' }),
+        ],
+      },
+    })
+    const items = wrapper.findAllComponents(DFormItem)
+    // 空值命中 required → 用 requiredMessage
+    expect((items[0].vm as any).validate()).toBe(false)
+    await flushPromises()
+    expect(items[0].find('.d-form-item__error').text()).toBe('请输入名称')
+    // 改为过短值 → 用 minMessage
+    await wrapper.setProps({ model: { name: 'a', age: 12, count: 12345 } })
+    expect((items[0].vm as any).validate()).toBe(false)
+    await flushPromises()
+    expect(items[0].find('.d-form-item__error').text()).toBe('至少 2 个字')
+    // number 值按字面长度比较，不抛错：12 长度 2 < min 3
+    expect((items[1].vm as any).validate()).toBe(false)
+    await flushPromises()
+    expect(items[1].find('.d-form-item__error').text()).toBe('长度不能少于 3 个字符')
+    // 12345 长度 5，落在 [3, 10] 内
+    expect((items[2].vm as any).validate()).toBe(true)
+  })
+
+  it('DFormItem 脱离 DForm 单独使用不报错且校验直接通过', () => {
+    const wrapper = mount(DFormItem, { props: { prop: 'name', label: '名称' } })
+    expect(wrapper.find('.d-form-item').exists()).toBe(true)
+    expect((wrapper.vm as any).validate()).toBe(true)
+  })
+
   it('DModal 打开后挂载到 body', async () => {
     const wrapper = mount(DModal, { props: { visible: true, title: '标题' } })
     await flushPromises()
     expect(document.body.querySelector('.d-modal')).not.toBeNull()
     expect(document.body.querySelector('.d-modal__title')?.textContent).toBe('标题')
+  })
+
+  it('DModal Escape 触发关闭事件', async () => {
+    const wrapper = mount(DModal, { props: { visible: true, title: '标题' } })
+    await flushPromises()
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
+    await flushPromises()
+    expect(wrapper.emitted('update:visible')?.[0]).toEqual([false])
+    expect(wrapper.emitted('close')).toBeTruthy()
   })
 
   it('DDropdown 渲染触发插槽与分割', () => {
@@ -191,6 +291,30 @@ describe('组件冒烟', () => {
     })
     expect(wrapper.find('.d-dropdown-trigger').exists()).toBe(true)
     expect(wrapper.find('.d-dropdown-menu').exists()).toBe(true)
+  })
+
+  it('DDropdown 点击开合驱动菜单显隐（CSS 过渡，无第三方动画库）', async () => {
+    const wrapper = mount(DDropdown, {
+      slots: { default: '<span>trigger</span>', menu: '<span>menu</span>' },
+    })
+    const trigger = wrapper.find('.d-dropdown-trigger')
+    // 断言 v-show 写入的内联 display（jsdom 的 getComputedStyle 在多次开合后有陈旧缓存，不可靠）
+    const display = () => (wrapper.find('.d-dropdown-menu').element as HTMLElement).style.display
+
+    await trigger.trigger('click')
+    await nextTick()
+    expect(display()).toBe('')
+
+    await trigger.trigger('click')
+    // leave 过渡（0.25s）结束后 v-show 隐藏；jsdom 下由 Vue 的 setTimeout 兜底收尾
+    await new Promise(r => setTimeout(r, 350))
+    expect(display()).toBe('none')
+
+    // 再开，反复切换状态正确
+    await trigger.trigger('click')
+    await nextTick()
+    expect(display()).toBe('')
+    wrapper.unmount()
   })
 
   it('DUpload 渲染上传入口', () => {

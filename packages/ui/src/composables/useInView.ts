@@ -1,4 +1,4 @@
-import { onMounted, onUnmounted, ref, type Ref } from 'vue'
+import { onUnmounted, ref, watch, type Ref } from 'vue'
 
 /**
  * 观察元素进入视口的通用 Composable（仅首次进入时触发一次）
@@ -14,22 +14,27 @@ export function useInView(
   const isInView = ref(false)
   let observer: IntersectionObserver | null = null
 
-  onMounted(() => {
+  // 元素可能晚于挂载才出现（v-if / 异步渲染），故用 watch 而非仅 onMounted：
+  // ref 一旦有值就挂观察，避免“挂载时为 null → 永不观察 → isInView 永远 false”
+  const startObserving = (el: HTMLElement) => {
+    if (observer || isInView.value) return
     observer = new IntersectionObserver(([entry]) => {
       if (entry.isIntersecting) {
         isInView.value = true
         // 只需触发一次进场，随后停止观察
         observer?.disconnect()
+        observer = null
       }
     }, { threshold: 0.15, ...options })
+    observer.observe(el)
+  }
 
-    if (targetRef.value) {
-      observer.observe(targetRef.value)
-    }
-  })
+  const stop = watch(targetRef, (el) => { if (el) startObserving(el) }, { immediate: true })
 
   onUnmounted(() => {
+    stop()
     observer?.disconnect()
+    observer = null
   })
 
   return isInView

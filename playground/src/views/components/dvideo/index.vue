@@ -15,11 +15,11 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@drizzol/ui'
 import DemoBlock from '@/components/demo-block'
 
 function onVideoReady() {
-    ElMessage.success('播放器就绪')
+    DMessage.success('播放器就绪')
 }
 </script>
 

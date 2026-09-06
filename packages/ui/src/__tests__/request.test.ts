@@ -1,12 +1,12 @@
 // request 拦截器单测
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 
-// 拦截器依赖 element-plus 提示：全部 mock 掉
-vi.mock('element-plus', () => ({
-  ElMessage: { error: vi.fn(), success: vi.fn(), warning: vi.fn() },
+// 拦截器依赖自研 message 提示：mock 掉以便断言
+vi.mock('@ui/components/message', () => ({
+  DMessage: { error: vi.fn(), success: vi.fn(), warning: vi.fn(), info: vi.fn() },
 }))
 
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@ui/components/message'
 import axios from 'axios'
 import { createRequest, configureRequest, getBaseUrl } from '@ui/utils/request'
 import request from '@ui/utils/request'
@@ -34,7 +34,7 @@ function failAdapter(status: number, data: any = {}) {
 
 describe('request 拦截器', () => {
   beforeEach(() => {
-    vi.mocked(ElMessage.error).mockClear()
+    vi.mocked(DMessage.error).mockClear()
   })
 
   it('成功时代理解包 res.data 并透传 code', async () => {
@@ -51,7 +51,7 @@ describe('request 拦截器', () => {
 
     await expect(instance.post('/login')).rejects.toEqual({ code: 401, msg: '用户名或密码错误' })
     expect(onUnauthorized).not.toHaveBeenCalled()
-    expect(ElMessage.error).toHaveBeenCalledWith('用户名或密码错误')
+    expect(DMessage.error).toHaveBeenCalledWith('用户名或密码错误')
   })
 
   it('401 非白名单接口触发 onUnauthorized', async () => {
@@ -68,7 +68,7 @@ describe('request 拦截器', () => {
     instance.defaults.adapter = failAdapter(502)
 
     await expect(instance.get('/x')).rejects.toEqual({ code: 502, msg: '服务器错误' })
-    expect(ElMessage.error).toHaveBeenCalledWith('服务器错误')
+    expect(DMessage.error).toHaveBeenCalledWith('服务器错误')
   })
 
   it('取消请求静默处理，不弹提示', async () => {
@@ -79,7 +79,7 @@ describe('request 拦截器', () => {
     }
 
     await expect(instance.get('/upload')).rejects.toThrow()
-    expect(ElMessage.error).not.toHaveBeenCalled()
+    expect(DMessage.error).not.toHaveBeenCalled()
   })
 
   it('configureRequest 更新默认实例与 getBaseUrl', () => {

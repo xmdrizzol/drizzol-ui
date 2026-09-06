@@ -1,5 +1,5 @@
 /*
- * 文章内容排版（编辑器与展示侧统一）
+ * 正文内容排版（编辑器与展示侧统一）
  *
  * 这是 m-editor 编辑态与 m-content 展示态共用的排版单一来源。
  * 修改正文排版（标题/段落/引用/表格/代码块等）请改这里的 @mixin prose。
@@ -83,7 +83,7 @@
     }
 
     li {
-        margin: 4px 0;
+        margin: 8px 0;
         line-height: inherit;
     }
 
@@ -170,8 +170,8 @@
     pre > code {
         display: block;
         margin: 16px 0;
-        background: #1e1e1e; // 与展示侧 shiki dark-plus 一致
-        color: #d4d4d4;
+        background: var(--dz-code-block-bg); // 与展示侧 shiki dark-plus 一致
+        color: var(--dz-code-block-text);
         border: 1px solid var(--dz-border);
         border-radius: 8px;
         padding: 16px;

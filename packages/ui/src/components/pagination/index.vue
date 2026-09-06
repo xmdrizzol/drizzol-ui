@@ -121,7 +121,7 @@ function go(page: number) {
         &.is-active {
             background: var(--dz-primary);
             border-color: var(--dz-primary);
-            color: #fff;
+            color: var(--dz-on-fill);
             font-weight: 600;
         }
 

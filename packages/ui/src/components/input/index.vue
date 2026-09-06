@@ -61,6 +61,8 @@ defineExpose({
     border-radius: 6px;
     background: var(--dz-bg);
     color: var(--dz-text);
+    // 表单控件默认不继承父级字体，需显式声明以跟随主题字体
+    font-family: inherit;
     outline: none;
     transition: border-color 0.2s;
 

@@ -57,7 +57,7 @@ onUnmounted(() => {
     // 默认实心主色：深浅主题下都与页面背景形成明确对比
     --dz-float-size: 44px;
     --dz-float-bg: var(--dz-primary);
-    --dz-float-color: #fff;
+    --dz-float-color: var(--dz-on-fill);
     --dz-float-border-color: transparent;
     --dz-float-shadow: var(--dz-shadow-md);
 

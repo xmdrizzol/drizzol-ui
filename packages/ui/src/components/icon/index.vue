@@ -19,7 +19,9 @@ const props = defineProps({
 
 <style scoped lang="scss">
 svg {
-    fill: currentColor;
+    // Lucide 为描边图标：以 currentColor 描边、不填充，随主题文字色变化
+    fill: none;
+    stroke: currentColor;
     vertical-align: middle;
     display: inline-block;
     color: inherit;

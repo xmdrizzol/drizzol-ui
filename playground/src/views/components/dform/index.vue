@@ -32,7 +32,7 @@ await formRef.value.validate()'>
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { ElMessage } from 'element-plus'
+import { DMessage } from '@drizzol/ui'
 import DemoBlock from '@/components/demo-block'
 
 const formModel = ref({ name: '', bio: '' })
@@ -44,7 +44,7 @@ const formRef = ref<{ validate: () => Promise<boolean>; resetFields: () => void 
 
 async function handleValidate() {
     const valid = await formRef.value?.validate()
-    ElMessage.success(valid ? '校验通过' : '校验失败，请检查表单')
+    DMessage.success(valid ? '校验通过' : '校验失败，请检查表单')
 }
 
 function handleReset() {

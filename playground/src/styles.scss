@@ -38,4 +38,36 @@ body {
         font-family: var(--dz-ff-mono);
         vertical-align: middle;
     }
+
+    // 演示行布局原子：横排按钮/卡片（此前各 demo 页 scoped 重复定义，收敛于此；
+    // 页内如需不同 gap，可在页面 scoped 样式里覆写——其优先级高于全局）
+    &__row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    // 正文内容链接：加 ↗ 箭头标识，与普通文本明显区分、一眼可知是链接
+    // （覆盖库全局 a 的 hover 下划线——箭头本身就是链接暗示，下划线反而拖累箭头）
+    p a,
+    li a {
+        font-weight: 500;
+
+        &::after {
+            content: ' ↗';
+            font-size: 0.85em;
+            display: inline-block;
+            margin-left: 1px;
+            transition: transform 0.15s ease;
+        }
+
+        &:hover {
+            text-decoration: none;
+
+            &::after {
+                transform: translate(1px, -1px);
+            }
+        }
+    }
 }

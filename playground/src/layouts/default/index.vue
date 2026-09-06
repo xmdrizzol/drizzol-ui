@@ -42,14 +42,17 @@ import { applyTheme, Theme, THEME_KEY } from '@drizzol/ui'
 
 const route = useRoute()
 
-const version = '0.1.0'
+const version = '0.2.0'
 
 const navGroups: { label: string; items: { key: string; label: string; to: string }[] }[] = [
     {
         label: '概况',
         items: [
             { key: '/', label: '总览', to: '/' },
+            { key: '/intro', label: '介绍', to: '/intro' },
             { key: '/theme', label: '主题色板', to: '/theme' },
+            { key: '/utils', label: '工具函数', to: '/utils' },
+            { key: '/utils/api', label: '网络·文件·存储', to: '/utils/api' },
         ],
     },
     {
@@ -76,6 +79,10 @@ const navGroups: { label: string; items: { key: string; label: string; to: strin
             { key: '/components/dform', label: 'DForm 表单', to: '/components/dform' },
             { key: '/components/dformitem', label: 'DFormItem 表单项', to: '/components/dformitem' },
             { key: '/components/dmodal', label: 'DModal 弹窗', to: '/components/dmodal' },
+            { key: '/components/ddrawer', label: 'DDrawer 抽屉', to: '/components/ddrawer' },
+            { key: '/components/dmessage', label: 'DMessage 消息提示', to: '/components/dmessage' },
+            { key: '/components/dnotification', label: 'DNotification 通知', to: '/components/dnotification' },
+            { key: '/components/dconfirm', label: 'DConfirm 确认框', to: '/components/dconfirm' },
             { key: '/components/ddropdown', label: 'DDropdown 下拉', to: '/components/ddropdown' },
             { key: '/components/dicon', label: 'DIcon 图标', to: '/components/dicon' },
         ],
@@ -163,7 +170,7 @@ function cycleTheme() {
         height: 30px;
         border-radius: 8px;
         background: var(--dz-primary);
-        color: #fff;
+        color: var(--dz-on-fill);
     }
 
     &__name {
@@ -209,11 +216,19 @@ function cycleTheme() {
         }
     }
 
+    // sticky 悬浮 + 独立滚动：页面保持原生滚动（DPageCover 视差、DFloatBar 返回顶部
+    // 等组件依赖 window 滚动），侧边栏跟随顶栏固定、超出部分自带细滚动条
     &__sidebar {
+        position: sticky;
+        top: 56px;
+        align-self: flex-start;
         width: 232px;
         flex-shrink: 0;
+        height: calc(100vh - 56px);
+        overflow-y: auto;
         padding: 20px 12px 40px;
         border-right: 1px solid var(--dz-border);
+        @include scrollbars;
 
         @include mobile {
             display: none;
@@ -230,29 +245,6 @@ function cycleTheme() {
         font-weight: 600;
         letter-spacing: 1px;
         color: var(--dz-text-l);
-    }
-
-    &__nav-item {
-        display: block;
-        padding: 6px 10px;
-        margin-bottom: 2px;
-        border-radius: 6px;
-        text-decoration: none;
-        font-size: 0.8125rem;
-        line-height: 1.4;
-        color: var(--dz-text-d);
-        transition: background 0.15s, color 0.15s;
-
-        &:hover {
-            color: var(--dz-primary);
-            background: var(--dz-bg);
-        }
-
-        &.is-active {
-            background: var(--dz-primary-hover-2);
-            color: var(--dz-primary);
-            font-weight: 500;
-        }
     }
 
     &__main {

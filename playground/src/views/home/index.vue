@@ -20,26 +20,26 @@
         <d-card class="home__usage">
             <h3>快速开始</h3>
             <pre class="home__code"><code>{{ code }}</code></pre>
-            <p class="home__note">
-                顶部导航查看<strong>主题色板</strong>、<strong>基础组件</strong>与<strong>增强组件</strong>示例；
-                组件清单与开发约定见仓库 README 与 CLAUDE.md。
-            </p>
+        <p class="home__note">
+            左侧导航查看<strong>主题色板</strong>、<strong>工具函数</strong>、<strong>网络·文件·存储</strong>与各类<strong>组件</strong>示例；
+            组件清单与开发约定见仓库 README 与 CLAUDE.md。
+        </p>
         </d-card>
     </div>
 </template>
 
 <script setup lang="ts">
-const badges = ['Vue 3.5', 'TypeScript', 'Vite', 'Element Plus', 'CSS 变量双主题']
+const badges = ['Vue 3.5', 'TypeScript', 'Vite', '零第三方 UI 依赖', 'CSS 变量双主题']
 
 const features = [
-    { icon: 'fd-paw', title: '16+ 组件', desc: 'DCard/DButton/DForm/DModal/DUpload/DCropper/DVideo 等，全部 D 前缀、--dz-* 变量。' },
+    { icon: 'fd-paw', title: '16+ 组件', desc: 'DCard / DButton / DForm / DModal / DUpload / DCropper / DVideo 等，全部 D 前缀、--dz-* 变量。' },
     { icon: 'fd-moon', title: '深浅双主题', desc: 'CSS 变量双色板 + <html class="dark"> 切换，跟随系统或手动三态。' },
     { icon: 'fd-cafe', title: '工具函数', desc: 'request 拦截器、theme、cookie、pxToRem、debounce、文件访问等开箱即用。' },
     { icon: 'fd-glasses', title: '可测试', desc: 'vitest 单测 + 组件挂载冒烟，pre-commit 自动回归。' },
 ]
 
 const code = [
-    "npm i @drizzol/ui element-plus vue",
+    "npm i @drizzol/ui vue",
     "",
     "// main.ts",
     "import DrizzolUi from '@drizzol/ui'",
@@ -126,6 +126,8 @@ const code = [
 
     &__feature-desc {
         margin: 0;
+        // 组件名长 token（DCard/DButton/...）在窄列中也要能断行，避免横向溢出被相邻卡片盖住
+        overflow-wrap: anywhere;
         font-size: 0.875rem;
         line-height: 1.7;
         color: var(--dz-text-d);
