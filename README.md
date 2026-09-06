@@ -13,7 +13,7 @@ Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基
 npm i @drizzol/ui vue
 ```
 
-`vue` 为 peerDependency（宿主自行安装；`vue-router` 可选）。提示/通知/确认/抽屉均为**库内自研**（`message` / `notification` / `confirm` / `DDrawer`），不依赖任何第三方 UI 库。
+`vue` 为 peerDependency（宿主自行安装；`vue-router` 可选）。
 
 ## 快速开始
 
