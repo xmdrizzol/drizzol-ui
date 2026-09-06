@@ -10,6 +10,7 @@
     "drizzol"
   ],
   "license": "MIT",
+  "author": "XMDrizzol",
   "type": "module",
   "main": "./dist/drizzol-ui.cjs",
   "module": "./dist/drizzol-ui.js",
