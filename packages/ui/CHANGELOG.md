@@ -1,5 +1,11 @@
 # @xmdrizzol/drizzol-ui
 
+## 0.2.1
+
+### Patch Changes
+
+- docs: 补充包内 README（npm 页面此前无 README 展示）；链接改为仓库绝对地址
+
 ## 0.2.0
 
 ### Minor Changes
