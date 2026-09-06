@@ -1,5 +1,10 @@
 # Drizzol UI
 
+[![npm](https://img.shields.io/npm/v/@xmdrizzol/drizzol-ui?color=1677ff)](https://www.npmjs.com/package/@xmdrizzol/drizzol-ui)
+[![license](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+[![docs](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E6%96%87%E6%A1%A3-ui.drizzol.top-1677ff)](https://ui.drizzol.top)
+
+
 Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基于 `@xmdrizzol/drizzol-ui`，可作为个人/小型项目前端基建直接使用。
 
 - 组件全部 `D` 前缀（`DButton` → 模板 `<d-button>`）

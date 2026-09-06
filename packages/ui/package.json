@@ -10,7 +10,15 @@
     "drizzol"
   ],
   "license": "MIT",
-  "author": "XMDrizzol",
+    "author": "XMDrizzol",
+  "homepage": "https://ui.drizzol.top",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xmdrizzol/drizzol-ui.git"
+  },
+  "bugs": {
+    "url": "https://github.com/xmdrizzol/drizzol-ui/issues"
+  },
   "type": "module",
   "main": "./dist/drizzol-ui.cjs",
   "module": "./dist/drizzol-ui.js",
