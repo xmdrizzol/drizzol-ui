@@ -1,11 +1,17 @@
 # Drizzol UI
 
+[![npm](https://img.shields.io/npm/v/@xmdrizzol/drizzol-ui?color=1677ff)](https://www.npmjs.com/package/@xmdrizzol/drizzol-ui)
+[![license](https://img.shields.io/badge/license-MIT-blue)](https://github.com/xmdrizzol/drizzol-ui/blob/main/LICENSE)
+[![docs](https://img.shields.io/badge/%E5%9C%A8%E7%BA%BF%E6%96%87%E6%A1%A3-ui.drizzol.top-1677ff)](https://ui.drizzol.top)
+
 Vue 3 组件库 —— 组件、工具函数、样式体系的统一基准。基于 `@xmdrizzol/drizzol-ui`，可作为个人/小型项目前端基建直接使用。
+
+📦 [npm](https://www.npmjs.com/package/@xmdrizzol/drizzol-ui) · 🐙 [GitHub](https://github.com/xmdrizzol/drizzol-ui) · 🖥 [在线演示](https://ui.drizzol.top) · 📖 [贡献指南](https://github.com/xmdrizzol/drizzol-ui/blob/main/CONTRIBUTING.md)
 
 - 组件全部 `D` 前缀（`DButton` → 模板 `<d-button>`）
 - 样式全部走 `--dz-*` CSS 变量（深浅双主题 `:root.dark`）
 - 工具函数（request 拦截器、theme、cookie、pxToRem 等）随包导出
-- 插件体系见 [docs/PLUGIN.md](docs/PLUGIN.md)
+- 提示/通知/确认/抽屉均为库内自研，**不依赖任何第三方 UI 库**
 
 ## 安装
 
@@ -41,7 +47,7 @@ app.mount('#app')
 也可以按需具名导入（配合 tree-shaking）：
 
 ```ts
-import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
+import { DCard, DButton, message, applyTheme } from '@xmdrizzol/drizzol-ui'
 ```
 
 ## 组件清单
@@ -81,7 +87,8 @@ import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 
 | 分类 | 导出 |
 | --- | --- |
-| 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`message.error` 错误提示 |
+| 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`DMessage.error` 错误提示 |
+| 提示 | `DMessage`（顶部 toast：success/error/warning/info）、`DNotification`（右上角通知，支持 VNode 正文）、`DConfirm`（基于 DModal 的命令式确认框） |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
 | 文件 | `getFileAccessUrl`、`configureFileAccessPrefix`、`uploadFile`、`uploadImage` |
 | 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
@@ -98,7 +105,7 @@ configureRequest({
 })
 ```
 
-后端契约约定：响应 `{ code, msg, data }` 包一层，`code === 200` 为成功；文件上传 `POST /api/general/file/upload[/image]`（字段 `File` + `CustomCategory`），访问 `GET /api/general/file/access/{type}/{fileRef}`。后端不同时，修改 `baseURL` / `configureFileAccessPrefix` 或自行封装 request。
+后端契约约定：响应 `{ code, msg, data }` 包一层，`code === 200` 为成功；文件上传 `POST /api/general/file/upload[/image]`（字段 `File` + `CustomCategory`），访问 `GET /api/general/file/access/{type}/{fileRef}`。后端不同，修改 `baseURL` / `configureFileAccessPrefix` 或自行封装 request。
 
 ## 样式与主题
 
@@ -112,20 +119,11 @@ configureRequest({
 // vite 可选：与库一致的 additionalData 全局注入
 ```
 
-## 版本与发布（changesets）
-
-仓库使用 [changesets](https://github.com/changesets/changesets) 管理语义化版本：
-
-1. 改动后写变更集：`npm run changeset`，选择影响包（`@xmdrizzol/drizzol-ui`、插件包）与 bump 类型（0.x 阶段：patch=修复/文档，minor=新增能力）
-2. 发版前：`npm run version-packages`（自动版本号 + CHANGELOG），提交生成的变更
-3. 构建并发布：`npm run release`（`npm run build && changeset publish`）
-4. 发布需 npmjs 账号（`npm login`），产物由 `files: ["dist"]` 控制
-
 ## 贡献
 
 欢迎 Issue 与 PR！提交前请阅读 [CONTRIBUTING.md](https://github.com/xmdrizzol/drizzol-ui/blob/main/CONTRIBUTING.md)：
 
-- Bug 报告请附版本、复现步骤与期望/实际行为（[Issue 模板](./.github/ISSUE_TEMPLATE/bug_report.md)）
+- Bug 报告请附版本、复现步骤与期望/实际行为（[Issue 模板](https://github.com/xmdrizzol/drizzol-ui/issues/new/choose)）
 - PR 走 fork + 分支，**不要直接 push main**；提交遵循 Conventional Commits
 - `npm test` / `npm run typecheck` 必须通过；发布物改动需附 changeset
 
@@ -135,18 +133,4 @@ configureRequest({
 
 - 内置图标来自 [Lucide](https://lucide.dev)（ISC 许可），经 Iconify 拉取后内联
 - 运行时依赖 axios / js-cookie / cropperjs / artplayer 均为 MIT
-- 各依赖与图标的详细许可说明见「介绍」页（文档站 `/intro`）
-
-## 本地开发
-
-```bash
-npm install
-npm run dev        # playground 演示站（端口 5177，直接消费库源码）
-npm run build      # 构建库（es + cjs + d.ts + styles）
-npm test           # vitest 单测 + 组件冒烟
-```
-
-
-## 仓库约定
-
-开发规范、维护规则、插件开发流程见 [CLAUDE.md](CLAUDE.md) 与 [docs/PLUGIN.md](docs/PLUGIN.md)。
+- 各依赖与图标的详细许可说明见[在线文档「介绍」页](https://ui.drizzol.top)

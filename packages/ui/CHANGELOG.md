@@ -1,5 +1,11 @@
 # @xmdrizzol/drizzol-ui
 
+## 0.2.2
+
+### Patch Changes
+
+- docs: 重写包内 README 面向 npm 消费者——徽章与 GitHub/文档站链接置顶、组件清单补全反馈四件套、移除维护者向内容（本地开发/仓库约定/CLAUDE 引用）
+
 ## 0.2.1
 
 ### Patch Changes
