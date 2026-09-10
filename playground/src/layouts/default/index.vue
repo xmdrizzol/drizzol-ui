@@ -1,9 +1,9 @@
 <template>
-    <div class="default-layout">
+    <d-layout class="default-layout">
         <!-- 雪碧图注入：仅需在根组件渲染一次 -->
         <d-icon-sprite />
 
-        <header class="default-layout__header">
+        <d-header fixed class="default-layout__header">
             <div class="default-layout__brand">
                 <router-link to="/" class="default-layout__link">
                     <span class="default-layout__logo">
@@ -26,23 +26,23 @@
                     <d-icon :name="themeMeta.icon" size="1.4" />
                 </button>
             </div>
-        </header>
+        </d-header>
 
-        <div class="default-layout__shell">
-            <aside class="default-layout__sidebar">
+        <d-layout class="default-layout__shell">
+            <d-aside fixed :width="232" class="default-layout__sidebar">
                 <d-menu :groups="navGroups" :model-value="route.path" />
-            </aside>
+            </d-aside>
 
-            <main class="default-layout__main">
+            <d-main class="default-layout__main">
                 <router-view />
-            </main>
-        </div>
+            </d-main>
+        </d-layout>
 
-        <footer class="default-layout__footer">
+        <d-footer height="auto" class="default-layout__footer">
             <span>Drizzol UI v{{ version }} · Vue 3 组件库</span>
             <span>组件、工具、样式与主题的统一基准</span>
-        </footer>
-    </div>
+        </d-footer>
+    </d-layout>
 </template>
 
 <script setup lang="ts">
@@ -146,20 +146,49 @@ function cycleTheme() {
 </script>
 
 <style scoped lang="scss">
-.default-layout {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
+/* 头部高度：与库内 DHeader 默认值一致，同时决定侧栏的吸顶偏移与自身高度 */
+$header-height: 56px;
 
-    &__header {
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        @include flex(space-between, center);
-        height: 56px;
-        padding: 0 16px 0 20px;
-        background: var(--dz-bg-secondary);
-        border-bottom: 1px solid var(--dz-border);
+.default-layout {
+    // 库内 .d-layout 自带 min-height: 0 / flex: 1，用复合选择器提高优先级还原「撑满视口、页脚贴底」
+    &.d-layout {
+        min-height: 100vh;
+        // 吸顶侧栏（DAside fixed）的吸附位置：让出吸顶头部的高度，避免与头部重叠
+        --dz-aside-sticky-top: #{$header-height};
+    }
+
+    // 以下覆写库组件默认值：库内样式是单类 scoped（.d-header 等），这里多带一层父类才能稳定压过，
+    // 不依赖 SFC 之间样式的注入顺序
+    .default-layout__header {
+        justify-content: space-between;
+    }
+
+    .default-layout__sidebar {
+        height: calc(100vh - #{$header-height});
+        padding: 20px 12px 40px;
+        @include scrollbars;
+
+        @include mobile {
+            display: none;
+        }
+    }
+
+    .default-layout__main {
+        padding: 28px 32px 60px;
+        max-width: 1080px;
+
+        @include mobile {
+            padding: 20px 16px 48px;
+        }
+    }
+
+    .default-layout__footer {
+        justify-content: space-between;
+        gap: 12px;
+        flex-wrap: wrap;
+        padding: 20px 32px;
+        font-size: 0.8125rem;
+        color: var(--dz-text-l);
     }
 
     &__brand {
@@ -222,68 +251,5 @@ function cycleTheme() {
             color: var(--dz-primary);
         }
     }
-
-    &__shell {
-        flex: 1;
-        display: flex;
-
-        @include mobile {
-            display: block;
-        }
-    }
-
-    // sticky 悬浮 + 独立滚动：页面保持原生滚动（DPageCover 视差、DFloatBar 返回顶部
-    // 等组件依赖 window 滚动），侧边栏跟随顶栏固定、超出部分自带细滚动条
-    &__sidebar {
-        position: sticky;
-        top: 56px;
-        align-self: flex-start;
-        width: 232px;
-        flex-shrink: 0;
-        height: calc(100vh - 56px);
-        overflow-y: auto;
-        padding: 20px 12px 40px;
-        border-right: 1px solid var(--dz-border);
-        @include scrollbars;
-
-        @include mobile {
-            display: none;
-        }
-    }
-
-    &__nav-group {
-        margin-bottom: 20px;
-    }
-
-    &__nav-title {
-        margin: 0 10px 6px;
-        font-size: 0.72rem;
-        font-weight: 600;
-        letter-spacing: 1px;
-        color: var(--dz-text-l);
-    }
-
-    &__main {
-        flex: 1;
-        min-width: 0;
-        padding: 28px 32px 60px;
-        max-width: 1080px;
-
-        @include mobile {
-            padding: 20px 16px 48px;
-        }
-    }
-
-    &__footer {
-        @include flex(space-between, center);
-        gap: 12px;
-        flex-wrap: wrap;
-        padding: 20px 32px;
-        border-top: 1px solid var(--dz-border);
-        background: var(--dz-bg-secondary);
-        font-size: 0.8125rem;
-        color: var(--dz-text-l);
-    }
-
 }
 </style>
