@@ -1,6 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import postcssPxtorem from 'postcss-pxtorem'
 import path from 'path'
+
+// px → rem（与库构建一致）：源码写 px，dev 即时换算。minPixelValue 保留 1px 细边框。
+const pxtorem = postcssPxtorem({ rootValue: 16, propList: ['*'], minPixelValue: 2 })
 
 export default defineConfig({
   plugins: [vue()],
@@ -14,6 +18,9 @@ export default defineConfig({
     }
   },
   css: {
+    postcss: {
+      plugins: [pxtorem]
+    },
     preprocessorOptions: {
       scss: {
         // 与库构建一致的全局注入：mixin/animations（来自库 styles）

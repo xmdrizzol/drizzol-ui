@@ -1,17 +1,17 @@
 <template>
-    <section class="d-layout" :style="{ flexDirection: direction }">
+    <section class="d-layout" :class="direction === 'row' ? 'is-row' : 'is-column'" :style="{ flexDirection: direction }">
         <slot />
     </section>
 </template>
 
 <script setup lang="ts">
-import { computed, provide, reactive } from 'vue'
-import { LAYOUT_KEY } from './layout-key'
+import { computed, useSlots, type VNode } from 'vue'
+import Aside from './aside.vue'
 
 /**
  * 布局容器：DLayout + DHeader + DAside + DMain + DFooter 组合使用
- * - 默认垂直排列；存在 DAside 时自动水平排列（可用 direction 强制）
- * - 布局上下文：子组件挂载时登记 aside/header/footer 标记
+ * - 默认垂直排列；默认插槽直接含 DAside 时自动水平排列（可用 direction 强制）
+ * - 完整「顶栏 + 侧边 + 内容 + 底栏」请用嵌套 DLayout：外层垂直（header + 内层 + footer），内层水平（aside + main）
  */
 const props = withDefaults(defineProps<{
     /** 排列方向：horizontal（左右）| vertical（上下），默认按子组件自动推断 */
@@ -20,13 +20,18 @@ const props = withDefaults(defineProps<{
     direction: undefined,
 })
 
-// 子组件挂载后写标记（响应式），决定自动方向
-const flags = reactive({ aside: false, header: false, footer: false })
-provide(LAYOUT_KEY, flags)
+const slots = useSlots()
 
-const direction = computed(() => {
+// 渲染期探测默认插槽是否直接包含 DAside → 自动切换为水平（row）。
+// withInstall 只是给 SFC 挂 install 并返回同一对象，因此 v.type === Aside 对
+// 「<d-aside>」全局注册与「DAside」导入均成立。
+function hasAside(vnodes?: VNode[]): boolean {
+    return !!vnodes?.some(v => v.type === Aside)
+}
+
+const direction = computed<'row' | 'column'>(() => {
     if (props.direction) return props.direction === 'horizontal' ? 'row' : 'column'
-    return flags.aside ? 'row' : 'column'
+    return hasAside(slots.default?.()) ? 'row' : 'column'
 })
 </script>
 

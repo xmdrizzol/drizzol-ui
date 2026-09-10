@@ -12,9 +12,12 @@
 .d-main {
     flex: 1;
     min-width: 0;
-    overflow: auto;
     background: var(--dz-bg);
-    padding: 20px;
+    padding: 24px;
     box-sizing: border-box;
+
+    @include mobile {
+        padding: 16px;
+    }
 }
 </style>

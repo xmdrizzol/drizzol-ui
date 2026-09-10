@@ -2,6 +2,7 @@
 import { describe, it, expect, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { h, nextTick } from 'vue'
+import asideSource from '@ui/components/layout/aside.vue?raw'
 
 // 重依赖 mock：artplayer 在 jsdom 下无法真实创建播放器，cropperjs 注册浏览器特定能力
 vi.mock('artplayer', () => {
@@ -77,6 +78,56 @@ describe('组件冒烟', () => {
     })
     await flushPromises()
     expect(wrapper.find('.d-layout').attributes('style')).toContain('row')
+  })
+
+  it('DHeader：height 数字按 px 转 rem，传 fixed 加 is-fixed，不传 height 无内联', () => {
+    const withH = mount(DHeader, { props: { height: 48, fixed: true }, slots: { default: () => 'x' } })
+    expect(withH.find('.d-header').attributes('style')).toContain('3rem')
+    expect(withH.find('.d-header').classes()).toContain('is-fixed')
+    withH.unmount()
+
+    const withoutH = mount(DHeader, { slots: { default: () => 'x' } })
+    expect(withoutH.find('.d-header').attributes('style')).toBeUndefined()
+    withoutH.unmount()
+  })
+
+  it('DHeader：纯属性字符串 height="48" 也转 rem（修复无单位导致的非法 CSS）', () => {
+    const w = mount(DHeader, { props: { height: '48' }, slots: { default: () => 'x' } })
+    const style = w.find('.d-header').attributes('style')
+    expect(style).toBeTruthy()
+    expect(style).toContain('3rem')
+  })
+
+  it('DFooter/DAside：尺寸转 rem，fixed 加 is-fixed', () => {
+    const footer = mount(DFooter, { props: { height: 48, fixed: true }, slots: { default: () => 'x' } })
+    expect(footer.find('.d-footer').attributes('style')).toContain('3rem')
+    expect(footer.find('.d-footer').classes()).toContain('is-fixed')
+
+    const aside = mount(DAside, { props: { width: 200, fixed: true }, slots: { default: () => 'x' } })
+    expect(aside.find('.d-aside').attributes('style')).toContain('12.5rem')
+    expect(aside.find('.d-aside').classes()).toContain('is-fixed')
+  })
+
+  it('DAside：带单位字符串原样透传（auto/%），数字/Npx 转 rem', () => {
+    const auto = mount(DAside, { props: { width: 'auto' }, slots: { default: () => 'x' } })
+    expect(auto.find('.d-aside').attributes('style')).toContain('auto')
+    auto.unmount()
+
+    const pct = mount(DAside, { props: { width: '50%' }, slots: { default: () => 'x' } })
+    expect(pct.find('.d-aside').attributes('style')).toContain('50%')
+    pct.unmount()
+
+    const pxStr = mount(DAside, { props: { width: '200px' }, slots: { default: () => 'x' } })
+    expect(pxStr.find('.d-aside').attributes('style')).toContain('12.5rem')
+    pxStr.unmount()
+  })
+
+  // sticky 的失效点是被 flex 拉伸到与容器等高（无位移空间），jsdom 无布局算不出，故守护样式源码不变量
+  it('DAside：fixed 样式保证 sticky 生效（收缩自身高度 + 留出吸顶偏移）', () => {
+    const fixedBlock = asideSource.match(/&\.is-fixed\s*\{([^}]*)\}/)?.[1] ?? ''
+    expect(fixedBlock).toContain('align-self: flex-start')
+    expect(fixedBlock).toContain('position: sticky')
+    expect(fixedBlock).toContain('var(--dz-aside-sticky-top')
   })
 
   it('DMenu 平铺模式渲染与选中事件', async () => {
