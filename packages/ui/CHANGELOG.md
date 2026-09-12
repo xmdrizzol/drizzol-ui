@@ -1,5 +1,23 @@
 # @xmdrizzol/drizzol-ui
 
+## 0.3.1
+
+### Patch Changes
+
+- 59ab318: 修复 DDropdown 菜单越出视口导致显示不全：定位计算加入视口边界夹取（shift 适配）。
+
+  - 水平越界时菜单整体平移收进视口（两侧各留 8px 安全边距），箭头反向跟随、继续指向触发器，跟随不到时夹在菜单边内不戳出。
+  - 触发器贴近视口底部、菜单下方放不下时整体上移适配，此时箭头自动隐藏（不再指向触发器）。
+  - 菜单打开期间监听窗口缩放与容器滚动，边界关系变化实时重算；首帧定位改在 `nextTick` 后用真实菜单尺寸计算，避免先渲染错误位置再跳正。
+  - 定位计算抽为纯函数 `components/dropdown/position.ts`，边界场景补单测（jsdom 无布局，组件内测不了）。
+
+- e0177db: 上传接口地址支持自定义（此前写死为后端契约路径 `/general/file/upload[/image]`）：
+
+  - 新增 `configureFileApi({ uploadUrl?, uploadImageUrl? })`：全局调整上传文件 / 裁剪图片的接口路径，与 `configureRequest`、`configureFileAccessPrefix` 同属运行时配置，宿主在入口调用一次。
+  - `DUpload` / `DCropper` 新增 `action` 属性：按组件实例覆盖上传地址（如头像上传走独立接口）。
+  - `uploadFile` / `uploadImage` 的参数新增 `url` 字段：单次调用覆盖，优先级 `params.url` > 全局配置 > 默认契约。
+  - 默认值不变，未配置时行为与旧版完全一致。
+
 ## 0.3.0
 
 ### Minor Changes
