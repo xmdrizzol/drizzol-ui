@@ -16,8 +16,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { ref, reactive, computed, nextTick, onMounted, onUnmounted } from 'vue'
 import { useClickOutside } from '@ui/composables/useClickOutside'
+import { computeMenuPosition } from './position'
 const TRIGGER = ['click', 'hover'] as const
 const PLACEMENT = ['top', 'bottom', 'left', 'right'] as const
 
@@ -49,7 +50,7 @@ const menuRef = ref<HTMLElement | null>(null)
 const arrowRef = ref<HTMLElement | null>(null)
 
 const menuStyle = reactive({ top: '0px', left: '0px' })
-const arrowStyle = reactive({ top: '0px', left: '0px' })
+const arrowStyle = reactive({ top: '0px', left: '0px', display: 'block' })
 // 进出场滑动距离交给 CSS 变量，offset prop 保持可用
 const offsetVars = computed(() => ({ '--dz-dd-offset': props.offset + 'px' }))
 
@@ -63,13 +64,20 @@ function updatePosition() {
     const menuRect = menuRef.value.getBoundingClientRect()
     const arrowRect = arrowRef.value.getBoundingClientRect()
 
-    if (props.placement === 'bottom') {
-        menuStyle.top = triggerRect.height + arrowRect.height / 2 + 'px'
-        menuStyle.left = 0 - (menuRect.width - triggerRect.width) / 2 + 'px'
+    // 其余 placement 定位待支持（见下方 TODO）
+    if (props.placement !== 'bottom') return
 
-        arrowStyle.top = -arrowRect.height + 'px'
-        arrowStyle.left = menuRect.width / 2 - arrowRect.width / 2 + 'px'
-    }
+    const p = computeMenuPosition(
+        { left: triggerRect.left, top: triggerRect.top, width: triggerRect.width, height: triggerRect.height },
+        { width: menuRect.width, height: menuRect.height },
+        { width: arrowRect.width, height: arrowRect.height },
+        { width: window.innerWidth, height: window.innerHeight },
+    )
+    menuStyle.top = p.top + 'px'
+    menuStyle.left = p.left + 'px'
+    arrowStyle.top = p.arrowTop + 'px'
+    arrowStyle.left = p.arrowLeft + 'px'
+    arrowStyle.display = p.arrowVisible ? 'block' : 'none'
 }
 
 // 开合只翻转 visible，进出场动画由 <Transition> + CSS 过渡完成：
@@ -79,8 +87,11 @@ function openMenu() {
         clearTimeout(closeTimer)
         closeTimer = null
     }
-    updatePosition()
     visible.value = true
+    // nextTick 后 v-show 已落地、菜单可测量，首帧即用真实尺寸定位并适配视口边界；
+    // 打开期间内容尺寸变化由 ResizeObserver 兜底
+    nextTick(updatePosition)
+    addViewportListeners()
 }
 
 function closeMenu() {
@@ -89,6 +100,23 @@ function closeMenu() {
         closeTimer = null
     }
     visible.value = false
+    removeViewportListeners()
+}
+
+// 打开期间视口变化（窗口缩放、容器滚动）时重新适配边界；菜单随 trigger 滚动，
+// 但与视口边缘的相对关系会变，须重算夹取
+function handleViewportChange() {
+    if (visible.value) updatePosition()
+}
+
+function addViewportListeners() {
+    window.addEventListener('resize', handleViewportChange)
+    window.addEventListener('scroll', handleViewportChange, true)
+}
+
+function removeViewportListeners() {
+    window.removeEventListener('resize', handleViewportChange)
+    window.removeEventListener('scroll', handleViewportChange, true)
 }
 
 // 点击外部关闭下拉框
@@ -148,8 +176,9 @@ onUnmounted(() => {
   if (closeTimer) {
     clearTimeout(closeTimer)
   }
-  // 打开状态下卸载时，务必移除全局点击监听，避免泄漏
+  // 打开状态下卸载时，务必移除全局点击/视口监听，避免泄漏
   removeListener()
+  removeViewportListeners()
 })
 
 // TODO: 切换弹出位置
