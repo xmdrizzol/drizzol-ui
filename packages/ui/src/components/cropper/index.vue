@@ -28,11 +28,16 @@ const props = withDefaults(defineProps<{
     /**
      * 裁剪输出尺寸（宽高一致，默认 300）
      */
-    size?: number
+    size?: number,
+    /**
+     * 上传接口路径（相对 baseURL 或完整 URL）；不传用全局配置（configureFileApi，默认 /general/file/upload/image）
+     */
+    action?: string
 }>(), {
     imgUrl: '',
     init: false,
-    size: 300
+    size: 300,
+    action: undefined
 })
 
 const cropperCanvasRef = ref<CropperCanvas | null>()
@@ -109,7 +114,7 @@ const getImgUrl = async (): Promise<{ displayUrl: string; fileRef: string } | un
     const blob = await getCroppedBlob()
     if (!blob) return
 
-    return uploadImage({ file: blob }).then(res => {
+    return uploadImage({ file: blob, url: props.action }).then(res => {
         const { storedFileName, accessUrl } = res.data
         return {
             displayUrl: accessUrl,

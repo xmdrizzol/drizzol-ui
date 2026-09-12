@@ -88,7 +88,7 @@ import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 | --- | --- |
 | 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`message.error` 错误提示 |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
-| 文件 | `getFileAccessUrl`、`configureFileAccessPrefix`、`uploadFile`、`uploadImage` |
+| 文件 | `getFileAccessUrl`、`configureFileAccessPrefix`、`configureFileApi`、`uploadFile`、`uploadImage` |
 | 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
 | 组合式 | `useClickOutside`、`useIsMobile`、`useInView`、`useScrollListener` |
 
@@ -103,7 +103,7 @@ configureRequest({
 })
 ```
 
-后端契约约定：响应 `{ code, msg, data }` 包一层，`code === 200` 为成功；文件上传 `POST /api/general/file/upload[/image]`（字段 `File` + `CustomCategory`），访问 `GET /api/general/file/access/{type}/{fileRef}`。后端不同时，修改 `baseURL` / `configureFileAccessPrefix` 或自行封装 request。
+后端契约约定：响应 `{ code, msg, data }` 包一层，`code === 200` 为成功；文件上传 `POST /api/general/file/upload[/image]`（字段 `File` + `CustomCategory`），访问 `GET /api/general/file/access/{type}/{fileRef}`。后端不同时，修改 `baseURL` / `configureFileAccessPrefix` / `configureFileApi`（上传接口路径，组件也可传 `action`）或自行封装 request。
 
 ## 样式与主题
 

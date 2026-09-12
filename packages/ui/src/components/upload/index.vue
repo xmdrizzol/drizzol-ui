@@ -81,6 +81,8 @@ const props = withDefaults(defineProps<{
     previewHeight?: number
     disabled?: boolean
     autoUpload?: boolean
+    /** 上传接口路径（相对 baseURL 或完整 URL）；不传用全局配置（configureFileApi，默认 /general/file/upload） */
+    action?: string
 }>(), {
     modelValue: '',
     accept: 'image/*',
@@ -92,6 +94,7 @@ const props = withDefaults(defineProps<{
     previewHeight: 200,
     disabled: false,
     autoUpload: true,
+    action: undefined,
 })
 
 const emit = defineEmits<{
@@ -177,7 +180,7 @@ async function doUpload(file: File): Promise<void> {
 
     try {
         const res = await uploadFile(
-            { file, category: props.category },
+            { file, category: props.category, url: props.action },
             {
                 signal: controller.signal,
                 onUploadProgress: (event) => {
