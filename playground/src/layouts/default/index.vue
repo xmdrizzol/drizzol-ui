@@ -149,6 +149,11 @@ function cycleTheme() {
 /* 头部高度：与库内 DHeader 默认值一致，同时决定侧栏的吸顶偏移与自身高度 */
 $header-height: 56px;
 
+/* 页脚高度（padding 20px×2 + 一行文字 ≈ 58px）：
+   侧栏把它预留出来，短页面（正文矮于侧栏）的文档总高恰好一屏、不产生滚动——
+   否则这 58px 的滚动量会推着无位移空间的侧栏上移，盖到吸顶头部上 */
+$footer-height: 58px;
+
 .default-layout {
     // 库内 .d-layout 自带 min-height: 0 / flex: 1，用复合选择器提高优先级还原「撑满视口、页脚贴底」
     &.d-layout {
@@ -164,7 +169,7 @@ $header-height: 56px;
     }
 
     .default-layout__sidebar {
-        height: calc(100vh - #{$header-height});
+        height: calc(100vh - #{$header-height} - #{$footer-height});
         padding: 20px 12px 40px;
         @include scrollbars;
 
