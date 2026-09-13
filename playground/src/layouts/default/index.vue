@@ -66,10 +66,12 @@
 import { computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { applyTheme, Theme, THEME_KEY } from '@xmdrizzol/drizzol-ui'
+// 版本号自动取自库 package.json：发版提版本后演示站随之同步，无需手动改
+import libPkg from '@ui/../package.json'
 
 const route = useRoute()
 
-const version = '0.2.0'
+const version = libPkg.version
 
 // 移动端抽屉导航开关
 const navOpen = ref(false)
