@@ -47,6 +47,7 @@
                     <tr><td>js-cookie</td><td>cookie 工具</td><td>MIT</td><td>—</td></tr>
                     <tr><td>cropperjs + <code>@cropper/element-*</code></td><td>DCropper 裁剪</td><td>MIT</td><td>—</td></tr>
                     <tr><td>artplayer</td><td>DVideo 播放器</td><td>MIT</td><td>—</td></tr>
+                    <tr><td>vue-photo-preview-next</td><td>DImage 图片预览</td><td>MIT</td><td>—</td></tr>
                 </tbody>
             </table>
             <h2>内置图标与许可</h2>

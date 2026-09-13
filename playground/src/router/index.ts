@@ -12,6 +12,7 @@ import DTag from '@/views/components/dtag'
 import DBadge from '@/views/components/dbadge'
 import DSkeleton from '@/views/components/dskeleton'
 import DEmpty from '@/views/components/dempty'
+import DImage from '@/views/components/dimage'
 import DPagination from '@/views/components/dpagination'
 import DCodeBlock from '@/views/components/dcodeblock'
 import DTabs from '@/views/components/dtabs'
@@ -60,6 +61,7 @@ const router = createRouter({
     { path: '/components/dbadge', name: 'dbadge', component: DBadge },
     { path: '/components/dskeleton', name: 'dskeleton', component: DSkeleton },
     { path: '/components/dempty', name: 'dempty', component: DEmpty },
+    { path: '/components/dimage', name: 'dimage', component: DImage },
     { path: '/components/dpagination', name: 'dpagination', component: DPagination },
     { path: '/components/dcodeblock', name: 'dcodeblock', component: DCodeBlock },
     { path: '/components/dtabs', name: 'dtabs', component: DTabs },

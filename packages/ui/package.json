@@ -64,7 +64,8 @@
     "artplayer": "^5.4.0",
     "axios": "^1.16.0",
     "cropperjs": "^2.1.1",
-    "js-cookie": "^3.0.7"
+    "js-cookie": "^3.0.7",
+    "vue-photo-preview-next": "^0.0.8"
   },
   "devDependencies": {
     "@types/js-cookie": "^3.0.6",

@@ -77,6 +77,7 @@ import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 | `DUpload` | 上传（进度通知/取消/多文件，对接文件接口契约） |
 | `DCropper` | 图片裁剪（cropperjs，输出尺寸可配） |
 | `DVideo` | 视频播放器（ArtPlayer 封装） |
+| `DImage` / `DImageGroup` | 图片（fileRef/URL 统一解析、加载失败兜底、点击预览大图 [vue-photo-preview-next](https://github.com/shen774411223d/vue-photo-preview-next)，分组预览可左右切换） |
 | `DPageHero` / `DPageCover` | 页面横幅 / 视差封面 |
 | `DFloatBar` | 右下浮动按钮（返回顶部/目录，threshold 可配） |
 | `DSearch` | 搜索框（防抖） |
@@ -139,7 +140,7 @@ configureRequest({
 本库源码基于 [MIT](./LICENSE) 许可开源。
 
 - 内置图标来自 [Lucide](https://lucide.dev)（ISC 许可），经 Iconify 拉取后内联
-- 运行时依赖 axios / js-cookie / cropperjs / artplayer 均为 MIT
+- 运行时依赖 axios / js-cookie / cropperjs / artplayer / vue-photo-preview-next 均为 MIT
 - 各依赖与图标的详细许可说明见「介绍」页（文档站 `/intro`）
 
 ## 本地开发

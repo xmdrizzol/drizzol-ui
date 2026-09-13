@@ -25,7 +25,7 @@
 - **组件导出**：每组件 `index.ts` 用 `withInstall(Comp, 'DComp')` 导出具名 + default，并由库入口 `src/index.ts` 登记进 `components` 数组（全量安装）与 `export *`（具名导入）；图标组件例外（`DIcon` + `DIconSprite`）
 - **样式注入**：`vite.config.ts`（库+playground）的 scss `additionalData` 全局注入 `_mixin.scss`/`_animations.scss`，**库内组件不得自行 `@use '@/styles/mixin'` 重复引入**（保留 `_variables` 的 `@use` 亦可，但注意别形成循环）
 - **px→rem**：库与 playground 构建均挂 `postcss-pxtorem`（`rootValue: 16`、`minPixelValue: 2`），**SCSS 源码写 px、构建自动换算 rem**；组件内 `:style` 等 JS 生成的尺寸走 `src/utils/pxToRem`（`1rem = 16px`）。1px 细边框因 `minPixelValue` 保持 px，**勿手写 rem 视觉不准**；受此影响 `var(--dz-*, px)` 的 px 兜底不会被插件换算，默认尺寸可写 px 让其转换
-- **依赖**：`vue` 为 peer（宿主安装，vue-router 可选）；axios/js-cookie/cropperjs/artplayer 为运行时依赖并列入 vite `external`；**不依赖任何第三方 UI 库**（提示/通知/确认/抽屉为自研四件套（DMessage/DNotification/DConfirm/DDrawer，命令式组件同走 D 前缀））
+- **依赖**：`vue` 为 peer（宿主安装，vue-router 可选）；axios/js-cookie/cropperjs/artplayer/vue-photo-preview-next 为运行时依赖并列入 vite `external`；**不依赖任何第三方 UI 库**（提示/通知/确认/抽屉为自研四件套（DMessage/DNotification/DConfirm/DDrawer，命令式组件同走 D 前缀））
 - **许可合规**：内置图标一律取自 **Lucide（ISC）**，经 Iconify API 拉取 SVG 后并入 `icon/symbols.vue`；**禁止**从 iconfont.cn 等用户上传平台下载内联（再分发授权不可确认），**禁止**内置第三方品牌 logo（github/discord/qq 等商标）。运行时依赖（axios/js-cookie/cropperjs/artplayer）全部 MIT；**勿引入非宽松许可的依赖**（gsap 曾因 No-Charge 许可被移除）
 - **工具函数**：库构建后 `import.meta.env` 不复存在——request 的 baseURL、file 前缀等一律运行时配置（`configureRequest`/`configureFileAccessPrefix`）
 - **语言**：注释、回复、文档一律中文（JSDoc 风格）；命令、路径、标识符保留原文

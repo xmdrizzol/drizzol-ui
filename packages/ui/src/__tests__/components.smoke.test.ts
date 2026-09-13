@@ -49,6 +49,8 @@ import { DTag } from '@ui/components/tag'
 import { DBadge } from '@ui/components/badge'
 import { DSkeleton } from '@ui/components/skeleton'
 import { DEmpty } from '@ui/components/empty'
+import DImage from '@ui/components/image'
+import { DImageGroup } from '@ui/components/image'
 import { DPagination } from '@ui/components/pagination'
 import { DCodeBlock } from '@ui/components/code-block'
 import { DTabs } from '@ui/components/tabs'
@@ -188,6 +190,12 @@ describe('组件冒烟', () => {
   it('DIconSprite 渲染雪碧图', () => {
     const wrapper = mount(DIconSprite)
     expect(wrapper.find('symbol').exists()).toBe(true)
+
+    // 编辑器场景的 7 个新增图标在雪碧图中真实存在
+    const ids = wrapper.findAll('symbol').map(s => s.attributes('id'))
+    for (const name of ['search', 'image', 'video', 'bold', 'italic', 'underline', 'list']) {
+      expect(ids).toContain(`dz-icon-${name}`)
+    }
   })
 
   it('DCard 根类名与悬浮修饰', async () => {
@@ -454,6 +462,42 @@ describe('数据展示组件冒烟', () => {
     const wrapper = mount(DEmpty, { props: { description: '没有内容' }, slots: { default: () => h('button', '去创建') } })
     expect(wrapper.text()).toContain('没有内容')
     expect(wrapper.text()).toContain('去创建')
+  })
+
+  it('DImage fileRef 解析与失败兜底', async () => {
+    // 带类型前缀 fileRef 拆类型拼接（不二次前缀）；完整 URL 原样返回
+    const wrapper = mount(DImage, { props: { src: 'image/e6fe8463.png', alt: '示例图', fallbackText: '加载失败' } })
+    expect(wrapper.find('img').attributes('src')).toBe('/api/general/file/access/image/e6fe8463.png')
+    expect(wrapper.find('img').attributes('alt')).toBe('示例图')
+
+    const direct = mount(DImage, { props: { src: 'https://example.com/a.png' } })
+    expect(direct.find('img').attributes('src')).toBe('https://example.com/a.png')
+
+    // 加载失败 → fallback 占位；src 换回有效地址后自动重试
+    await wrapper.find('img').trigger('error')
+    expect(wrapper.find('.d-image--error').exists()).toBe(true)
+    expect(wrapper.text()).toContain('加载失败')
+  })
+
+  it('DImage 预览关闭与懒加载属性', () => {
+    const off = mount(DImage, { props: { src: 'a.png', preview: false } })
+    expect(off.findComponent({ name: 'PhotoConsumer' }).exists()).toBe(false)
+    const lazy = mount(DImage, { props: { src: 'a.png', lazy: true } })
+    expect(lazy.find('img').attributes('loading')).toBe('lazy')
+  })
+
+  it('DImageGroup 分组预览：组内不再自带 Provider', () => {
+    // PhotoProvider 渲染为 Fragment（无对应 DOM 类名），按组件名查找
+    const grouped = mount(DImageGroup, {
+      slots: { default: () => [h(DImage, { src: 'a.png' }), h(DImage, { src: 'b.png' })] },
+    })
+    const groupedImages = grouped.findAllComponents(DImage)
+    expect(groupedImages).toHaveLength(2)
+    expect(groupedImages[0].findComponent({ name: 'PhotoConsumer' }).exists()).toBe(true)
+    expect(groupedImages[0].findComponent({ name: 'PhotoProvider' }).exists()).toBe(false)
+    // 无分组时单图自带 Provider 承载独立预览
+    const alone = mount(DImage, { props: { src: 'a.png' } })
+    expect(alone.findComponent({ name: 'PhotoProvider' }).exists()).toBe(true)
   })
 
   it('DPagination 页码窗口与切换', async () => {

@@ -12,6 +12,7 @@ import { DTag } from './components/tag'
 import { DBadge } from './components/badge'
 import { DSkeleton } from './components/skeleton'
 import { DEmpty } from './components/empty'
+import { DImage, DImageGroup } from './components/image'
 import { DCodeBlock } from './components/code-block'
 import { DCard } from './components/card'
 import { DButton } from './components/button'
@@ -33,7 +34,7 @@ import { DDrawer } from './components/drawer'
 /** 全部组件（插件安装时按序注册） */
 const components = [
   DIcon, DIconSprite, DLayout, DHeader, DAside, DMain, DFooter, DRow, DCol, DMenu, DTabs, DPagination,
-  DTag, DBadge, DSkeleton, DEmpty, DCodeBlock, DCard, DButton, DInput, DForm, DFormItem,
+  DTag, DBadge, DSkeleton, DEmpty, DImage, DImageGroup, DCodeBlock, DCard, DButton, DInput, DForm, DFormItem,
   DModal, DDropdown, DUpload, DCropper, DVideo, DPageHero, DPageCover,
   DFloatBar, DSearch, DSort, DDrawer
 ]
@@ -58,6 +59,7 @@ export * from './components/tag'
 export * from './components/badge'
 export * from './components/skeleton'
 export * from './components/empty'
+export * from './components/image'
 export * from './components/code-block'
 export * from './components/card'
 export * from './components/button'

@@ -41,6 +41,7 @@ export default defineConfig({
         'js-cookie',
         'cropperjs',
         'artplayer',
+        'vue-photo-preview-next',
         '@cropper/element-canvas',
         '@cropper/element-image'
       ],
