@@ -85,16 +85,20 @@ async function handleCopy() {
 
     &__body {
         margin: 0;
-        padding: 16px;
+        // 横向内边距交给内部 code：滚动容器（pre）自身的右内边距在滚到尽头时会被吃掉，
+        // 内边距随 code（宽度跟随内容）一起滚动，长代码滚到底仍保留右侧留白
+        padding: 0;
         overflow-x: auto;
 
         code {
             display: block;
+            width: max-content;
+            min-width: 100%;
             background: transparent;
             // 复位全局 pre > code 的边框/外边距，避免组件内部出现双重盒子
             margin: 0;
             border: none;
-            padding: 0;
+            padding: 16px;
             border-radius: 0;
             font-size: 0.8125rem;
             line-height: 1.7;

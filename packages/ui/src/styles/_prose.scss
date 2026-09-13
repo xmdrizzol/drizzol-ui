@@ -169,6 +169,10 @@
 
     pre > code {
         display: block;
+        // 与 _typography.scss 同步：宽度跟随内容并至少铺满容器，
+        // 横向滚动时深色底/边框始终包住长行文本
+        width: max-content;
+        min-width: 100%;
         margin: 16px 0;
         background: var(--dz-code-block-bg); // 与展示侧 shiki dark-plus 一致
         color: var(--dz-code-block-text);

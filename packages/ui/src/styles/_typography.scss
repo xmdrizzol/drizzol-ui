@@ -98,6 +98,10 @@ pre {
 
 pre > code {
     display: block;
+    // 宽度跟随内容并至少铺满容器：长行把代码盒一起撑宽，横向滚动时
+    // 深色底/边框始终包住文本（否则 white-space: pre 的长行会溢出到盒子外）
+    width: max-content;
+    min-width: 100%;
     margin: 16px 0;
     background: var(--dz-code-block-bg);
     color: var(--dz-code-block-text);
