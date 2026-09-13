@@ -14,16 +14,17 @@
                 <span class="default-layout__version">v{{ version }}</span>
             </div>
             <div class="default-layout__actions">
-                <a class="default-layout__action" href="https://github.com/xmdrizzol/drizzol-ui"
-                    target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path fill="currentColor" d="M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-                </a>
-                <a class="default-layout__action" href="https://www.npmjs.com/package/@xmdrizzol/drizzol-ui"
-                    target="_blank" rel="noopener" aria-label="npm" title="npm">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path fill="currentColor" d="M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019l-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z"/></svg>
+                <a v-for="ext in externalLinks" :key="ext.name" class="default-layout__action"
+                    :href="ext.href" target="_blank" rel="noopener"
+                    :aria-label="ext.name" :title="ext.name">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path fill="currentColor" :d="ext.path" /></svg>
                 </a>
                 <button class="default-layout__theme" :title="themeMeta.label" @click="cycleTheme">
                     <d-icon :name="themeMeta.icon" size="1.4" />
+                </button>
+                <!-- 移动端导航入口：侧栏在窄屏隐藏后由此打开抽屉菜单 -->
+                <button class="default-layout__nav" title="导航菜单" aria-label="打开导航菜单" @click="navOpen = true">
+                    <d-icon name="menu" size="1.4" />
                 </button>
             </div>
         </d-header>
@@ -42,6 +43,22 @@
             <span>Drizzol UI v{{ version }} · Vue 3 组件库</span>
             <span>组件、工具、样式与主题的统一基准</span>
         </d-footer>
+
+        <!-- 移动端导航抽屉：与桌面侧栏共用 navGroups，选中后自动收起；
+             GitHub/npm 在窄屏从头栏收进抽屉标题栏，保证移动端仍可直达仓库 -->
+        <d-drawer v-model:visible="navOpen" title="导航菜单" direction="ltr" :size="280">
+            <template #header>
+                <span class="default-layout__drawer-title">导航菜单</span>
+                <span class="default-layout__drawer-links">
+                    <a v-for="ext in externalLinks" :key="ext.name" class="default-layout__drawer-link"
+                        :href="ext.href" target="_blank" rel="noopener"
+                        :aria-label="ext.name" :title="ext.name">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path fill="currentColor" :d="ext.path" /></svg>
+                    </a>
+                </span>
+            </template>
+            <d-menu :groups="navGroups" :model-value="route.path" @select="navOpen = false" />
+        </d-drawer>
     </d-layout>
 </template>
 
@@ -53,6 +70,23 @@ import { applyTheme, Theme, THEME_KEY } from '@xmdrizzol/drizzol-ui'
 const route = useRoute()
 
 const version = '0.2.0'
+
+// 移动端抽屉导航开关
+const navOpen = ref(false)
+
+// GitHub/npm 外链：桌面头栏与移动端抽屉标题栏共用（窄屏从头栏收进抽屉）
+const externalLinks = [
+    {
+        name: 'GitHub',
+        href: 'https://github.com/xmdrizzol/drizzol-ui',
+        path: 'M12 .297c-6.63 0-12 5.373-12 12c0 5.303 3.438 9.8 8.205 11.385c.6.113.82-.258.82-.577c0-.285-.01-1.04-.015-2.04c-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729c1.205.084 1.838 1.236 1.838 1.236c1.07 1.835 2.809 1.305 3.495.998c.108-.776.417-1.305.76-1.605c-2.665-.3-5.466-1.332-5.466-5.93c0-1.31.465-2.38 1.235-3.22c-.135-.303-.54-1.523.105-3.176c0 0 1.005-.322 3.3 1.23c.96-.267 1.98-.399 3-.405c1.02.006 2.04.138 3 .405c2.28-1.552 3.285-1.23 3.285-1.23c.645 1.653.24 2.873.12 3.176c.765.84 1.23 1.91 1.23 3.22c0 4.61-2.805 5.625-5.475 5.92c.42.36.81 1.096.81 2.22c0 1.606-.015 2.896-.015 3.286c0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12',
+    },
+    {
+        name: 'npm',
+        href: 'https://www.npmjs.com/package/@xmdrizzol/drizzol-ui',
+        path: 'M1.763 0C.786 0 0 .786 0 1.763v20.474C0 23.214.786 24 1.763 24h20.474c.977 0 1.763-.786 1.763-1.763V1.763C24 .786 23.214 0 22.237 0zM5.13 5.323l13.837.019l-.009 13.836h-3.464l.01-10.382h-3.456L12.04 19.17H5.113z',
+    },
+]
 
 const navGroups: { label: string; items: { key: string; label: string; to: string }[] }[] = [
     {
@@ -104,6 +138,7 @@ const navGroups: { label: string; items: { key: string; label: string; to: strin
             { key: '/components/dbadge', label: 'DBadge 徽标', to: '/components/dbadge' },
             { key: '/components/dskeleton', label: 'DSkeleton 骨架屏', to: '/components/dskeleton' },
             { key: '/components/dempty', label: 'DEmpty 空状态', to: '/components/dempty' },
+            { key: '/components/dimage', label: 'DImage 图片', to: '/components/dimage' },
             { key: '/components/dcodeblock', label: 'DCodeBlock 代码块', to: '/components/dcodeblock' },
         ],
     },
@@ -240,7 +275,8 @@ $footer-height: 58px;
     }
 
     &__actions .default-layout__action,
-    &__theme {
+    &__theme,
+    &__nav {
         @include flex(center, center);
         width: 36px;
         height: 36px;
@@ -255,6 +291,51 @@ $footer-height: 58px;
             background: var(--dz-bg);
             color: var(--dz-primary);
         }
+    }
+
+    // 移动端：侧栏隐藏，收起外链腾出头部空间，改由汉堡按钮打开抽屉导航
+    &__actions .default-layout__action {
+        @include mobile {
+            display: none;
+        }
+    }
+
+    &__nav {
+        display: none;
+
+        @include mobile {
+            @include flex(center, center);
+        }
+    }
+}
+
+/* 抽屉标题栏（GitHub/npm 外链）：DDrawer Teleport 到 body 后不在 .default-layout 内，
+   作用域样式必须写在顶层才能命中插槽内容 */
+.default-layout__drawer-title {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--dz-text-h);
+}
+
+.default-layout__drawer-links {
+    @include flex(center, center);
+    gap: 6px;
+    // 标题栏是 space-between：margin-left:auto 让外链与右侧关闭按钮成组贴边
+    margin-left: auto;
+}
+
+.default-layout__drawer-link {
+    @include flex(center, center);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    color: var(--dz-text-l);
+    transition: background 0.2s, color 0.2s;
+
+    // hover 用中性灰：抽屉面板底就是 --dz-bg，hover 再用同色会完全不可见
+    &:hover {
+        background: var(--dz-gray-4);
+        color: var(--dz-primary);
     }
 }
 </style>
