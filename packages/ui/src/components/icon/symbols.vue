@@ -1,4 +1,4 @@
-<!-- 内置图标雪碧图。图标源：Lucide (https://lucide.dev, ISC 许可)，24x24 描边、stroke=currentColor 随主题色；*-fill 为同图标填充版（fill=currentColor 自动随色）。共 50 个 symbol。 -->
+<!-- 内置图标雪碧图。图标源：Lucide (https://lucide.dev, ISC 许可)，24x24 描边、stroke=currentColor 随主题色；*-fill 为同图标填充版（fill=currentColor 自动随色）。共 60 个 symbol。 -->
 <template>
     <div style="display: none;">
         <svg viewBox="0 0 24 24">
@@ -160,6 +160,27 @@
             </symbol>
             <symbol id="dz-icon-info" viewBox="0 0 24 24">
                 <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></g></g>
+            </symbol>
+            <symbol id="dz-icon-search" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m21 21l-4.34-4.34"/><circle cx="11" cy="11" r="8"/></g></g>
+            </symbol>
+            <symbol id="dz-icon-image" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15l-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></g></g>
+            </symbol>
+            <symbol id="dz-icon-video" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="m16 13l5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5"/><rect width="14" height="12" x="2" y="6" rx="2"/></g></g>
+            </symbol>
+            <symbol id="dz-icon-bold" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 12h9a4 4 0 0 1 0 8H7a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h7a4 4 0 0 1 0 8"/></g>
+            </symbol>
+            <symbol id="dz-icon-italic" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 4h-9m4 16H5M15 4L9 20"/></g>
+            </symbol>
+            <symbol id="dz-icon-underline" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 4v6a6 6 0 0 0 12 0V4M4 20h16"/></g>
+            </symbol>
+            <symbol id="dz-icon-list" viewBox="0 0 24 24">
+                <g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h.01M3 12h.01M3 19h.01M8 5h13M8 12h13M8 19h13"/></g>
             </symbol>
         </svg>
     </div>
