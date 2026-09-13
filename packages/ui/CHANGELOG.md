@@ -1,5 +1,28 @@
 # @xmdrizzol/drizzol-ui
 
+## 0.4.0
+
+### Minor Changes
+
+- d2f58e0: 新增 `DImage` / `DImageGroup` 图片组件（点击预览大图基于 vue-photo-preview-next）：
+
+  - `DImage`：`src` 统一接受完整 URL（http/blob/data）或文件引用（`image/xxx.png` 带类型前缀自动拆解、纯存储文件名按 image 拼接访问前缀）；加载失败显示兜底占位（`fallback-text` 或 `#fallback` 插槽）；`width`/`height`/`radius`/`fit`/`lazy` 常规图片属性齐备。
+  - 点击预览大图默认开启（`:preview="false"` 关闭），基于 vue-photo-preview-next（MIT，与 DVideo 封装 ArtPlayer、DCropper 封装 cropperjs 同为内部封装的功能库）；`DImageGroup` 分组后预览可左右切换，`mask-closable`/`loop` 等参数透传。
+  - 运行时新增依赖 `vue-photo-preview-next@^0.0.8`（已列入 vite external）。
+
+- 8e64cec: DIcon 新增 7 个 Lucide 图标，覆盖编辑器工具条场景：
+
+  `search`（搜索）、`image`（图片）、`video`（视频）、`bold`（加粗）、`italic`（斜体）、`underline`（下划线）、`list`（无序列表）。
+
+  取自 Lucide（ISC 许可），经 Iconify API 拉取后并入雪碧图，现共 60 个 symbol；`<d-icon name="bold" />` 即用。
+
+### Patch Changes
+
+- 25a3562: 修复代码块在窄屏横向滚动时的显示错误：
+
+  - `pre > code`（全局排版与 prose 排版同步修改）宽度改为 `max-content` + `min-width: 100%`：长行把深色代码盒一起撑宽，横向滚动时背景/边框始终包住文本（此前 `white-space: pre` 的长行会溢出到深色盒子外，滚动后文字悬在盒外）。
+  - DCodeBlock：`__body` 的横向内边距移到内部 `code`（宽度跟随内容），长代码滚到最右仍保留右侧留白（滚动容器自身的右内边距在滚尽时会被吃掉）。
+
 ## 0.3.1
 
 ### Patch Changes
