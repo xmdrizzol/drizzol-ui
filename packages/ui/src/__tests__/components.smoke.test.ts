@@ -51,6 +51,7 @@ import { DSkeleton } from '@ui/components/skeleton'
 import { DEmpty } from '@ui/components/empty'
 import DImage from '@ui/components/image'
 import { DImageGroup } from '@ui/components/image'
+import DAvatar from '@ui/components/avatar'
 import { DPagination } from '@ui/components/pagination'
 import { DCodeBlock } from '@ui/components/code-block'
 import { DTabs } from '@ui/components/tabs'
@@ -498,6 +499,46 @@ describe('数据展示组件冒烟', () => {
     // 无分组时单图自带 Provider 承载独立预览
     const alone = mount(DImage, { props: { src: 'a.png' } })
     expect(alone.findComponent({ name: 'PhotoProvider' }).exists()).toBe(true)
+  })
+
+  it('DImage src 换回有效地址后重置失败态', async () => {
+    const wrapper = mount(DImage, { props: { src: 'broken.png' } })
+    await wrapper.find('img').trigger('error')
+    expect(wrapper.find('.d-image--error').exists()).toBe(true)
+    await wrapper.setProps({ src: 'good.png' })
+    expect(wrapper.find('.d-image--error').exists()).toBe(false)
+  })
+
+  it('DAvatar 尺寸形状与 fileRef 解析', () => {
+    const wrapper = mount(DAvatar, { props: { src: 'image/e6fe8463.png', alt: '头像', size: 40 } })
+    expect(wrapper.find('.d-avatar--circle').exists()).toBe(true)
+    expect(wrapper.attributes('style')).toContain('2.5rem')
+    expect(wrapper.attributes('title')).toBe('头像')
+    expect(wrapper.find('img').attributes('src')).toBe('/api/general/file/access/image/e6fe8463.png')
+
+    const square = mount(DAvatar, { props: { src: 'a.png', shape: 'square', size: '3rem' } })
+    expect(square.find('.d-avatar--square').exists()).toBe(true)
+    expect(square.attributes('style')).toContain('3rem')
+  })
+
+  it('DAvatar 空引用/加载失败进入兜底，src 恢复后重试', async () => {
+    // 空引用直接兜底
+    const empty = mount(DAvatar, { props: { fallbackText: '洛' } })
+    expect(empty.find('.d-avatar--fallback').exists()).toBe(true)
+    expect(empty.text()).toContain('洛')
+    expect(empty.find('img').exists()).toBe(false)
+
+    // 加载失败 → 兜底；#fallback 插槽可自定义
+    const wrapper = mount(DAvatar, {
+      props: { src: 'broken.png' },
+      slots: { fallback: () => h('i', '自定义') },
+    })
+    await wrapper.find('img').trigger('error')
+    expect(wrapper.find('.d-avatar--fallback').exists()).toBe(true)
+    expect(wrapper.text()).toContain('自定义')
+    // src 换成有效地址 → 自动重试回图片态
+    await wrapper.setProps({ src: 'good.png' })
+    expect(wrapper.find('.d-avatar__img').exists()).toBe(true)
   })
 
   it('DPagination 页码窗口与切换', async () => {

@@ -78,6 +78,7 @@ import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 | `DCropper` | 图片裁剪（cropperjs，输出尺寸可配） |
 | `DVideo` | 视频播放器（ArtPlayer 封装） |
 | `DImage` / `DImageGroup` | 图片（fileRef/URL 统一解析、加载失败兜底、点击预览大图 [vue-photo-preview-next](https://github.com/shen774411223d/vue-photo-preview-next)，分组预览可左右切换） |
+| `DAvatar` | 头像（圆/方、尺寸可配，fileRef/URL 统一解析与 DImage 同套规则，空引用/加载失败显示文字兜底或自定义插槽） |
 | `DPageHero` / `DPageCover` | 页面横幅 / 视差封面 |
 | `DFloatBar` | 右下浮动按钮（返回顶部/目录，threshold 可配） |
 | `DSearch` | 搜索框（防抖） |
@@ -89,7 +90,7 @@ import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 | --- | --- |
 | 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`message.error` 错误提示 |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
-| 文件 | `getFileAccessUrl`、`configureFileAccessPrefix`、`configureFileApi`、`uploadFile`、`uploadImage` |
+| 文件 | `getFileAccessUrl`、`resolveAccessUrl`（宽容解析：类型前缀拆解/纯文件名拼接）、`configureFileAccessPrefix`、`configureFileApi`、`uploadFile`、`uploadImage` |
 | 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
 | 组合式 | `useClickOutside`、`useIsMobile`、`useInView`、`useScrollListener` |
 
