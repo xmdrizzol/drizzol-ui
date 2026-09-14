@@ -26,10 +26,9 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, useAttrs } from 'vue'
+import { computed, inject, ref, useAttrs, watch } from 'vue'
 import { PhotoProvider, PhotoConsumer } from 'vue-photo-preview-next'
-import { getFileAccessUrl } from '@ui/utils/file'
-import type { FileCategory } from '@ui/types/api'
+import { resolveAccessUrl } from '@ui/utils/file'
 import { toSize } from '@ui/components/layout/size'
 import DIcon from '@ui/components/icon'
 import { D_IMAGE_GROUP_KEY } from './context'
@@ -75,23 +74,13 @@ const inGroup = inject(D_IMAGE_GROUP_KEY, false)
 // 多分支根元素（class/style 等透传手动接管：预览分支的 Provider 根是 Fragment，无法自动透传）
 const rootAttrs = useAttrs()
 
-/** fileRef/URL 统一解析为可访问地址：
- * - 完整 URL（http/blob/data）原样返回（getFileAccessUrl 幂等处理）
- * - 带类型前缀的 fileRef（image/xxx.png）：拆出类型后拼接，避免二次前缀
- * - 纯存储文件名：按 image 类型拼接 */
-const displayUrl = computed(() => {
-    const raw = props.src || ''
-    if (!raw) return ''
-    const typed = raw.match(/^(image|video|music|document|archive|material|other)\/([^/]+)$/)
-    if (typed && !raw.startsWith('http')) {
-        return getFileAccessUrl(typed[2], typed[1] as FileCategory)
-    }
-    return getFileAccessUrl(raw)
-})
+/** fileRef/URL 统一解析为可访问地址（完整 URL 幂等、类型前缀拆解、纯文件名按 image 拼接） */
+const displayUrl = computed(() => resolveAccessUrl(props.src || ''))
 
-// 加载失败状态（src 换成有效地址后随 displayUrl 变化自动重试）
+// 加载失败状态（src 变化后重置：换成有效地址即自动重试）
 const errored = ref(false)
 const hasError = computed(() => !displayUrl.value || errored.value)
+watch(() => props.src, () => { errored.value = false })
 
 /** 透传给 img 的公共属性（各渲染分支共用） */
 const imgAttrs = computed(() => ({
