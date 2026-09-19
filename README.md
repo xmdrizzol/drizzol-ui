@@ -90,7 +90,7 @@ import { DCard, DButton, request, applyTheme } from '@xmdrizzol/drizzol-ui'
 | --- | --- |
 | 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`message.error` 错误提示 |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
-| 文件 | `getFileAccessUrl`、`resolveAccessUrl`（宽容解析：类型前缀拆解/纯文件名拼接）、`configureFileAccessPrefix`、`configureFileApi`、`uploadFile`、`uploadImage` |
+| 文件 | `getFileAccessUrl`、`resolveAccessUrl`（宽容解析：类型前缀拆解/纯文件名拼接）、`configureFileAccessPrefix`、`configureFileAccessResolver`（完全接管 src → URL）、`configureFileApi`、`uploadFile`、`uploadImage` |
 | 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
 | 组合式 | `useClickOutside`、`useIsMobile`、`useInView`、`useScrollListener` |
 
@@ -105,7 +105,21 @@ configureRequest({
 })
 ```
 
-后端契约约定：响应 `{ code, msg, data }` 包一层，`code === 200` 为成功；文件上传 `POST /api/general/file/upload[/image]`（字段 `File` + `CustomCategory`），访问 `GET /api/general/file/access/{type}/{fileRef}`。后端不同时，修改 `baseURL` / `configureFileAccessPrefix` / `configureFileApi`（上传接口路径，组件也可传 `action`）或自行封装 request。
+后端契约约定：响应 `{ code, msg, data }` 包一层，`code === 200` 为成功；文件上传 `POST /api/general/file/upload[/image]`（字段 `File` + `CustomCategory`），访问 `GET /api/general/file/access/{type}/{fileRef}`。
+
+**库源码不内置任何后端地址**——上传路径与访问前缀默认为空，文件地址完全由宿主声明。按上述契约使用时，在应用入口配置一次：
+
+```ts
+import { configureFileApi, configureFileAccessPrefix } from '@xmdrizzol/drizzol-ui'
+
+// 上传接口路径（DUpload / DCropper 组件也可传 action，uploadFile / uploadImage 可传 url 覆盖）
+configureFileApi({ uploadUrl: '/general/file/upload', uploadImageUrl: '/general/file/upload/image' })
+
+// 文件访问前缀：fileRef（如 image/xxx.png 或裸存储文件名）按 `前缀 + type/fileRef` 拼接
+configureFileAccessPrefix('/api/general/file/access/')
+```
+
+图片类组件（DImage / DAvatar / DUpload 预览）的 `src` 语义：`http(s)` / `blob:` / `data:` 开头的完整地址与 `/` 开头的同源相对路径（如 `/uploads/xxx.png`）**原样使用**；其余视为 fileRef——已配置前缀时按 `前缀 + type/fileRef` 拼接，未配置时原样返回。拼接规则不满足后端约定时，`configureFileAccessResolver(src => ...)` 可完全接管 src → URL 的解析（优先于前缀配置，传 `undefined` 恢复内置规则）。
 
 ## 样式与主题
 

@@ -81,7 +81,7 @@ const props = withDefaults(defineProps<{
     previewHeight?: number
     disabled?: boolean
     autoUpload?: boolean
-    /** 上传接口路径（相对 baseURL 或完整 URL）；不传用全局配置（configureFileApi，默认 /general/file/upload） */
+    /** 上传接口路径（相对 baseURL 或完整 URL）；不传用全局配置（configureFileApi，默认空、需宿主配置） */
     action?: string
 }>(), {
     modelValue: '',

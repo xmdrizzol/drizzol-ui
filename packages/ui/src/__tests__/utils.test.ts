@@ -5,7 +5,7 @@ import { formatDate } from '@ui/utils/formatDate'
 import { debounce, throttle } from '@ui/utils/throttle-debounce'
 import { applyTheme, initTheme, isSystemDarkMode, THEME_KEY, Theme } from '@ui/utils/theme'
 import { setCookie, getCookie, setJSONCookie, getJSONCookie } from '@ui/utils/cookie'
-import { getFileAccessUrl, configureFileAccessPrefix } from '@ui/utils/file'
+import { getFileAccessUrl, resolveAccessUrl, configureFileAccessPrefix, configureFileAccessResolver } from '@ui/utils/file'
 
 describe('pxToRem', () => {
   it('数字按 16 基准换算', () => {
@@ -141,22 +141,57 @@ describe('theme', () => {
 })
 
 describe('file 访问地址', () => {
-  afterEach(() => configureFileAccessPrefix('/api/general/file/access/'))
+  // 库默认不内置后端地址：前缀为空时一律原样返回；断言契约拼接的用例需显式配置
+  const CONTRACT_PREFIX = '/api/general/file/access/'
 
-  it('拼接访问前缀', () => {
+  afterEach(() => {
+    configureFileAccessPrefix('')
+    configureFileAccessResolver(undefined)
+  })
+
+  it('未配置前缀（默认）一律原样返回，不拼接任何后端地址', () => {
+    expect(getFileAccessUrl('e6fe8463.png')).toBe('e6fe8463.png')
+    expect(resolveAccessUrl('image/e6fe8463.png')).toBe('image/e6fe8463.png')
+    expect(getFileAccessUrl('')).toBe('')
+  })
+
+  it('配置前缀后按 前缀 + type/fileRef 拼接（drizzol 契约示例）', () => {
+    configureFileAccessPrefix(CONTRACT_PREFIX)
     expect(getFileAccessUrl('e6fe8463.png')).toBe('/api/general/file/access/image/e6fe8463.png')
+    // 带类型前缀 fileRef 拆类型拼接（不二次前缀成 image/image/）
+    expect(resolveAccessUrl('image/e6fe8463.png')).toBe('/api/general/file/access/image/e6fe8463.png')
   })
 
   it('完整地址幂等', () => {
+    configureFileAccessPrefix(CONTRACT_PREFIX)
     const full = '/api/general/file/access/image/e6fe8463.png'
     expect(getFileAccessUrl(full)).toBe(full)
     expect(getFileAccessUrl('https://cdn.example.com/a.png')).toBe('https://cdn.example.com/a.png')
   })
 
-  it('支持自定义前缀与空值', () => {
+  it('支持自定义前缀', () => {
     configureFileAccessPrefix('https://files.example.com/access')
     expect(getFileAccessUrl('a.png')).toBe('https://files.example.com/access/image/a.png')
-    expect(getFileAccessUrl('')).toBe('')
+  })
+
+  it('/ 开头的同源相对路径原样使用（自建上传接口返回 /uploads/xxx 的场景）', () => {
+    configureFileAccessPrefix(CONTRACT_PREFIX)
+    expect(getFileAccessUrl('/uploads/abc.png')).toBe('/uploads/abc.png')
+    expect(resolveAccessUrl('/uploads/abc.png')).toBe('/uploads/abc.png')
+    // 不再拼出 .../image//uploads/... 双斜杠地址
+    expect(resolveAccessUrl('/uploads/abc.png')).not.toContain('general/file/access')
+  })
+
+  it('configureFileAccessResolver 完全接管，undefined 恢复内置规则', () => {
+    configureFileAccessPrefix(CONTRACT_PREFIX)
+    configureFileAccessResolver(src => `https://cdn.example.com/${src}`)
+    // 原始 src 直接交给 resolver：fileRef、相对路径、完整 URL 都不再走内置规则
+    expect(resolveAccessUrl('image/e6fe8463.png')).toBe('https://cdn.example.com/image/e6fe8463.png')
+    expect(resolveAccessUrl('/uploads/abc.png')).toBe('https://cdn.example.com//uploads/abc.png')
+    expect(getFileAccessUrl('a.png')).toBe('https://cdn.example.com/a.png')
+
+    configureFileAccessResolver(undefined)
+    expect(resolveAccessUrl('image/e6fe8463.png')).toBe('/api/general/file/access/image/e6fe8463.png')
   })
 })
 

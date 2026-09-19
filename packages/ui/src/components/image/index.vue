@@ -38,7 +38,7 @@ import 'vue-photo-preview-next/dist/index.css'
 defineOptions({ name: 'DImage', inheritAttrs: false })
 
 const props = withDefaults(defineProps<{
-    /** 图片地址：完整 URL（http/blob/data）原样使用；fileRef 走 getFileAccessUrl 拼接访问前缀 */
+    /** 图片地址：完整 URL（http/blob/data）与 / 开头同源路径原样使用；fileRef 按访问前缀配置解析（未配置原样返回，见 resolveAccessUrl） */
     src?: string
     /** 替代文本，同时作为预览态的图片介绍 */
     alt?: string

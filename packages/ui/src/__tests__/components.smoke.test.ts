@@ -50,6 +50,7 @@ import { DBadge } from '@ui/components/badge'
 import { DSkeleton } from '@ui/components/skeleton'
 import { DEmpty } from '@ui/components/empty'
 import DImage from '@ui/components/image'
+import { configureFileAccessPrefix } from '@ui/utils/file'
 import { DImageGroup } from '@ui/components/image'
 import DAvatar from '@ui/components/avatar'
 import { DPagination } from '@ui/components/pagination'
@@ -466,13 +467,20 @@ describe('数据展示组件冒烟', () => {
   })
 
   it('DImage fileRef 解析与失败兜底', async () => {
+    // fileRef 拼接依赖宿主配置的前缀（库默认不内置后端地址），用例内显式配置
+    configureFileAccessPrefix('/api/general/file/access/')
     // 带类型前缀 fileRef 拆类型拼接（不二次前缀）；完整 URL 原样返回
     const wrapper = mount(DImage, { props: { src: 'image/e6fe8463.png', alt: '示例图', fallbackText: '加载失败' } })
     expect(wrapper.find('img').attributes('src')).toBe('/api/general/file/access/image/e6fe8463.png')
     expect(wrapper.find('img').attributes('alt')).toBe('示例图')
+    configureFileAccessPrefix('')
 
     const direct = mount(DImage, { props: { src: 'https://example.com/a.png' } })
     expect(direct.find('img').attributes('src')).toBe('https://example.com/a.png')
+
+    // / 开头的同源相对路径（自建上传接口约定）原样使用，不拼访问前缀
+    const relative = mount(DImage, { props: { src: '/uploads/abc.png' } })
+    expect(relative.find('img').attributes('src')).toBe('/uploads/abc.png')
 
     // 加载失败 → fallback 占位；src 换回有效地址后自动重试
     await wrapper.find('img').trigger('error')
@@ -510,11 +518,18 @@ describe('数据展示组件冒烟', () => {
   })
 
   it('DAvatar 尺寸形状与 fileRef 解析', () => {
+    // fileRef 拼接依赖宿主配置的前缀（库默认不内置后端地址），用例内显式配置
+    configureFileAccessPrefix('/api/general/file/access/')
     const wrapper = mount(DAvatar, { props: { src: 'image/e6fe8463.png', alt: '头像', size: 40 } })
     expect(wrapper.find('.d-avatar--circle').exists()).toBe(true)
     expect(wrapper.attributes('style')).toContain('2.5rem')
     expect(wrapper.attributes('title')).toBe('头像')
     expect(wrapper.find('img').attributes('src')).toBe('/api/general/file/access/image/e6fe8463.png')
+    configureFileAccessPrefix('')
+
+    // / 开头的同源相对路径原样使用，不拼访问前缀
+    const relative = mount(DAvatar, { props: { src: '/uploads/abc.png', size: 40 } })
+    expect(relative.find('img').attributes('src')).toBe('/uploads/abc.png')
 
     const square = mount(DAvatar, { props: { src: 'a.png', shape: 'square', size: '3rem' } })
     expect(square.find('.d-avatar--square').exists()).toBe(true)
