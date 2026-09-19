@@ -29,9 +29,9 @@
         </demo-block>
 
         <demo-block title="文件访问地址" anchor-id="fileaccess"
-            desc="getFileAccessUrl 把 fileRef 拼成可访问 URL；已是完整地址（http/blob/data 或含前缀）则原样返回（幂等）。">
+            desc="getFileAccessUrl 把 fileRef 拼成可访问 URL；完整地址（http/blob/data）与 / 开头的同源相对路径（如 /uploads/xxx.png）原样返回。库默认前缀为空（原样返回 fileRef），演示站已在入口按契约配置前缀；下方输入可试出两种行为。">
             <div class="demo-block__stack api-col">
-                <d-input v-model="fileRef" placeholder="如 image/e6fe8463.png 或 storedFileName" />
+                <d-input v-model="fileRef" placeholder="如 image/e6fe8463.png、/uploads/a.png 或 storedFileName" />
                 <div class="api-types">
                     <d-button v-for="t in fileTypes" :key="t" size="small"
                         :type="fileType === t ? 'primary' : 'default'" @click="fileType = t">{{ t }}</d-button>
@@ -40,7 +40,7 @@
                     <span class="api-url__label">访问 URL</span>
                     <code class="api-url__val">{{ accessUrl }}</code>
                 </div>
-                <p class="api-note">自定义前缀：<code>configureFileAccessPrefix('https://files.example.com/access')</code></p>
+                <p class="api-note">自定义前缀：<code>configureFileAccessPrefix('https://files.example.com/access')</code>；约定更特殊时完全接管：<code>configureFileAccessResolver(src =&gt; `https://cdn.example.com/${src}`)</code>（传入 undefined 恢复内置规则）</p>
             </div>
         </demo-block>
 
@@ -93,7 +93,7 @@ await request.post('/posts', { title: 'hi' })
 
 // 非 2xx 统一 DMessage.error 报错；502 提示“服务器错误”；401 触发登出（见下）`
 
-const configureDoc = `import { configureRequest, getBaseUrl, Theme } from '@xmdrizzol/drizzol-ui'
+const configureDoc = `import { configureRequest, getBaseUrl, configureFileApi, configureFileAccessPrefix } from '@xmdrizzol/drizzol-ui'
 
 configureRequest({
   baseURL: '/api',
@@ -104,7 +104,13 @@ configureRequest({
   noLogoutApis: ['/login', '/register', '/sendCode'],
 })
 
-getBaseUrl('/upload')  // 'https://api.example.com/upload'（供直连场景拼接）`
+getBaseUrl('/upload')  // 'https://api.example.com/upload'（供直连场景拼接）
+
+// 文件地址同样在入口配置：库源码不内置后端地址，默认为空
+// 上传路径（组件也可逐个传 action；uploadFile/uploadImage 可传 url 覆盖）
+configureFileApi({ uploadUrl: '/general/file/upload', uploadImageUrl: '/general/file/upload/image' })
+// 文件访问前缀（fileRef → URL 拼接；未配置时 src 一律原样使用）
+configureFileAccessPrefix('/api/general/file/access/')`
 
 const contractDoc = `// 后端统一响应包：非 200 会被 reject，交给你 catch 或全局处理
 interface ApiResponse<T> {
@@ -119,11 +125,12 @@ const posts = res.data`
 
 const uploadDoc = `import { uploadFile, uploadImage } from '@xmdrizzol/drizzol-ui'
 
-// POST /general/file/upload（字段 File + CustomCategory）
+// 上传路径由宿主 configureFileApi 配置（或此处传 url 覆盖）
+// 契约示例：POST /general/file/upload（字段 File + CustomCategory）
 const { data } = await uploadFile({ file: rawFile, category: 'image' })
 // data: { storedFileName, accessUrl }
 
-// POST /general/file/upload/image（裁剪图等 Blob）
+// 裁剪图等 Blob（契约示例：POST /general/file/upload/image）
 await uploadImage({ file: blob })
 // 注：multipart 的 Content-Type 交给浏览器补 boundary，切勿手写死`
 

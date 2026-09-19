@@ -4,7 +4,8 @@
             <h1 class="component-page__title">DImage<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
                 图片：fileRef/URL 统一解析、加载失败兜底、点击预览大图（vue-photo-preview-next）；
-                DImageGroup 分组后预览可左右切换。
+                DImageGroup 分组后预览可左右切换。src 语义：http(s)/blob:/data: 与 / 开头的同源路径（如 /uploads/a.png）原样使用，
+                其余视为 fileRef——已配置访问前缀时拼接、未配置（库默认）原样返回；特殊约定可用 configureFileAccessResolver 完全接管。
             </p>
         </header>
 

@@ -2,7 +2,7 @@
     <div class="component-page">
         <header class="component-page__head">
             <h1 class="component-page__title">DUpload<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
-            <p class="component-page__desc">上传组件：点击选择文件 → POST 上传接口（默认 /api/general/file/upload，字段 File + CustomCategory）→ 进度通知；支持取消、多文件、预览。接口地址可自定义：全局 configureFileApi({ uploadUrl })，或组件传 action。</p>
+            <p class="component-page__desc">上传组件：点击选择文件 → POST 上传接口（演示站配置为 /api/general/file/upload，字段 File + CustomCategory）→ 进度通知；支持取消、多文件、预览。上传地址由宿主配置（库源码不内置）：全局 configureFileApi({ uploadUrl })，或组件传 action。</p>
         </header>
 
         <demo-block title="基础用法" anchor-id="demo"

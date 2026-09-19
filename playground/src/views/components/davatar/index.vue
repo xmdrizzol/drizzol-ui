@@ -3,7 +3,7 @@
         <header class="component-page__head">
             <h1 class="component-page__title">DAvatar<span class="component-page__tag">@xmdrizzol/drizzol-ui</span></h1>
             <p class="component-page__desc">
-                头像：圆/方两种形状、尺寸可配；fileRef/URL 统一解析（与 DImage 同一套规则）；
+                头像：圆/方两种形状、尺寸可配；fileRef/URL 统一解析（与 DImage 同一套规则，/ 开头的同源路径原样使用）；
                 图片为空或加载失败时显示文字兜底（如用户名首字），#fallback 插槽可完全自定义。
             </p>
         </header>
