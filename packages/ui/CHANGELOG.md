@@ -1,5 +1,62 @@
 # @xmdrizzol/drizzol-ui
 
+## 0.7.0
+
+### Minor Changes
+
+- c101544: 新增 `DLoadingBar` 页面顶部加载进度条（nprogress 式命令式服务）：
+
+  - `DLoadingBar.start()` 开始后自动缓慢自增（封顶 90%，剩余留给收尾冲刺）；`done()` 冲刺到 100% 后淡出隐藏；`set(n)` 手动指定进度。
+  - **最短展示时长**（`start({ minDuration })`，默认 400ms）：SPA 路由经常瞬间完成，done 早于此时长会延迟到凑满再淡出，保证肉眼可见。
+  - 全局单例：重复 `start` 不叠加；未 `start` 直接 `done` 安全收尾；淡出途中 `start` 会重置重新开始。
+  - 外观默认 `--dz-primary` 填充、2px 高，经 `start({ height, color })` 可调；`z-index` 高于弹窗与通知。
+  - 常配路由切换：`beforeEach` 里 `start()`、`afterEach`/`onError` 里 `done()`（演示站自身即此用法）。
+
+- f8e5557: 新增 `DProgress` 进度条组件：
+
+  - `value` 0-100 自动收敛并取整，宽度变化带过渡动画；`role="progressbar"` + aria 属性齐备。
+  - `status` 语义色（primary / success / warning / danger）；`text` 显示右侧百分比，`#text` 插槽可自定义文案（如"第 3 / 10 题"）。
+  - 高度与配色经 `--dz-progress-height` / `--dz-progress-fill` / `--dz-progress-track` 调节，默认样式即 upload-notify 内部同款。
+  - `showUploadNotification` 正文已改用 DProgress 渲染（行为不变，实现去重）。
+
+- 7344841: DTabs 支持无面板模式与泛型 key：
+
+  - **`panel` 属性（默认 true，向后兼容）**：`false` 时只渲染标签行、不渲染面板与插槽——切换后由宿主自行拉取数据渲染（排序/筛选页签场景）；`update:modelValue` / `change` 事件、禁用与 tablist/tab 语义不变。
+  - **`DTabItem<T extends string>` 泛型**：宿主可写 `DTabItem<'latest' | 'hot'>[]` 获得编译期约束；默认 `string` 不破坏现有用法。
+  - **指示条样式统一**：由近全宽（left/right 12px、圆角 99px）改为 24px 居中短条、圆角 2px、active 0.9375rem/600；`bottom: 0` 与 bar 滚动容器的约束注释保持不变。
+
+- 5ff2ac8: DNotification 新增 `beforeClose` 关闭前拦截：
+
+  - `beforeClose?: () => boolean | Promise<boolean>`——仅头部 ✕ 触发（程序化 `close()` 不经过它，语义与 Element Plus 对话框一致）；返回 `false` 或 Promise reject 阻止关闭，其余放行。
+  - 典型场景："关闭前先确认"——如上传通知点 ✕ 需弹确认框，确认才真正取消并关闭。
+
+- dd0f320: 从包根导出 `showUploadNotification` / `UploadNotifyControl`，上传进度通知样式统一：
+
+  - **导出**：`components/upload` 转发 `upload-notify`，包根 `import { showUploadNotification } from '@xmdrizzol/drizzol-ui'` 可用——可独立于 DUpload 使用（自行封装上传逻辑/直传场景）。
+  - **布局沿用通知默认头部**：标题行显示文件名（类型图标由 DNotification 提供），正文只放进度条 + 百分比；容器加宽至 260px，等宽数字防百分比抖动。
+  - **取消 ✕ 仅在传入 `onCancel` 时渲染**（标题行右侧，经 DNotification 的 `beforeClose` 先弹确认框（取消上传 / 继续上传），确认才触发 `onCancel` 并关闭）；不传 `onCancel` 为纯进度展示——无 ✕，由调用方 `close()` 收尾。
+  - **移除失效隐藏规则**：清理误写的 `.el-notification__title` 残留选择器（从未生效过）。
+  - **行为**：`update()` 收敛 0-100 并取整。
+
+### Patch Changes
+
+- f4b890e: 把最低支持浏览器固化为 **Chrome 86**：产物不再出现 `inset` 简写、range 语法媒体查询与 `color-mix()`，旧内核下弹窗/抽屉遮罩、语义底色、移动端适配与视频容器比例恢复正常。
+
+  - **构建声明**：`build.cssTarget: 'chrome86'`。真正生效的是这个旋钮——`css.lightningcss.targets` 会被 Vite 压缩路径覆盖（此前产物被按 Vite 默认的 chrome111 目标"现代化"，正是本次问题的根因）。
+  - **宿主自建构建也要声明同一基线**：宿主打包会把 `dist/style.css` 重新压缩一遍，不声明就会把修复静默抵消（见 README「浏览器兼容性」）。
+  - **46 处 `color-mix()` 收敛为三元组**：新增 `--dz-{primary,success,warning,danger,gray-7,gray-9,bg}-rgb`（随主题切换）与 `--dz-code-block-text-rgb`、`--dz-scrim-strong-rgb`（恒定）。三元组经 `rgb-triplet()` 从同一色板 SCSS 变量派生，改 `$light-*`/`$dark-*` 色板重新编译自动同步；宿主**运行时覆盖**语义色需与 `--dz-<名>` 成对覆盖 `--dz-<名>-rgb`（CSS 变量无法互相派生的固有限制）。暗色 `--dz-primary-hover-2` 同时改为静态值。
+  - **浅底保持不透明**：消息/通知卡片、按钮朴素底与实心语义变体 hover（原本是 `color-mix(X p%, var(--dz-bg))` 的不透明色）改用新增的 `@include tint-on-bg(--dz-x-rgb, $fill, $line, $shadow)`——不透明底色 + inset 阴影罩层，**不会透出下层内容**（若直接写 `rgba(X, p)`，固定定位的提示卡会变成半透明罩层），合成结果与旧值逐位一致。只有原本就半透明的罩层（tag 底、代码块头部、引用块、骨架屏微光）保留 `rgba(...)`。
+  - **`d-video`**：容器比例加 `padding-top` 兜底（新增导出纯函数 `ratioToPaddingTop`），新增绝对定位的 `.d-video__inner` 挂载层保证旧内核下父盒高度确定。
+  - **`inset` 简写**（page-hero / skeleton 共 3 处）改为长写属性。
+  - **防回归**：`npm run build` 末尾新增产物基线校验（`inset` / range 媒体查询 / `color-mix` / scoped `:root` / 缺兜底的 `aspect-ratio` 直接构建失败），`npm test` 新增源码与构建配置扫描。
+  - 已知限制：`d-video` 依赖的 ArtPlayer 运行时注入样式自带 16 处 `inset:`（第三方代码，不经过本库构建），旧内核下播放器内部浮层（如网页全屏）可能偏位；如需彻底修复可在宿主侧用 patch-package 处理该依赖。
+
+- f4b890e: 产物去重：`dist/style.css` 从 245KB 降到约 65KB（-73%），剔除的规则此前永不命中。
+
+  - **scoped `:root` 令牌块**：vite 的 scss `additionalData` 把 `_animations.scss` 注入每个组件的 `<style>`，它 `@use` 的 `_variables.scss` 带顶层 `:root` / `:root.dark` 输出，于是 36 个组件各自重新输出一份全量令牌，被 vue 的 scoped 变换改写成 `[data-v-*]:root`；`<html>` 永远不会带组件的 data-v 属性，这些规则从不命中（0.6.0 里占 133KB / 54%）。
+  - **无用的 scoped `@keyframes` 副本**：同一份注入让每个组件都输出全部 13 个关键帧，vue 会按组件改名成 `fadeIn-<scopeId>`，其中未被任何 `animation` 声明引用、且存在同内容全局定义的副本被删除（库与宿主的 JS 都不引用动画名）。
+  - 新增 `scripts/css-dedupe.mjs`（纯函数 + CLI，含单测），库与 playground 的 build 链各挂一处；`check-css-baseline.mjs` 会断言去重已生效、且被引用的关键帧仍有定义。
+
 ## 0.6.0
 
 ### Minor Changes
