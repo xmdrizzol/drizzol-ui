@@ -218,7 +218,7 @@ background: var(--dz-tag-primary-bg);
 
 **源码回退**：
 
-- `_variables.scss`：新增 `--dz-{primary,success,warning,danger,gray-7,gray-9,bg}-rgb` 逗号三元组（亮/暗各一份）+ `--dz-code-block-text-rgb`、`--dz-scrim-strong-rgb`（恒定）；暗色 `--dz-primary-hover-2` 由 `color-mix(...)` 改为 `rgba(var(--dz-primary-rgb), 0.18)`。
+- `_variables.scss`：新增 `--dz-{primary,success,warning,danger,gray-7,gray-9,bg}-rgb` 逗号三元组（亮/暗各一份，经 `rgb-triplet()` 从同一色板变量派生——SCSS 改色板重编译自动同步；宿主运行时覆盖 CSS 变量仍需成对）+ `--dz-code-block-text-rgb`、`--dz-scrim-strong-rgb`（恒定）；暗色 `--dz-primary-hover-2` 由 `color-mix(...)` 改为 `rgba(var(--dz-primary-rgb), 0.18)`。
 - 46 处 `color-mix()` 全部改写（tag / button 用组件内局部变量 `--dz-tag-rgb`、`--dz-tag-close-rgb`、`--dz-btn-rgb` 按变体取值）。其中**原本不透明**的那些（消息/通知卡片底与描边、按钮朴素底与描边、实心语义变体 hover 底与描边）改写成 `@include tint-on-bg()` —— 不透明底色 + inset 阴影罩层（罩层在内容之下、描边压在同一层不透明底上），因为 `color-mix(X p%, var(--dz-bg))` 的结果是**不透明**色：若直接写成 `background: rgba(X, p)`，卡片就变成半透明罩层，消息/通知这种 `position: fixed` 浮层会透出下层内容（这是修复过程中自查发现并纠正的一处偏差，已在 `src/__tests__/css-baseline.test.ts` 加断言防回退）。**原本就半透明**的（tag 底与描边、代码块头部与复制按钮、引用块、骨架屏微光、page-hero 遮罩、暗色 `--dz-primary-hover-2`）保留 `rgba(...)` 写法。`float-bar` 的 hover 改成"12% 白罩层 + 自身底色"两层背景（最后一层是不透明底色）。
 - `page-hero` / `skeleton` 的 3 处 `inset:` → `@include absolute(0,0,0,0)`。
 - `d-video`：容器加 `.d-video__inner` 绝对定位挂载层 + `::before` 的 `padding-top` 兜底（由新增纯函数 `ratioToPaddingTop` 从 `ratio` 解析），现代内核仍走 `aspect-ratio`，两者高度数学等价。
