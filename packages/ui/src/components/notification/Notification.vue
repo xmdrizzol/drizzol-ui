@@ -79,6 +79,9 @@ defineExpose({ close })
     border-radius: 10px;
     border: 1px solid var(--dz-border);
     background: var(--dz-bg);
+    // 类型变体把底色/描边换成半透明罩层：clip 到 padding-box 后描边下方不再压着自身底色，
+    // 与页面底（= --dz-bg，原 color-mix 的混色对象）的合成结果与 0.6.0 一致
+    background-clip: padding-box;
     box-shadow: var(--dz-shadow-md);
     color: var(--dz-text);
     font-size: 0.875rem;
@@ -101,21 +104,23 @@ defineExpose({ close })
         flex-shrink: 0;
     }
 
+    // 类型差异化：最低支持 Chrome 86 无 color-mix()，
+    // 用 rgba(var(--dz-*-rgb), <alpha>) 等价表达，随深浅主题自适应
     &--success {
-        background: color-mix(in srgb, var(--dz-success) 10%, var(--dz-bg));
-        border-color: color-mix(in srgb, var(--dz-success) 40%, var(--dz-bg));
+        background: rgba(var(--dz-success-rgb), 0.1);
+        border-color: rgba(var(--dz-success-rgb), 0.4);
         .d-notification__icon { color: var(--dz-success); }
     }
 
     &--error {
-        background: color-mix(in srgb, var(--dz-danger) 10%, var(--dz-bg));
-        border-color: color-mix(in srgb, var(--dz-danger) 40%, var(--dz-bg));
+        background: rgba(var(--dz-danger-rgb), 0.1);
+        border-color: rgba(var(--dz-danger-rgb), 0.4);
         .d-notification__icon { color: var(--dz-danger); }
     }
 
     &--warning {
-        background: color-mix(in srgb, var(--dz-warning) 12%, var(--dz-bg));
-        border-color: color-mix(in srgb, var(--dz-warning) 45%, var(--dz-bg));
+        background: rgba(var(--dz-warning-rgb), 0.12);
+        border-color: rgba(var(--dz-warning-rgb), 0.45);
         .d-notification__icon { color: var(--dz-warning); }
     }
 

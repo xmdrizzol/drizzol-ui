@@ -275,6 +275,18 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-warning: #faad14;
   --dz-danger: #f5222d;
 
+  // 语义色 RGB 三元组：浅底/罩层统一写 rgba(var(--dz-*-rgb), <alpha>)。
+  // 最低支持 Chrome 86 没有 color-mix()，三元组 + rgba 与 color-mix(X p%, transparent) 数值等价，
+  // 且同样随主题切换；改色值时必须与上面的颜色令牌成对同步（位置一一对应）。
+  --dz-primary-rgb: 22, 119, 255; // --dz-primary-6
+  --dz-success-rgb: 82, 196, 26;
+  --dz-warning-rgb: 250, 173, 20;
+  --dz-danger-rgb: 245, 34, 45;
+  --dz-gray-7-rgb: 140, 140, 140; // --dz-text-d / d-button--info
+  --dz-gray-9-rgb: 67, 67, 67; // --dz-text / d-button--default
+  --dz-bg-rgb: 255, 255, 255; // --dz-bg（d-skeleton 微光）
+  --dz-scrim-strong-rgb: 0, 0, 0; // 恒定（不随主题变化）
+
   // 实心填充前景 / 媒体浮层 / 代码块（恒定，不随主题反转）
   --dz-on-fill: #{$light-on-fill};
   --dz-scrim: #{$light-scrim};
@@ -288,6 +300,7 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-code-block-text: #{$code-block-text};
   --dz-code-block-text-d: #{$code-block-text-d};
   --dz-code-block-copied: #{$code-block-copied};
+  --dz-code-block-text-rgb: 212, 212, 212; // 恒定，同 --dz-code-block-text
 
   // 阴影
   --dz-shadow-sm: #{$light-shadow-sm};
@@ -332,7 +345,7 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-primary: var(--dz-primary-6);
   --dz-primary-hover: var(--dz-primary-7);
   // 主色罩：半透明主色直接叠在底面上，页面底/卡片底不同也能自适应，不会发闷
-  --dz-primary-hover-2: color-mix(in srgb, var(--dz-primary-6) 18%, transparent);
+  --dz-primary-hover-2: rgba(var(--dz-primary-rgb), 0.18);
   --dz-primary-active: var(--dz-primary-7);
   --dz-text-h: var(--dz-gray-10);
   --dz-text: var(--dz-gray-9);
@@ -352,6 +365,16 @@ $dark-mask: rgba(17, 17, 17, 0.6);
   --dz-success: #67c23a;
   --dz-warning: #e6a23c;
   --dz-danger: #f56c6c;
+
+  // 语义色 RGB 三元组（深色色值，详见浅色块说明）
+  --dz-primary-rgb: 59, 130, 246; // --dz-primary-6
+  --dz-success-rgb: 103, 194, 58;
+  --dz-warning-rgb: 230, 162, 60;
+  --dz-danger-rgb: 245, 108, 108;
+  --dz-gray-7-rgb: 154, 157, 171; // --dz-text-d / d-button--info
+  --dz-gray-9-rgb: 217, 219, 227; // --dz-text / d-button--default
+  --dz-bg-rgb: 31, 32, 39; // --dz-bg（d-skeleton 微光）
+  --dz-scrim-strong-rgb: 0, 0, 0; // 恒定（不随主题变化）
 
   // 实心填充前景 / 媒体浮层（代码块恒定深色，无需随主题变化）
   --dz-on-fill: #{$dark-on-fill};

@@ -62,7 +62,7 @@ const code = [
         border-radius: 16px;
         background:
             radial-gradient(120% 160% at 90% -20%, var(--dz-primary-hover-2) 0%, transparent 55%),
-            radial-gradient(90% 120% at 10% 130%, color-mix(in srgb, var(--dz-primary-6) 12%, transparent) 0%, transparent 50%),
+            radial-gradient(90% 120% at 10% 130%, rgba(var(--dz-primary-6-rgb), 0.12) 0%, transparent 50%),
             var(--dz-bg-secondary);
     }
 

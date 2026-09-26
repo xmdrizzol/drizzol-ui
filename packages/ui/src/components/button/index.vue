@@ -59,11 +59,13 @@ const buttonClass = computed(() => [
 <style scoped lang="scss">
 .d-button {
     // 类型色变量：default 中性白、primary 蓝主色，其余类型由修饰类覆盖；
-    // --dz-btn-color 供 plain / link 形态取前景色
+    // --dz-btn-color 供 plain / link 形态取前景色，--dz-btn-rgb 是其对应的 RGB 三元组
+    //（最低支持 Chrome 86 无 color-mix()，浅底/描边用 rgba(var(--dz-btn-rgb), <alpha>) 等价表达）
     --dz-btn-bg: var(--dz-bg);
     --dz-btn-border: var(--dz-border);
     --dz-btn-text: var(--dz-text);
     --dz-btn-color: var(--dz-text);
+    --dz-btn-rgb: var(--dz-gray-9-rgb);
     --dz-btn-bg-hover: var(--dz-primary-hover-2);
     --dz-btn-border-hover: var(--dz-primary);
     --dz-btn-text-hover: var(--dz-primary);
@@ -71,6 +73,9 @@ const buttonClass = computed(() => [
     @include flex(center, center);
 
     background: var(--dz-btn-bg);
+    // 半透明描边要与页面底（= --dz-bg，原 color-mix 的混色对象）合成；
+    // clip 到 padding-box 后描边下方不再压着自身底色，合成结果与 0.6.0 一致
+    background-clip: padding-box;
     border: 1px solid var(--dz-btn-border);
     border-radius: 6px;
     color: var(--dz-btn-text);
@@ -107,6 +112,7 @@ const buttonClass = computed(() => [
     --dz-btn-border: var(--dz-primary);
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-primary);
+    --dz-btn-rgb: var(--dz-primary-rgb);
     --dz-btn-bg-hover: var(--dz-primary-hover);
     --dz-btn-border-hover: var(--dz-primary-hover);
     --dz-btn-text-hover: var(--dz-on-fill);
@@ -117,8 +123,9 @@ const buttonClass = computed(() => [
     --dz-btn-border: var(--dz-success);
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-success);
-    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-success) 85%, var(--dz-bg));
-    --dz-btn-border-hover: color-mix(in srgb, var(--dz-success) 85%, var(--dz-bg));
+    --dz-btn-rgb: var(--dz-success-rgb);
+    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
+    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -127,8 +134,9 @@ const buttonClass = computed(() => [
     --dz-btn-border: var(--dz-warning);
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-warning);
-    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-warning) 85%, var(--dz-bg));
-    --dz-btn-border-hover: color-mix(in srgb, var(--dz-warning) 85%, var(--dz-bg));
+    --dz-btn-rgb: var(--dz-warning-rgb);
+    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
+    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -137,8 +145,9 @@ const buttonClass = computed(() => [
     --dz-btn-border: var(--dz-danger);
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-danger);
-    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-danger) 85%, var(--dz-bg));
-    --dz-btn-border-hover: color-mix(in srgb, var(--dz-danger) 85%, var(--dz-bg));
+    --dz-btn-rgb: var(--dz-danger-rgb);
+    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
+    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -147,8 +156,9 @@ const buttonClass = computed(() => [
     --dz-btn-border: var(--dz-gray-7);
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-gray-7);
-    --dz-btn-bg-hover: color-mix(in srgb, var(--dz-gray-7) 85%, var(--dz-bg));
-    --dz-btn-border-hover: color-mix(in srgb, var(--dz-gray-7) 85%, var(--dz-bg));
+    --dz-btn-rgb: var(--dz-gray-7-rgb);
+    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
+    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -162,7 +172,7 @@ const buttonClass = computed(() => [
     // hover 文字色向底色轻微偏移，保留反馈又不至于过重
     &:hover {
         background: transparent;
-        color: color-mix(in srgb, var(--dz-btn-color) 78%, var(--dz-bg));
+        color: rgba(var(--dz-btn-rgb), 0.78);
     }
 }
 
@@ -177,8 +187,8 @@ const buttonClass = computed(() => [
 
 // 朴素形态：类型色淡底 + 类型色描边/文字，hover 转实心
 .is-plain {
-    background: color-mix(in srgb, var(--dz-btn-color) 10%, var(--dz-bg));
-    border-color: color-mix(in srgb, var(--dz-btn-color) 40%, var(--dz-bg));
+    background: rgba(var(--dz-btn-rgb), 0.1);
+    border-color: rgba(var(--dz-btn-rgb), 0.4);
     color: var(--dz-btn-color);
 
     &:hover {

@@ -1,6 +1,7 @@
 // 工具函数单测
 import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
 import { pxToRem } from '@ui/utils/pxToRem'
+import { ratioToPaddingTop } from '@ui/utils/ratio'
 import { formatDate } from '@ui/utils/formatDate'
 import { debounce, throttle } from '@ui/utils/throttle-debounce'
 import { applyTheme, initTheme, isSystemDarkMode, THEME_KEY, Theme } from '@ui/utils/theme'
@@ -15,6 +16,29 @@ describe('pxToRem', () => {
 
   it('字符串解析', () => {
     expect(pxToRem('24px')).toBe('1.5rem')
+  })
+})
+
+describe('ratioToPaddingTop', () => {
+  it('分数写法按高/宽换算百分比', () => {
+    expect(ratioToPaddingTop('16 / 9')).toBe('56.25%')
+    expect(ratioToPaddingTop('16/9')).toBe('56.25%')
+    expect(ratioToPaddingTop('4 / 3')).toBe('75%')
+    expect(ratioToPaddingTop('9 / 16')).toBe('177.7778%')
+  })
+
+  it('十进制写法按 100 / 宽高比换算', () => {
+    expect(ratioToPaddingTop('1.7778')).toBe('56.2493%')
+    expect(ratioToPaddingTop(2)).toBe('50%')
+  })
+
+  it('非法输入返回 null（不下发兜底，行为同旧版）', () => {
+    expect(ratioToPaddingTop('')).toBeNull()
+    expect(ratioToPaddingTop('auto 16 / 9')).toBeNull()
+    expect(ratioToPaddingTop('0 / 9')).toBeNull()
+    expect(ratioToPaddingTop('-16/9')).toBeNull()
+    expect(ratioToPaddingTop(undefined)).toBeNull()
+    expect(ratioToPaddingTop(null)).toBeNull()
   })
 })
 

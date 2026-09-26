@@ -42,6 +42,11 @@ const emit = defineEmits<{
     max-width: 100%;
     box-sizing: border-box;
 
+    // 变体色三元组：浅底/描边/hover 罩层统一写 rgba(var(--dz-tag-rgb), <alpha>)。
+    // 最低支持 Chrome 86 无 color-mix()，三元组 + rgba 与 color-mix(X p%, transparent) 数值等价。
+    --dz-tag-rgb: var(--dz-gray-7-rgb); // 默认/信息：弱化灰（= --dz-text-d）
+    --dz-tag-close-rgb: var(--dz-tag-rgb); // 关闭键 hover 罩层（原 currentColor 12%）
+
     &.is-round {
         border-radius: 99px;
     }
@@ -59,32 +64,38 @@ const emit = defineEmits<{
     }
 
     &--primary {
-        background: color-mix(in srgb, var(--dz-primary) 12%, transparent);
-        border-color: color-mix(in srgb, var(--dz-primary) 30%, transparent);
+        --dz-tag-rgb: var(--dz-primary-rgb);
+        background: rgba(var(--dz-tag-rgb), 0.12);
+        border-color: rgba(var(--dz-tag-rgb), 0.3);
         color: var(--dz-primary);
     }
 
     &--success {
-        background: color-mix(in srgb, var(--dz-success) 12%, transparent);
-        border-color: color-mix(in srgb, var(--dz-success) 30%, transparent);
+        --dz-tag-rgb: var(--dz-success-rgb);
+        background: rgba(var(--dz-tag-rgb), 0.12);
+        border-color: rgba(var(--dz-tag-rgb), 0.3);
         color: var(--dz-success);
     }
 
     &--warning {
-        background: color-mix(in srgb, var(--dz-warning) 14%, transparent);
-        border-color: color-mix(in srgb, var(--dz-warning) 32%, transparent);
+        --dz-tag-rgb: var(--dz-warning-rgb);
+        background: rgba(var(--dz-tag-rgb), 0.14);
+        border-color: rgba(var(--dz-tag-rgb), 0.32);
         color: var(--dz-warning);
     }
 
     &--danger {
-        background: color-mix(in srgb, var(--dz-danger) 12%, transparent);
-        border-color: color-mix(in srgb, var(--dz-danger) 30%, transparent);
+        --dz-tag-rgb: var(--dz-danger-rgb);
+        background: rgba(var(--dz-tag-rgb), 0.12);
+        border-color: rgba(var(--dz-tag-rgb), 0.3);
         color: var(--dz-danger);
     }
 
     &--info {
-        background: color-mix(in srgb, var(--dz-primary-6) 12%, transparent);
-        border-color: color-mix(in srgb, var(--dz-primary-6) 30%, transparent);
+        // 底色/描边随主色，文字与关闭键罩层保持弱化灰
+        --dz-tag-close-rgb: var(--dz-gray-7-rgb);
+        background: rgba(var(--dz-primary-rgb), 0.12);
+        border-color: rgba(var(--dz-primary-rgb), 0.3);
         color: var(--dz-text-d);
     }
 
@@ -107,7 +118,7 @@ const emit = defineEmits<{
 
         &:hover {
             opacity: 1;
-            background: color-mix(in srgb, currentColor 12%, transparent);
+            background: rgba(var(--dz-tag-close-rgb), 0.12);
             color: var(--dz-text);
         }
     }

@@ -56,8 +56,9 @@ async function handleCopy() {
     &__header {
         @include flex(space-between, center);
         padding: 8px 14px;
-        background: color-mix(in srgb, var(--dz-code-block-text) 6%, transparent);
-        border-bottom: 1px solid color-mix(in srgb, var(--dz-code-block-text) 8%, transparent);
+        // 最低支持 Chrome 86 无 color-mix()，罩层用 rgba(var(--dz-code-block-text-rgb), <alpha>) 等价表达
+        background: rgba(var(--dz-code-block-text-rgb), 0.06);
+        border-bottom: 1px solid rgba(var(--dz-code-block-text-rgb), 0.08);
     }
 
     &__lang {
@@ -69,7 +70,7 @@ async function handleCopy() {
 
     &__copy {
         padding: 2px 10px;
-        border: 1px solid color-mix(in srgb, var(--dz-code-block-text) 16%, transparent);
+        border: 1px solid rgba(var(--dz-code-block-text-rgb), 0.16);
         border-radius: 4px;
         background: transparent;
         color: var(--dz-code-block-text);
@@ -78,7 +79,7 @@ async function handleCopy() {
         transition: all 0.15s;
 
         &:hover {
-            background: color-mix(in srgb, var(--dz-code-block-text) 10%, transparent);
+            background: rgba(var(--dz-code-block-text-rgb), 0.1);
             color: var(--dz-on-fill);
         }
     }

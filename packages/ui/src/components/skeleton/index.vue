@@ -85,10 +85,10 @@ const rowWidths = computed(() => {
 
         &::after {
             content: '';
-            position: absolute;
-            inset: 0;
+            @include absolute(0, 0, 0, 0);
             transform: translateX(-100%);
-            background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--dz-bg) 60%, transparent), transparent);
+            // 最低支持 Chrome 86 无 color-mix()，微光罩层用 rgba(var(--dz-bg-rgb), <alpha>) 等价表达
+            background: linear-gradient(90deg, transparent, rgba(var(--dz-bg-rgb), 0.6), transparent);
         }
     }
 

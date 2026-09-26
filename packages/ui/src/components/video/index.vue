@@ -1,11 +1,14 @@
 <template>
-    <div ref="containerRef" class="d-video"></div>
+    <div class="d-video">
+        <div ref="containerRef" class="d-video__inner"></div>
+    </div>
 </template>
 
 <script setup lang="ts">
-import { ref, shallowRef, watch, onMounted, onBeforeUnmount } from 'vue'
+import { computed, ref, shallowRef, watch, onMounted, onBeforeUnmount } from 'vue'
 import Artplayer from 'artplayer'
 import type { Option } from 'artplayer'
+import { ratioToPaddingTop } from '@ui/utils/ratio'
 
 /**
  * 通用视频播放器（ArtPlayer 封装）
@@ -14,6 +17,7 @@ import type { Option } from 'artplayer'
  * - 不 import css 文件：v5 样式运行时自动注入 `<style id="artplayer-style">`，类名收敛在 `.art-video-player` 下
  * - `autoSize: false`（默认即 false，显式写出防误改）：保持固定容器比例，不按视频原生比例脱离容器
  * - 非 16:9 视频源会出现上下黑边（黑底承载，不拉伸），属既定取舍
+ * - 比例有两条等价路径：现代内核走 `aspect-ratio`，Chrome 86 等低版本走 `::before` 的 padding-top 兜底
  */
 
 const props = withDefaults(defineProps<{
@@ -49,6 +53,9 @@ const emit = defineEmits<{
 
 const containerRef = ref<HTMLDivElement>()
 const player = shallowRef<Artplayer>()
+
+/** 兜底比例（16 / 9 → 56.25%）；ratio 解析不出正数时给空值，此时不下发 padding，行为同旧版 */
+const paddingTop = computed(() => ratioToPaddingTop(props.ratio) ?? '')
 
 /** 解析主题色：props.theme 优先，否则读取全局 CSS 变量 --dz-primary */
 function resolveTheme(): string {
@@ -113,10 +120,24 @@ defineExpose({ player })
 
 <style scoped lang="scss">
 .d-video {
+    position: relative;
     width: 100%;
     aspect-ratio: v-bind('props.ratio');
     border-radius: 8px;
     overflow: hidden;
     background: var(--dz-bg-secondary);
+
+    // Chrome 86 等无 aspect-ratio 的内核：靠占位块撑出同一比例
+    //（padding 百分比按宽度解析，与 aspect-ratio 的高度一致，现代内核两条路径并存也不冲突）
+    &::before {
+        content: '';
+        display: block;
+        padding-top: v-bind('paddingTop');
+    }
+
+    // ArtPlayer 挂载点：绝对铺满，任何内核下父盒都有确定高度（其 .art-video-player 依赖 height: 100%）
+    &__inner {
+        @include absolute(0, 0, 0, 0);
+    }
 }
 </style>

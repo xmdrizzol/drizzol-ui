@@ -73,7 +73,10 @@ onUnmounted(() => {
         align-items: center;
         justify-content: center;
         border-radius: 50%;
-        background: var(--dz-float-bg);
+        // 最低支持 Chrome 86 无 color-mix()：hover 的"微亮一档"改用 12% 白罩层两层背景，
+        // 与 color-mix(var(--dz-float-bg) 88%, #fff) 数值等价，对自定义底色/主题同样生效；
+        // 基态保留一层同形透明罩层，hover 只改 alpha，过渡依旧平滑
+        background: linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 0)), var(--dz-float-bg);
         color: var(--dz-float-color);
         border: 1px solid var(--dz-float-border-color);
         box-shadow: var(--dz-float-shadow);
@@ -82,7 +85,7 @@ onUnmounted(() => {
 
         // hover 微亮一档（对自定义底色同样生效），上浮提示可点击
         &:hover {
-            background: color-mix(in srgb, var(--dz-float-bg) 88%, #fff);
+            background: linear-gradient(rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.12)), var(--dz-float-bg);
             transform: translateY(-2px);
         }
 

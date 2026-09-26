@@ -56,14 +56,12 @@ withDefaults(
 
     // d-page-cover 作背景层铺满横幅
     &__cover {
-        position: absolute;
-        inset: 0;
+        @include absolute(0, 0, 0, 0);
     }
 
     // 深色遮罩：底部最重，向上渐隐
     &__scrim {
-        position: absolute;
-        inset: 0;
+        @include absolute(0, 0, 0, 0);
         z-index: 1;
         background: var(--dz-hero-scrim);
     }
@@ -105,7 +103,9 @@ withDefaults(
         font-size: clamp(2rem, 4.5vw, 3rem);
         font-weight: $fw-semibold;
         letter-spacing: 2px;
-        text-shadow: 0 2px 16px color-mix(in srgb, var(--dz-scrim-strong) 50%, transparent);
+        // 最低支持 Chrome 86 无 color-mix()：原为 var(--dz-scrim-strong) 50% 罩，即该色的半透明
+        //（亮 0.7×0.5=0.35 / 暗 0.75×0.5=0.375，统一取 0.35，暗色差 0.025 不可辨）
+        text-shadow: 0 2px 16px rgba(var(--dz-scrim-strong-rgb), 0.35);
 
         @include fade-in(1s, $ease-out);
     }

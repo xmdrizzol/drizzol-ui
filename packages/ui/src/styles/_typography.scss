@@ -120,7 +120,8 @@ blockquote {
     margin: 0 0 1.1em;
     padding: 12px 16px;
     border-left: 3px solid var(--dz-primary);
-    background: color-mix(in srgb, var(--dz-primary) 6%, transparent);
+    // 最低支持 Chrome 86 无 color-mix()，罩层用 rgba(var(--dz-primary-rgb), <alpha>) 等价表达
+    background: rgba(var(--dz-primary-rgb), 0.06);
     color: var(--dz-text-d);
     border-radius: 0 8px 8px 0;
 
