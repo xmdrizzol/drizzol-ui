@@ -73,9 +73,6 @@ const buttonClass = computed(() => [
     @include flex(center, center);
 
     background: var(--dz-btn-bg);
-    // 半透明描边要与页面底（= --dz-bg，原 color-mix 的混色对象）合成；
-    // clip 到 padding-box 后描边下方不再压着自身底色，合成结果与 0.6.0 一致
-    background-clip: padding-box;
     border: 1px solid var(--dz-btn-border);
     border-radius: 6px;
     color: var(--dz-btn-text);
@@ -118,14 +115,23 @@ const buttonClass = computed(() => [
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
+// 实心语义变体：hover 底色/描边是"类型色 85% 罩在页面底上"，用不透明合成表达
+//（tint-on-bg 等价旧 color-mix，最低支持 Chrome 86 无 color-mix；半透明罩层会透出下层内容）
+.d-button--success,
+.d-button--warning,
+.d-button--danger,
+.d-button--info {
+    &:hover {
+        @include tint-on-bg(--dz-btn-rgb, 0.85, 0.85);
+    }
+}
+
 .d-button--success {
     --dz-btn-bg: var(--dz-success);
     --dz-btn-border: var(--dz-success);
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-success);
     --dz-btn-rgb: var(--dz-success-rgb);
-    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
-    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -135,8 +141,6 @@ const buttonClass = computed(() => [
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-warning);
     --dz-btn-rgb: var(--dz-warning-rgb);
-    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
-    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -146,8 +150,6 @@ const buttonClass = computed(() => [
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-danger);
     --dz-btn-rgb: var(--dz-danger-rgb);
-    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
-    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -157,8 +159,6 @@ const buttonClass = computed(() => [
     --dz-btn-text: var(--dz-on-fill);
     --dz-btn-color: var(--dz-gray-7);
     --dz-btn-rgb: var(--dz-gray-7-rgb);
-    --dz-btn-bg-hover: rgba(var(--dz-btn-rgb), 0.85);
-    --dz-btn-border-hover: rgba(var(--dz-btn-rgb), 0.85);
     --dz-btn-text-hover: var(--dz-on-fill);
 }
 
@@ -169,7 +169,8 @@ const buttonClass = computed(() => [
     color: var(--dz-btn-color);
 
     // 纯文字形态：任何状态下都不带背景（覆盖基座 hover 的背景色）；
-    // hover 文字色向底色轻微偏移，保留反馈又不至于过重
+    // hover 文字色向底色轻微偏移，保留反馈又不至于过重。
+    // 注：文字色无法用"底色 + 罩层"表达，这里保留半透明写法（落在页面上与旧 color-mix 值一致）
     &:hover {
         background: transparent;
         color: rgba(var(--dz-btn-rgb), 0.78);
@@ -187,14 +188,15 @@ const buttonClass = computed(() => [
 
 // 朴素形态：类型色淡底 + 类型色描边/文字，hover 转实心
 .is-plain {
-    background: rgba(var(--dz-btn-rgb), 0.1);
-    border-color: rgba(var(--dz-btn-rgb), 0.4);
+    @include tint-on-bg(--dz-btn-rgb, 0.1, 0.4);
     color: var(--dz-btn-color);
 
     &:hover {
         background: var(--dz-btn-bg);
         border-color: var(--dz-btn-border);
         color: var(--dz-btn-text);
+        // 实心态不带罩层（inset 阴影不会被 background 简写清掉，需显式复位）
+        box-shadow: none;
     }
 }
 </style>

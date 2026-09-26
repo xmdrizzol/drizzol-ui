@@ -91,3 +91,31 @@
     align-items: $align;
     flex-direction: $direction;
 }
+
+/**
+ * 类型色罩层（不透明合成）
+ *
+ * 语义浅底原本是 `color-mix(in srgb, X p%, var(--dz-bg))`——结果是**不透明**色；最低支持 Chrome 86
+ * 没有 color-mix()，若直接改成 `background: rgba(X, p)` 就变成半透明罩层，卡片会透出下层内容
+ * （消息/通知浮在任意页面内容之上，尤其明显）。这里用"不透明底 + inset 阴影罩层"合成：
+ * - `background-color: var(--dz-bg)`：铺满整块（默认 border-box），描边下方也是不透明底
+ * - `box-shadow: inset …`：罩层盖在底色之上、内容之下，渲染结果与旧 color-mix 逐位一致
+ * - `$line`：描边色同样是不透明合成（半透明描边压在同一层不透明底上）
+ *
+ * @param {String} $rgb-var - RGB 三元组变量名（如 `--dz-success-rgb`，可用组件内局部变量）
+ * @param {Number} $fill - 内部罩层强度（原 color-mix 的百分比）
+ * @param {Number} $line - 描边强度（省略则不改描边）
+ * @param {String} $shadow - 需保留的外阴影（如 `var(--dz-shadow-sm)`）
+ */
+@mixin tint-on-bg($rgb-var, $fill, $line: null, $shadow: null) {
+    background-color: var(--dz-bg);
+    // 9999px 展开量：inset 阴影被裁在 padding 盒内，任意尺寸都能铺满
+    @if $shadow {
+        box-shadow: inset 0 0 0 9999px rgba(var(#{$rgb-var}), $fill), #{$shadow};
+    } @else {
+        box-shadow: inset 0 0 0 9999px rgba(var(#{$rgb-var}), $fill);
+    }
+    @if $line {
+        border-color: rgba(var(#{$rgb-var}), $line);
+    }
+}

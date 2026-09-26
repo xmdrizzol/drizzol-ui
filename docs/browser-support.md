@@ -188,6 +188,7 @@ background: var(--dz-tag-primary-bg);
 - [ ] Chrome 86：DVideo 容器比例正确（16:9 等）—— 比例修复已就位（`aspect-ratio` + `padding-top` 兜底），**真机待复核**
 - [ ] Chrome 86 窄屏：`html` 根字号为 14px，`d-col` 栅格按断点生效 —— 产物中 `@media screen and (max-width:768px){html{font-size:.875rem!important}` 与 `@media (min-width:768px){.d-col--sm-*}` 已确认保留为经典语法，**真机待复核**
 - [x] 现代浏览器无回归：色彩等价性用 `color-mix` 与替换值的逐条数值核对（premultiplied sRGB，阈值 1/255）——107/108 条完全一致，唯一偏差是 `page-hero` 标题阴影在暗色下 0.375 → 0.35（源码注释已记录，视觉不可辨）；视频容器几何实测 640×360（比例 0.5625 = 16:9，`::before` padding-top 360px）与 ArtPlayer 渲染正常
+- [x] 不透明性实测：在消息卡片正后方铺一条纯红横幅（`#ff0033`），暗色下卡片内部像素实测 `(34,39,55)` vs 旧 `color-mix` 期望 `(33,40,56)`（横幅控制点确认为纯红），浅色下内部合成 `(236,244,255)`、hover 按钮底 `(108,205,60)`，与旧值偏差均为 0；卡片 `background-color` alpha = 1 且无 `opacity`/`filter`/`mix-blend-mode` → 确认不透底（截图目视一致）
 - [x] 随修复补 `.changeset`（0.x 阶段 patch = 修复）与防回归断言（落在 `src/__tests__/css-baseline.test.ts` + 构建期 `scripts/check-css-baseline.mjs`，比塞进 `components.smoke.test.ts` 更合适：产物级断言不能在 pre-commit 跑——`dist/` 是 gitignore 的旧产物，容易测出假绿）
 - [x] 额外收益（本次一并处理）：产物从 245KB 降到约 64.5KB —— 剔除 36 份永不命中的 scoped `:root` 令牌块与 467 段无用 scoped `@keyframes` 副本（详见 十一）
 
@@ -218,7 +219,7 @@ background: var(--dz-tag-primary-bg);
 **源码回退**：
 
 - `_variables.scss`：新增 `--dz-{primary,success,warning,danger,gray-7,gray-9,bg}-rgb` 逗号三元组（亮/暗各一份）+ `--dz-code-block-text-rgb`、`--dz-scrim-strong-rgb`（恒定）；暗色 `--dz-primary-hover-2` 由 `color-mix(...)` 改为 `rgba(var(--dz-primary-rgb), 0.18)`。
-- 46 处 `color-mix()` 全部改写成 `rgba(var(--dz-*-rgb), <alpha>)`（tag / button 用组件内局部变量 `--dz-tag-rgb`、`--dz-tag-close-rgb`、`--dz-btn-rgb` 按变体取值）；`background-clip: padding-box` 加在 d-button / d-message / d-notification 上，使半透明描边与页面底合成（与原 `color-mix(X p%, var(--dz-bg))` 的不透明结果逐位一致）；`float-bar` 的 hover 改成"12% 白罩层 + 自身底色"两层背景。
+- 46 处 `color-mix()` 全部改写（tag / button 用组件内局部变量 `--dz-tag-rgb`、`--dz-tag-close-rgb`、`--dz-btn-rgb` 按变体取值）。其中**原本不透明**的那些（消息/通知卡片底与描边、按钮朴素底与描边、实心语义变体 hover 底与描边）改写成 `@include tint-on-bg()` —— 不透明底色 + inset 阴影罩层（罩层在内容之下、描边压在同一层不透明底上），因为 `color-mix(X p%, var(--dz-bg))` 的结果是**不透明**色：若直接写成 `background: rgba(X, p)`，卡片就变成半透明罩层，消息/通知这种 `position: fixed` 浮层会透出下层内容（这是修复过程中自查发现并纠正的一处偏差，已在 `src/__tests__/css-baseline.test.ts` 加断言防回退）。**原本就半透明**的（tag 底与描边、代码块头部与复制按钮、引用块、骨架屏微光、page-hero 遮罩、暗色 `--dz-primary-hover-2`）保留 `rgba(...)` 写法。`float-bar` 的 hover 改成"12% 白罩层 + 自身底色"两层背景（最后一层是不透明底色）。
 - `page-hero` / `skeleton` 的 3 处 `inset:` → `@include absolute(0,0,0,0)`。
 - `d-video`：容器加 `.d-video__inner` 绝对定位挂载层 + `::before` 的 `padding-top` 兜底（由新增纯函数 `ratioToPaddingTop` 从 `ratio` 解析），现代内核仍走 `aspect-ratio`，两者高度数学等价。
 

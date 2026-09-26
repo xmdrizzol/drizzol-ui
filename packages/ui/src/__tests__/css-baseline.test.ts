@@ -152,6 +152,34 @@ describe('产物去重（scripts/css-dedupe.mjs）', () => {
   })
 })
 
+describe('语义浅底必须是不透明合成', () => {
+  // 0.6.0 的 color-mix(X p%, var(--dz-bg)) 结果是不透明色：卡片/按钮浮在任意内容之上，
+  // 若改成半透明 rgba 罩层就会透出下层内容（消息/通知尤其明显）。浅底统一走 tint-on-bg。
+  const sources = styleSources()
+  const find = (rel: string) => sources.find((source) => source.rel === rel)!
+
+  it('消息 / 通知的语义变体用 tint-on-bg，且不再用半透明 background 直接铺底', () => {
+    for (const rel of ['components/message/Message.vue', 'components/notification/Notification.vue']) {
+      const source = find(rel)
+      expect(source.code, `${rel} 未使用 tint-on-bg`).toContain('@include tint-on-bg')
+      expect(source.code, `${rel} 出现半透明 background`).not.toMatch(/background:\s*rgba\(/)
+    }
+  })
+
+  it('按钮的朴素底与实心语义 hover 用 tint-on-bg', () => {
+    const button = find('components/button/index.vue').code
+    expect(button).toContain('@include tint-on-bg(--dz-btn-rgb, 0.1, 0.4)')
+    expect(button).toContain('@include tint-on-bg(--dz-btn-rgb, 0.85, 0.85)')
+  })
+
+  it('tint-on-bg 的实现是不透明底色 + inset 罩层', () => {
+    const mixin = find('styles/_mixin.scss').code
+    expect(mixin).toContain('@mixin tint-on-bg')
+    expect(mixin).toContain('background-color: var(--dz-bg)')
+    expect(mixin).toMatch(/box-shadow:\s*inset/)
+  })
+})
+
 describe('产物基线校验（scripts/check-css-baseline.mjs）', () => {
   const clean =
     ':root{--a:1}.d-tag[data-v-abc]{background:rgba(var(--dz-primary-rgb),.12)}' +

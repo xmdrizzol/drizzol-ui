@@ -22,7 +22,8 @@
 
 - **命名**：组件 `D` 前缀（PascalCase，模板 kebab-case `d-button`）；目录 kebab-case 三件套（`index.vue` + `index.ts` barrel）；CSS 类 `d-*`、BEM 式；CSS 变量一律 `--dz-*`，**禁止写死色值**（深浅主题靠变量）
 - **颜色/主题**：`_variables.scss` 的 `:root` / `:root.dark` 双色板是唯一色值来源；新组件配色只用 `var(--dz-*)`
-- **浏览器基线**：**最低支持 Chrome 86**（构建声明 `build.cssTarget: 'chrome86'` + 源码约定 + 产物断言，详见 README「浏览器兼容性」）。源码禁写 `color-mix()`（用 `rgba(var(--dz-*-rgb), <alpha>)`；**改语义色时 `--dz-<名>` 与 `--dz-<名>-rgb` 成对同步**）、`inset` 简写（用 `@include absolute()/fixed()`）、range 语法媒体查询、逻辑属性、`:is()/:where()/:has()`、`dvh/svh/lvh`、独立 `translate/rotate/scale`；`aspect-ratio` 必须配 padding 兜底（见 `d-video` + `ratioToPaddingTop`）。护栏：`npm test` 扫源码/配置，`npm run build` 末尾扫产物
+- **浏览器基线**：**最低支持 Chrome 86**（构建声明 `build.cssTarget: 'chrome86'` + 源码约定 + 产物断言，详见 README「浏览器兼容性」）。源码禁写 `color-mix()`、`inset` 简写（用 `@include absolute()/fixed()`）、range 语法媒体查询、逻辑属性、`:is()/:where()/:has()`、`dvh/svh/lvh`、独立 `translate/rotate/scale`；`aspect-ratio` 必须配 padding 兜底（见 `d-video` + `ratioToPaddingTop`）。**改语义色时 `--dz-<名>` 与 `--dz-<名>-rgb` 成对同步**。护栏：`npm test` 扫源码/配置，`npm run build` 末尾扫产物
+- **浅底不透明**：`color-mix(X p%, var(--dz-bg))` 原本是不透明色，替代时**不能**写 `background: rgba(X, p)`（半透明，卡片会透出下层内容）——浅底统一 `@include tint-on-bg(--dz-x-rgb, $fill, $line, $shadow)`（不透明底色 + inset 罩层，颜色与旧值逐位一致）；只有原本就半透明的罩层（tag 底、代码块头部、引用块、骨架屏微光）才用 `rgba(var(--dz-*-rgb), <alpha>)`
 - **组件导出**：每组件 `index.ts` 用 `withInstall(Comp, 'DComp')` 导出具名 + default，并由库入口 `src/index.ts` 登记进 `components` 数组（全量安装）与 `export *`（具名导入）；图标组件例外（`DIcon` + `DIconSprite`）
 - **样式注入**：`vite.config.ts`（库+playground）的 scss `additionalData` 全局注入 `_mixin.scss`/`_animations.scss`，**库内组件不得自行 `@use '@/styles/mixin'` 重复引入**（保留 `_variables` 的 `@use` 亦可，但注意别形成循环）
 - **px→rem**：库与 playground 构建均挂 `postcss-pxtorem`（`rootValue: 16`、`minPixelValue: 2`），**SCSS 源码写 px、构建自动换算 rem**；组件内 `:style` 等 JS 生成的尺寸走 `src/utils/pxToRem`（`1rem = 16px`）。1px 细边框因 `minPixelValue` 保持 px，**勿手写 rem 视觉不准**；受此影响 `var(--dz-*, px)` 的 px 兜底不会被插件换算，默认尺寸可写 px 让其转换
