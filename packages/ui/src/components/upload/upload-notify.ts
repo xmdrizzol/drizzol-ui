@@ -1,27 +1,31 @@
 // 上传进度通知
 import { defineComponent, h, ref } from 'vue'
 import { DConfirm } from '@ui/components/confirm'
+import { DIcon } from '@ui/components/icon'
 import { DNotification } from '@ui/components/notification'
 import type { NotificationHandle } from '@ui/components/notification'
 
 export interface UploadNotifyControl {
-    /** 更新进度（0-100） */
+    /** 更新进度（0-100，超出范围自动收敛并取整） */
     update: (percent: number) => void
     /** 关闭通知 */
     close: () => void
 }
 
 interface UploadNotifyOptions {
-    /** 文件名（显示在通知标题行） */
+    /** 文件名（显示在通知第一行，超长省略） */
     title?: string
-    /** 用户确认取消后的回调（执行真正的取消上传） */
-    onCancel: () => void
+    /**
+     * 用户确认取消后的回调（执行真正的取消上传）。
+     * 可选：不传则为纯进度展示（不渲染取消 ✕）
+     */
+    onCancel?: () => void
 }
 
 /**
- * 显示上传进度通知
- * - 通知内渲染文件名 + 百分比 + 进度条，随 onUploadProgress 实时更新
- * - 右上角 ×：先弹确认框，确认后才触发 onCancel（统一走确认流程）
+ * 显示上传进度通知（两行式：行1 图标+文件名+取消✕，行2 进度条+百分比）
+ * - 可独立于 DUpload 使用：自行封装上传逻辑（如直传 OSS）时复用进度与取消确认
+ * - ✕ 仅在传入 onCancel 时渲染；点击先弹确认框（取消上传/继续上传），确认才触发 onCancel
  * - 上传完成由调用方通过返回的 close() 关闭
  */
 export function showUploadNotification(options: UploadNotifyOptions): UploadNotifyControl {
@@ -36,7 +40,7 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
             cancelButtonText: '继续上传',
         })
             .then(() => {
-                options.onCancel()
+                options.onCancel?.()
                 handle?.close()
             })
             .catch(() => {
@@ -50,16 +54,27 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
         message: h(defineComponent({
             setup() {
                 return () => h('div', { class: 'd-upload-notify' }, [
+                    // 行1：状态图标 + 文件名（超长省略）+ 取消✕（仅传入 onCancel 时渲染）
                     h('div', { class: 'd-upload-notify__header' }, [
+                        h(DIcon, { name: 'circle-alert', size: 1.2, class: 'd-upload-notify__icon' }),
                         h('span', { class: 'd-upload-notify__title' }, options.title || '文件上传'),
-                        h('span', { class: 'd-upload-notify__percent' }, `${progress.value}%`),
-                        h('span', { class: 'd-upload-notify__close', onClick: handleCloseClick }, '✕'),
+                        options.onCancel
+                            ? h('button', {
+                                class: 'd-upload-notify__close',
+                                title: '取消上传',
+                                onClick: handleCloseClick,
+                            }, '✕')
+                            : null,
                     ]),
+                    // 行2：进度条（8px 圆角）+ 右对齐百分比
                     h('div', { class: 'd-upload-notify__progress' }, [
-                        h('div', {
-                            class: 'd-upload-notify__progress-inner',
-                            style: { width: `${progress.value}%` },
-                        }),
+                        h('div', { class: 'd-upload-notify__progress-track' }, [
+                            h('div', {
+                                class: 'd-upload-notify__progress-inner',
+                                style: { width: `${progress.value}%` },
+                            }),
+                        ]),
+                        h('span', { class: 'd-upload-notify__percent' }, `${progress.value}%`),
                     ]),
                 ])
             },
@@ -71,7 +86,8 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
 
     return {
         update(p: number) {
-            progress.value = p
+            // 收敛到 0-100 并取整，宿主上报值不规整也能稳定展示
+            progress.value = Math.min(100, Math.max(0, Math.round(p)))
         },
         close() {
             handle?.close()

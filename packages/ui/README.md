@@ -88,7 +88,7 @@ import { DCard, DButton, message, applyTheme } from '@xmdrizzol/drizzol-ui'
 | 分类 | 导出 |
 | --- | --- |
 | 请求 | `request`（默认实例）、`createRequest`、`configureRequest`、`getBaseUrl`；统一解包 `res.data`、401 白名单、取消静默、`DMessage.error` 错误提示 |
-| 提示 | `DMessage`（顶部 toast：success/error/warning/info）、`DNotification`（右上角通知，支持 VNode 正文）、`DConfirm`（基于 DModal 的命令式确认框） |
+| 提示 | `DMessage`（顶部 toast：success/error/warning/info）、`DNotification`（右上角通知，支持 VNode 正文）、`DConfirm`（基于 DModal 的命令式确认框）、`showUploadNotification`（上传进度通知：两行式进度 + ✕ 取消确认，可独立于 DUpload 使用） |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
 | 文件 | `getFileAccessUrl`、`resolveAccessUrl`（宽容解析：类型前缀拆解/纯文件名拼接）、`configureFileAccessPrefix`、`configureFileAccessResolver`（完全接管 src → URL）、`configureFileApi`、`uploadFile`、`uploadImage` |
 | 通用 | `pxToRem`、`ratioToPaddingTop`（宽高比 → `padding-top` 百分比，`aspect-ratio` 的旧内核兜底）、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |

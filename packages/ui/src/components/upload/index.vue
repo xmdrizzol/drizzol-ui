@@ -340,8 +340,9 @@ defineExpose({ openPicker, clearFile, fileInputRef })
 <!-- 上传进度通知样式（通知渲染在 body，需全局样式；mixin 由 vite additionalData 注入） -->
 <style lang="scss">
 .d-upload-notify-root {
-    // 通知自带空标题（进度信息在消息体内）
-    .el-notification__title {
+    // 进度信息（图标/文件名/百分比）都在消息体内，默认头部（空标题）由库内消化隐藏，
+    // 宿主无需再写 display:none 的覆盖（曾因误用第三方库的残留选择器失效过）
+    .d-notification__header {
         display: none;
     }
 }
@@ -349,50 +350,59 @@ defineExpose({ openPicker, clearFile, fileInputRef })
 .d-upload-notify {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
     width: 100%;
-    min-width: 240px;
+    min-width: 260px;
 
+    // 行1：状态图标 + 文件名（超长省略）+ 取消✕（仅传入 onCancel 时渲染）
     &__header {
         display: flex;
         align-items: center;
         gap: 8px;
     }
 
+    &__icon {
+        flex-shrink: 0;
+        color: var(--dz-primary);
+    }
+
     &__title {
         flex: 1;
         min-width: 0;
-        font-size: 13px;
-        color: var(--dz-text);
+        font-weight: 600;
+        font-size: 0.875rem;
+        color: var(--dz-text-h);
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
-    &__percent {
-        flex-shrink: 0;
-        font-size: 12px;
-        color: var(--dz-text-l);
-    }
-
     &__close {
         flex-shrink: 0;
-        cursor: pointer;
-        width: 20px;
-        height: 20px;
-        font-size: 14px;
+        border: none;
+        background: none;
+        padding: 0 2px;
+        font-size: 16px;
         line-height: 1;
         color: var(--dz-text-l);
-        @include flex(center, center);
+        cursor: pointer;
 
         &:hover {
             color: var(--dz-text);
         }
     }
 
+    // 行2：进度条（8px 圆角）+ 右对齐百分比
     &__progress {
-        height: 6px;
-        border-radius: 3px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    &__progress-track {
+        flex: 1;
+        height: 8px;
+        border-radius: 999px;
         background: var(--dz-bg-secondary);
         overflow: hidden;
     }
@@ -400,9 +410,18 @@ defineExpose({ openPicker, clearFile, fileInputRef })
     &__progress-inner {
         display: block;
         height: 100%;
-        border-radius: 3px;
+        border-radius: 999px;
         background: var(--dz-primary);
-        transition: width 0.2s;
+        transition: width 0.15s;
+    }
+
+    &__percent {
+        flex-shrink: 0;
+        font-size: 0.8125rem;
+        font-weight: 600;
+        color: var(--dz-text-h);
+        // 等宽数字：进度跳动时百分比宽度不抖动
+        font-variant-numeric: tabular-nums;
     }
 }
 </style>

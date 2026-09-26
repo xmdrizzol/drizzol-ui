@@ -15,14 +15,62 @@
                 <p class="component-page__echo">modelValue：{{ uploadRef || '（未选择）' }}</p>
             </div>
         </demo-block>
+
+        <demo-block title="上传进度通知" anchor-id="notify"
+            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：两行式进度（状态图标 + 文件名，进度条 + 百分比），点 ✕ 先确认再触发 onCancel；不传 onCancel 则为纯进度展示。"
+            :code="notifyDoc">
+            <div class="component-page__row">
+                <d-button type="primary" @click="simulate(false)">模拟上传（可取消）</d-button>
+                <d-button @click="simulate(true)">纯进度展示（无取消）</d-button>
+            </div>
+        </demo-block>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import DemoBlock from '@/components/demo-block'
+import { showUploadNotification, type UploadNotifyControl } from '@xmdrizzol/drizzol-ui'
 
 const uploadRef = ref('')
+
+// 进度模拟：随机步进到 100；确认取消后停止步进
+let control: UploadNotifyControl | null = null
+let timer: ReturnType<typeof setInterval> | undefined
+
+function simulate(bare: boolean) {
+    control?.close()
+    if (timer) clearInterval(timer)
+    let percent = 0
+    control = showUploadNotification({
+        title: 'campus-photo-2026.zip',
+        // 不传 onCancel：纯进度展示（无 ✕）
+        ...(bare ? {} : {
+            onCancel: () => {
+                if (timer) clearInterval(timer)
+            },
+        }),
+    })
+    timer = setInterval(() => {
+        percent = Math.min(100, percent + Math.ceil(Math.random() * 12))
+        control?.update(percent)
+        if (percent >= 100 && timer) clearInterval(timer)
+    }, 260)
+}
+
+const notifyDoc = `import { showUploadNotification } from '@xmdrizzol/drizzol-ui'
+
+const control = showUploadNotification({
+  title: 'campus-photo-2026.zip',
+  // 可选：不传则纯进度展示（无 ✕）；确认弹窗（取消上传/继续上传）确认后触发
+  onCancel: () => xhr.abort(),
+})
+
+// onUploadProgress 里实时更新（超出 0-100 自动收敛并取整）
+control.update(62)
+
+// 上传完成由调用方关闭
+control.close()`
 </script>
 
 <style scoped lang="scss">

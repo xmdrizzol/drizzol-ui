@@ -1,4 +1,4 @@
-// 命令式提示四件套测试：message / notification / confirm / DDrawer
+// 命令式提示四件套测试：message / notification / confirm / DDrawer（+ upload-notify）
 import { describe, it, expect, afterEach, vi } from 'vitest'
 import { h } from 'vue'
 import { mount } from '@vue/test-utils'
@@ -6,6 +6,8 @@ import { DMessage } from '@ui/components/message'
 import { DNotification } from '@ui/components/notification'
 import { DConfirm } from '@ui/components/confirm'
 import DDrawer from '@ui/components/drawer'
+import { showUploadNotification } from '@ui/components/upload'
+import uploadSource from '@ui/components/upload/index.vue?raw'
 
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -191,5 +193,69 @@ describe('DDrawer', () => {
       expect(panel.style.height).toBe('18.75rem')
     }
     wrapper.unmount()
+  })
+})
+
+describe('upload-notify', () => {
+  afterEach(() => {
+    document.querySelectorAll('.d-notification').forEach(el => el.remove())
+  })
+
+  it('包根可导出（宿主从 @xmdrizzol/drizzol-ui 直接导入）', async () => {
+    const root = await import('@ui')
+    expect(typeof root.showUploadNotification).toBe('function')
+  })
+
+  it('两行式渲染：行1 文件名，行2 进度条 + 百分比；默认头部由库内隐藏', async () => {
+    const control = showUploadNotification({ title: '课件.zip' })
+    await wait(30)
+    const root = document.querySelector('.d-upload-notify')!
+    expect(root.querySelector('.d-upload-notify__title')?.textContent).toBe('课件.zip')
+    expect(root.querySelector('.d-upload-notify__icon')).toBeTruthy()
+    expect(root.querySelector('.d-upload-notify__progress-track')).toBeTruthy()
+    expect(root.querySelector('.d-upload-notify__percent')?.textContent).toBe('0%')
+    // customClass 挂上了（宿主侧不再需要 CSS hack）
+    expect(document.querySelector('.d-upload-notify-root .d-notification__header')).toBeTruthy()
+    // jsdom 不注入组件样式，头部隐藏规则做源码级断言（库内消化，而非 .el-* 残留选择器）
+    const rootBlock = uploadSource.match(/\.d-upload-notify-root\s*\{[\s\S]*?\n\}/)?.[0] ?? ''
+    expect(rootBlock).toContain('.d-notification__header')
+    expect(rootBlock).toContain('display: none')
+    expect(rootBlock).not.toContain('.el-')
+    control.close()
+  })
+
+  it('update 收敛到 0-100 并取整，进度响应式刷新', async () => {
+    const control = showUploadNotification({ title: 'x' })
+    control.update(150)
+    await wait(30)
+    const percent = () => document.querySelector('.d-upload-notify__percent')?.textContent
+    expect(percent()).toBe('100%')
+    control.update(-5)
+    await wait(30)
+    expect(percent()).toBe('0%')
+    control.update(62)
+    await wait(30)
+    expect(percent()).toBe('62%')
+    control.close()
+  })
+
+  it('未传 onCancel 时不渲染取消按钮（纯进度展示）', () => {
+    const control = showUploadNotification({ title: 'x' })
+    expect(document.querySelector('.d-upload-notify__close')).toBeNull()
+    control.close()
+  })
+
+  it('点 ✕ 先弹确认框，确认后触发 onCancel 并关闭通知', async () => {
+    const onCancel = vi.fn()
+    const control = showUploadNotification({ title: 'x', onCancel })
+    ;(document.querySelector('.d-upload-notify__close') as HTMLButtonElement).click()
+    await wait(60)
+    const confirmBtn = [...document.querySelectorAll('.d-modal__footer button')]
+      .find(b => b.textContent?.trim() === '取消上传')
+    expect(confirmBtn).toBeTruthy()
+    ;(confirmBtn as HTMLButtonElement).click()
+    await wait(60)
+    expect(onCancel).toHaveBeenCalledTimes(1)
+    await wait(400) // 等通知离场与弹窗卸载清理
   })
 })
