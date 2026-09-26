@@ -29,8 +29,11 @@ const handle = DNotification({
 handle.close()">
             <template #desc>
                 <p class="demo-block__desc">
-                    message 传渲染函数组件，内部读取响应式进度实时重渲染；标题行走通知默认头部，正文只放进度条；
-                    走完自动调 <code>close()</code>。要开箱即用的同款效果（含 ✕ 取消确认），直接用
+                    message 传渲染函数组件，内部读取响应式进度实时重渲染；标题行走通知默认头部，
+                    正文只放进度条，走完自动调 <code>close()</code>。
+                </p>
+                <p class="demo-block__desc">
+                    要开箱即用的同款效果（含 ✕ 取消确认），直接用
                     <router-link to="/components/dupload">showUploadNotification</router-link>（见 DUpload 演示页）。
                 </p>
             </template>

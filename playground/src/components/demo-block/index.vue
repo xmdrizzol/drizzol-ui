@@ -54,14 +54,17 @@ const resolvedLanguage = computed(() => {
     margin-bottom: 40px;
     scroll-margin-top: 76px; // 锚点定位为粘性头部留出空间
 
-    &__header {
-        margin-bottom: 12px;
+    // 说明段落：行高与正文排版（介绍页）一致，支持多段换行
+    // （插槽版作用域在父页面，需 v-slotted 才能吃到本组件的排版）
+    &__desc,
+    :slotted(.demo-block__desc) {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: var(--dz-line-height);
+    }
 
-        // 插槽传入的说明段落（作用域在父页面，需 v-slotted 才能吃到本组件的排版）
-        :slotted(.demo-block__desc) {
-            margin: 0;
-            font-size: 0.875rem;
-        }
+    :slotted(.demo-block__desc + .demo-block__desc) {
+        margin-top: 4px;
     }
 
     &__title {
@@ -69,11 +72,6 @@ const resolvedLanguage = computed(() => {
         font-size: 1.25rem;
         color: var(--dz-text-h);
         font-weight: 600;
-    }
-
-    &__desc {
-        margin: 0;
-        font-size: 0.875rem;
     }
 
     &__body {
