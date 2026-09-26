@@ -17,7 +17,7 @@
         </demo-block>
 
         <demo-block title="上传进度通知" anchor-id="notify"
-            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则为纯进度展示。"
+            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则不出 ✕（纯进度展示，由调用方 close() 收尾）。"
             :code="notifyDoc">
             <div class="component-page__row">
                 <d-button type="primary" @click="simulate(false)">模拟上传（可取消）</d-button>

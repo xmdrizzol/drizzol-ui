@@ -273,13 +273,10 @@ describe('upload-notify', () => {
     control.close()
   })
 
-  it('未传 onCancel：头部 ✕ 直接关闭，不走确认框', async () => {
+  it('未传 onCancel：不渲染 ✕（纯进度展示，由调用方 close() 收尾）', () => {
     const control = showUploadNotification({ title: 'x' })
-    const closeBtn = document.querySelector('.d-upload-notify-root .d-notification__close') as HTMLButtonElement
-    expect(closeBtn).toBeTruthy()
-    closeBtn.click()
-    await wait(400)
-    expect(document.querySelector('.d-upload-notify-root')).toBeNull()
+    expect(document.querySelector('.d-upload-notify-root .d-notification__close')).toBeNull()
+    control.close()
   })
 
   it('点标题行 ✕ 先弹确认框，确认后触发 onCancel 并关闭通知', async () => {

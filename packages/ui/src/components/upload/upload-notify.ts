@@ -16,17 +16,17 @@ interface UploadNotifyOptions {
     title?: string
     /**
      * 用户确认取消后的回调（执行真正的取消上传）。
-     * 可选：不传则头部 ✕ 直接关闭（纯进度展示，无确认流程）
+     * 可选：不传则不渲染 ✕（纯进度展示，由调用方通过 close() 收尾）
      */
     onCancel?: () => void
 }
 
 /**
- * 显示上传进度通知：头部为标题（DNotification 默认头部，含类型图标与 ✕），正文为进度条 + 百分比
+ * 显示上传进度通知：头部为标题（DNotification 默认头部，含类型图标），正文为进度条 + 百分比
  * - 可独立于 DUpload 使用：自行封装上传逻辑（如直传 OSS）时复用进度与取消确认
- * - ✕ 在标题行右侧；传入 onCancel 时经 beforeClose 先弹确认框（取消上传/继续上传），
+ * - 传入 onCancel 时标题行右侧渲染 ✕，点击经 beforeClose 先弹确认框（取消上传/继续上传），
  *   确认才触发 onCancel 并关闭，取消则继续上传
- * - 上传完成由调用方通过返回的 close() 关闭
+ * - 不传 onCancel 为纯进度展示：无 ✕，上传完成由调用方通过返回的 close() 关闭
  */
 export function showUploadNotification(options: UploadNotifyOptions): UploadNotifyControl {
     const progress = ref(0)
@@ -66,10 +66,11 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
                 ])
             },
         })),
+        // ✕ 仅在传入 onCancel 时渲染（标题行右侧，经 beforeClose 走确认流）；
+        // 纯进度展示不出 ✕，由调用方 close() 收尾
+        showClose: Boolean(options.onCancel),
         duration: 0,
         customClass: 'd-upload-notify-root',
-        // ✕ 在标题行右侧；传入 onCancel 时经 beforeClose 走确认流，
-        // 未传 onCancel 时 ✕ 直接关闭（纯进度提示，关闭无副作用）
         ...(options.onCancel ? { beforeClose: handleCloseClick } : {}),
     })
 
