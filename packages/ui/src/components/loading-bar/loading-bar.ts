@@ -9,6 +9,11 @@ export interface LoadingBarOptions {
     height?: number
     /** 填充色（默认 var(--dz-primary)） */
     color?: string
+    /**
+     * 最短展示时长（ms，默认 400）：SPA 里加载经常瞬间完成，
+     * 条会"一闪而过"看不见——done 早于此时长时延迟到凑满再淡出
+     */
+    minDuration?: number
 }
 
 const visible = ref(false)
@@ -16,10 +21,13 @@ const fading = ref(false)
 const percent = ref(0)
 const height = ref(2)
 const color = ref('var(--dz-primary)')
+const minDuration = ref(400)
 
 let host: HTMLElement | null = null
 let vnode: VNode | null = null
+let startedAt = 0
 let trickleTimer: ReturnType<typeof setInterval> | null = null
+let finishTimer: ReturnType<typeof setTimeout> | null = null
 let hideTimer: ReturnType<typeof setTimeout> | null = null
 
 const LoadingBarComp = defineComponent({
@@ -67,6 +75,11 @@ export const DLoadingBar = {
         ensureMounted()
         if (options?.height !== undefined) height.value = options.height
         if (options?.color !== undefined) color.value = options.color
+        if (options?.minDuration !== undefined) minDuration.value = options.minDuration
+        if (finishTimer) {
+            clearTimeout(finishTimer)
+            finishTimer = null
+        }
         if (hideTimer) {
             clearTimeout(hideTimer)
             hideTimer = null
@@ -77,6 +90,7 @@ export const DLoadingBar = {
         fading.value = false
         visible.value = true
         percent.value = 0
+        startedAt = Date.now()
         // 自增封顶 90%：剩余进度留给 done() 冲刺，避免"假完成"
         trickleTimer = setInterval(() => {
             percent.value = Math.min(90, percent.value + Math.ceil(Math.random() * 4))
@@ -87,17 +101,21 @@ export const DLoadingBar = {
         if (!visible.value) return
         percent.value = Math.min(100, Math.max(0, Math.round(n)))
     },
-    /** 完成加载：冲刺到 100% 后淡出隐藏 */
+    /** 完成加载：冲刺到 100%，凑满最短展示时长后淡出隐藏 */
     done() {
         if (!visible.value) return
         clearTrickle()
         percent.value = 100
-        fading.value = true
-        hideTimer = setTimeout(() => {
-            visible.value = false
-            fading.value = false
-            percent.value = 0
-            hideTimer = null
-        }, 400)
+        // 瞬时完成的场景（如 SPA 路由）：延迟到凑满最短展示时长再淡出，保证肉眼可见
+        finishTimer = setTimeout(() => {
+            finishTimer = null
+            fading.value = true
+            hideTimer = setTimeout(() => {
+                visible.value = false
+                fading.value = false
+                percent.value = 0
+                hideTimer = null
+            }, 400)
+        }, Math.max(0, minDuration.value - (Date.now() - startedAt)))
     },
 }

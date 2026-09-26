@@ -315,6 +315,16 @@ describe('loading-bar', () => {
     expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
   })
 
+  it('start 后立即 done：按最短展示时长（默认 400ms）保持可见', async () => {
+    DLoadingBar.start()
+    DLoadingBar.done()
+    await wait(150)
+    // 瞬时完成的场景下仍可见（SPA 路由切换即此场景）
+    expect(getComputedStyle(document.querySelector('.d-loading-bar')).display).toBe('block')
+    await wait(800)
+    expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
+  })
+
   it('重复 start 不叠加（全局单例）', async () => {
     DLoadingBar.start()
     DLoadingBar.start()
