@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/views/home'
 import Theme from '@/views/theme'
 import Intro from '@/views/intro'
+import Compat from '@/views/compat'
 import Utils from '@/views/utils'
 import UtilsApi from '@/views/utils/api.vue'
 
@@ -53,6 +54,7 @@ const router = createRouter({
     { path: '/', name: 'home', component: Home },
     { path: '/intro', name: 'intro', component: Intro },
     { path: '/theme', name: 'theme', component: Theme },
+    { path: '/compat', name: 'compat', component: Compat },
     { path: '/utils', name: 'utils', component: Utils },
     { path: '/utils/api', name: 'utils-api', component: UtilsApi },
     { path: '/components/dlayout', name: 'dlayout', component: DLayout },

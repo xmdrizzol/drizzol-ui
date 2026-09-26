@@ -97,6 +97,7 @@ const navGroups: { label: string; items: { key: string; label: string; to: strin
             { key: '/', label: '总览', to: '/' },
             { key: '/intro', label: '介绍', to: '/intro' },
             { key: '/theme', label: '主题色板', to: '/theme' },
+            { key: '/compat', label: '浏览器兼容', to: '/compat' },
             { key: '/utils', label: '工具函数', to: '/utils' },
             { key: '/utils/api', label: '网络·文件·存储', to: '/utils/api' },
         ],
