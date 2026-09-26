@@ -1,0 +1,17 @@
+.d-loading-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    // 高于弹窗（2000）与通知（3000）：加载条属于全局反馈，永远可见
+    z-index: 5000;
+    pointer-events: none;
+    transition: opacity 0.3s;
+}
+
+.d-loading-bar__inner {
+    height: 100%;
+    border-radius: 0 999px 999px 0;
+    background: var(--dz-primary);
+    transition: width 0.2s ease-out;
+}

@@ -86,6 +86,7 @@ export * from './components/drawer'
 export * from './components/message'
 export * from './components/notification'
 export * from './components/confirm'
+export * from './components/loading-bar'
 
 // 工具与组合式函数
 export * from './utils'

@@ -8,6 +8,7 @@ import { DConfirm } from '@ui/components/confirm'
 import DDrawer from '@ui/components/drawer'
 import { showUploadNotification } from '@ui/components/upload'
 import { showUploadNotification as rootShowUploadNotification } from '@ui'
+import { DLoadingBar } from '@ui/components/loading-bar'
 
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -291,5 +292,52 @@ describe('upload-notify', () => {
     await wait(60)
     expect(onCancel).toHaveBeenCalledTimes(1)
     await wait(400) // 等通知离场与弹窗卸载清理
+  })
+})
+
+describe('loading-bar', () => {
+  afterEach(() => {
+    DLoadingBar.done()
+  })
+
+  it('start 显示顶部条并自增，done 冲刺后隐藏', async () => {
+    DLoadingBar.start()
+    await wait(600)
+    const el = document.querySelector('.d-loading-bar') as HTMLElement
+    expect(el).toBeTruthy()
+    expect(el.style.display).toBe('block')
+    const inner = el.querySelector('.d-loading-bar__inner') as HTMLElement
+    // 自增封顶 90%，不会假完成
+    expect(parseFloat(inner.style.width)).toBeGreaterThan(0)
+    expect(parseFloat(inner.style.width)).toBeLessThanOrEqual(90)
+    DLoadingBar.done()
+    await wait(800)
+    expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
+  })
+
+  it('重复 start 不叠加（全局单例）', async () => {
+    DLoadingBar.start()
+    DLoadingBar.start()
+    DLoadingBar.start()
+    await wait(100)
+    expect(document.querySelectorAll('.d-loading-bar').length).toBe(1)
+    DLoadingBar.done()
+    await wait(800)
+  })
+
+  it('未 start 直接 done 安全收尾', async () => {
+    DLoadingBar.done()
+    await wait(800)
+    expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
+  })
+
+  it('set 直接指定进度', async () => {
+    DLoadingBar.start()
+    DLoadingBar.set(66)
+    await wait(50)
+    const inner = document.querySelector('.d-loading-bar__inner') as HTMLElement
+    expect(inner.style.width).toBe('66%')
+    DLoadingBar.done()
+    await wait(800)
   })
 })

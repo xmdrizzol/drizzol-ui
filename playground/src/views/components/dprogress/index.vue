@@ -46,12 +46,26 @@
                 </d-progress>
             </div>
         </demo-block>
+
+        <demo-block title="页面顶部加载进度条" anchor-id="loadingbar"
+            desc="全局单例 DLoadingBar：start() 开始后自动缓慢自增（封顶 90%），done() 冲刺到 100% 后淡出；重复 start 不叠加，未 start 直接 done 也安全。本站路由切换的顶部进度条就是它。"
+            code="import { DLoadingBar } from '@xmdrizzol/drizzol-ui'
+
+// 路由切换常配：beforeEach start / afterEach done
+DLoadingBar.start()
+fetchData().finally(() => DLoadingBar.done())">
+            <div class="component-page__row">
+                <d-button type="primary" @click="DLoadingBar.start()">start()</d-button>
+                <d-button @click="DLoadingBar.done()">done()</d-button>
+            </div>
+        </demo-block>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import DemoBlock from '@/components/demo-block'
+import { DLoadingBar } from '@xmdrizzol/drizzol-ui'
 
 const basic = ref(60)
 </script>

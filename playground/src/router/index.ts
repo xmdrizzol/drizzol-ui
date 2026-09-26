@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { DLoadingBar } from '@xmdrizzol/drizzol-ui'
 import Home from '@/views/home'
 import Theme from '@/views/theme'
 import Intro from '@/views/intro'
@@ -94,6 +95,17 @@ const router = createRouter({
     { path: '/components/dupload', name: 'dupload', component: DUpload },
     { path: '/:pathMatch(.*)*', name: '404', component: NotFound },
   ],
+})
+
+// 页面顶部加载进度条：路由切换全程由 DLoadingBar 反馈（初始导航也会走一次）
+router.beforeEach(() => {
+  DLoadingBar.start()
+})
+router.afterEach(() => {
+  DLoadingBar.done()
+})
+router.onError(() => {
+  DLoadingBar.done()
 })
 
 export default router
