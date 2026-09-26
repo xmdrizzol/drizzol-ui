@@ -13,5 +13,5 @@
     height: 100%;
     border-radius: 0 999px 999px 0;
     background: var(--dz-primary);
-    transition: width 0.2s ease-out;
+    // 宽度过渡由运行时按剩余最短展示时长以内联样式下发（冲刺过程可见）
 }

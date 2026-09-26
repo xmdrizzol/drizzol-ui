@@ -315,9 +315,14 @@ describe('loading-bar', () => {
     expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
   })
 
-  it('start 后立即 done：按最短展示时长（默认 400ms）保持可见', async () => {
+  it('start 后立即 done：以剩余时长滑动冲刺（过程可见），期满淡出', async () => {
     DLoadingBar.start()
     DLoadingBar.done()
+    await wait(30) // 等 Vue 异步渲染落地
+    const inner = document.querySelector('.d-loading-bar__inner') as HTMLElement
+    // 冲刺过渡 = 剩余的最短展示时长（约 400ms），宽度仍在滑向 100%
+    expect(parseFloat((inner.style.transition.match(/width (\d+)ms/) ?? [])[1] ?? '0')).toBeGreaterThanOrEqual(300)
+    expect(inner.style.width).toBe('100%')
     await wait(150)
     // 瞬时完成的场景下仍可见（SPA 路由切换即此场景）
     expect(getComputedStyle(document.querySelector('.d-loading-bar')).display).toBe('block')

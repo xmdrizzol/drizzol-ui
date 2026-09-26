@@ -48,14 +48,17 @@
         </demo-block>
 
         <demo-block title="页面顶部加载进度条" anchor-id="loadingbar"
-            desc="全局单例 DLoadingBar：start() 开始后自动缓慢自增（封顶 90%），done() 冲刺到 100% 后淡出；重复 start 不叠加，未 start 直接 done 也安全。本站路由切换的顶部进度条就是它。"
+            desc="全局单例 DLoadingBar：start() 开始后自动缓慢自增（封顶 90%），done() 以剩余的最短展示时长为过渡窗口滑到 100% 再淡出——过程肉眼可见；重复 start 不叠加，未 start 直接 done 也安全。本站路由切换的顶部进度条就是它。"
             code="import { DLoadingBar } from '@xmdrizzol/drizzol-ui'
 
 // 路由切换常配：beforeEach start / afterEach done
 DLoadingBar.start()
-fetchData().finally(() => DLoadingBar.done())">
+fetchData().finally(() => DLoadingBar.done())
+
+// 静态打包站点没有真实加载时，可拉长最短展示时长让过程更明显
+DLoadingBar.start({ minDuration: 1200 })">
             <div class="component-page__row">
-                <d-button type="primary" @click="DLoadingBar.start()">start()</d-button>
+                <d-button type="primary" @click="DLoadingBar.start({ minDuration: 1200 })">start()（演示 1.2s）</d-button>
                 <d-button @click="DLoadingBar.done()">done()</d-button>
             </div>
         </demo-block>

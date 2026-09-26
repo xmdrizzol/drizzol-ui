@@ -22,6 +22,8 @@ const percent = ref(0)
 const height = ref(2)
 const color = ref('var(--dz-primary)')
 const minDuration = ref(400)
+// __inner 的宽度过渡：done 冲刺时按"剩余最短展示时长"展开，让滑动过程肉眼可见
+const innerTransition = ref('width 0.2s ease-out')
 
 let host: HTMLElement | null = null
 let vnode: VNode | null = null
@@ -41,7 +43,10 @@ const LoadingBarComp = defineComponent({
                 background: color.value,
             },
         }, [
-            h('div', { class: 'd-loading-bar__inner', style: { width: `${percent.value}%` } }),
+            h('div', {
+                class: 'd-loading-bar__inner',
+                style: { width: `${percent.value}%`, transition: innerTransition.value },
+            }),
         ])
     },
 })
@@ -91,6 +96,7 @@ export const DLoadingBar = {
         visible.value = true
         percent.value = 0
         startedAt = Date.now()
+        innerTransition.value = 'width 0.2s ease-out'
         // 自增封顶 90%：剩余进度留给 done() 冲刺，避免"假完成"
         trickleTimer = setInterval(() => {
             percent.value = Math.min(90, percent.value + Math.ceil(Math.random() * 4))
@@ -101,12 +107,13 @@ export const DLoadingBar = {
         if (!visible.value) return
         percent.value = Math.min(100, Math.max(0, Math.round(n)))
     },
-    /** 完成加载：冲刺到 100%，凑满最短展示时长后淡出隐藏 */
+    /** 完成加载：以剩余的最短展示时长为过渡窗口，让条从当前位置滑到 100% 再淡出（过程肉眼可见） */
     done() {
         if (!visible.value) return
         clearTrickle()
+        const remaining = Math.max(200, minDuration.value - (Date.now() - startedAt))
+        innerTransition.value = `width ${remaining}ms ease-out`
         percent.value = 100
-        // 瞬时完成的场景（如 SPA 路由）：延迟到凑满最短展示时长再淡出，保证肉眼可见
         finishTimer = setTimeout(() => {
             finishTimer = null
             fading.value = true
@@ -114,8 +121,9 @@ export const DLoadingBar = {
                 visible.value = false
                 fading.value = false
                 percent.value = 0
+                innerTransition.value = 'width 0.2s ease-out'
                 hideTimer = null
             }, 400)
-        }, Math.max(0, minDuration.value - (Date.now() - startedAt)))
+        }, remaining)
     },
 }
