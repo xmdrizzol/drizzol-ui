@@ -25,12 +25,22 @@
                 <p class="component-page__echo">当前：{{ activeKey }}</p>
             </div>
         </demo-block>
+
+        <demo-block title="无面板模式" anchor-id="panel"
+            desc="panel=false 只渲染标签行（切换后由外部自行拉取列表渲染），适合排序/筛选页签。tabs 的 key 支持泛型：DTabItem<'latest' | 'hot'>[] 可获得编译期约束。"
+            :code="panelCode">
+            <div class="component-page__stack">
+                <d-tabs v-model="sortKey" :tabs="sortTabs" :panel="false" />
+                <p class="component-page__echo">当前排序：{{ sortKey }} ——（此处由宿主自行拉取列表渲染）</p>
+            </div>
+        </demo-block>
     </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import DemoBlock from '@/components/demo-block'
+import type { DTabItem } from '@xmdrizzol/drizzol-ui'
 
 const activeKey = ref('t1')
 const tabs = [
@@ -38,6 +48,24 @@ const tabs = [
     { key: 't2', label: '设置' },
     { key: 't3', label: '禁用', disabled: true },
 ]
+
+// 泛型 key：sortKey 获得 'latest' | 'hot' 编译期约束
+const sortKey = ref<'latest' | 'hot'>('latest')
+const sortTabs: DTabItem<'latest' | 'hot'>[] = [
+    { key: 'latest', label: '最新' },
+    { key: 'hot', label: '热门' },
+]
+
+const panelCode = `// 泛型 key：获得编译期约束
+import type { DTabItem } from '@xmdrizzol/drizzol-ui'
+
+const sortTabs: DTabItem<'latest' | 'hot'>[] = [
+  { key: 'latest', label: '最新' },
+  { key: 'hot', label: '热门' },
+]
+
+<!-- 无面板：只渲染标签行，内容由外部按 v-model 渲染 -->
+<d-tabs v-model="sort" :tabs="sortTabs" :panel="false" />`
 </script>
 
 <style scoped lang="scss">

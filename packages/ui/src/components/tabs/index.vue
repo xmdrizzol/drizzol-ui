@@ -13,30 +13,33 @@
                 <slot :name="`tab-${tab.key}`">{{ tab.label }}</slot>
             </button>
         </div>
-        <div class="d-tabs__panel" role="tabpanel">
+        <!-- 无面板模式（panel=false）只渲染标签行：切换后由宿主自行拉取数据渲染 -->
+        <div v-if="panel" class="d-tabs__panel" role="tabpanel">
             <slot :name="modelValue" />
         </div>
     </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends string">
 import type { DTabItem } from './index'
 
 const props = withDefaults(defineProps<{
     /** 标签数据（内容通过 同名插槽 提供，如 #t1） */
-    tabs: DTabItem[]
-    /** 当前激活 key（v-model） */
-    modelValue?: string
+    tabs: DTabItem<T>[]
+    /** 当前激活 key（v-model）；未传入时无激活项 */
+    modelValue?: T
+    /** 是否渲染内容面板；false 时仅渲染标签行（排序/筛选页签场景，切换由宿主自行渲染） */
+    panel?: boolean
 }>(), {
-    modelValue: '',
+    panel: true,
 })
 
 const emit = defineEmits<{
-    'update:modelValue': [key: string]
-    'change': [key: string]
+    'update:modelValue': [key: T]
+    'change': [key: T]
 }>()
 
-function select(tab: DTabItem) {
+function select(tab: DTabItem<T>) {
     if (tab.disabled || tab.key === props.modelValue) return
     emit('update:modelValue', tab.key)
     emit('change', tab.key)
@@ -69,18 +72,20 @@ function select(tab: DTabItem) {
 
         &.is-active {
             color: var(--dz-primary);
-            font-weight: 500;
+            font-size: 0.9375rem;
+            font-weight: 600;
 
             &::after {
                 content: '';
                 position: absolute;
-                left: 12px;
-                right: 12px;
+                left: 50%;
+                width: 24px;
+                transform: translateX(-50%);
                 // 贴着 bar 边框线上方，不要 -1px 叠进边框：bar 是 overflow-x 滚动容器
                 // （另一轴随之变 auto），任何 1px 纵向溢出都会带出纵向滚动条
                 bottom: 0;
                 height: 2px;
-                border-radius: 99px;
+                border-radius: 2px;
                 background: var(--dz-primary);
             }
         }

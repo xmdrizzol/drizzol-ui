@@ -56,7 +56,7 @@ import { DCard, DButton, message, applyTheme } from '@xmdrizzol/drizzol-ui'
 | --- | --- |
 | `DLayout` / `DHeader` / `DAside` / `DMain` / `DFooter` | 布局系统（容器 + 头/侧/内容/脚，存在侧栏时自动水平排列） |
 | `DMenu` | 导航菜单（分组/平铺、图标、路由链接、禁用、激活高亮；vue-router 为可选依赖） |
-| `DTabs` | 标签页（v-model 激活 key，内容按 key 同名插槽） |
+| `DTabs` | 标签页（v-model 激活 key，内容按 key 同名插槽；`panel=false` 为无面板模式——只渲染标签行，key 支持泛型 `DTabItem<'a' \| 'b'>`） |
 | `DPagination` | 分页（页码窗口 + 省略号，total/pageCount 两种模式） |
 | `DRow` / `DCol` | 24 分栏栅格（gutter 列间距、span/offset、xs~xl 响应式断点） |
 | `DTag` | 语义标签（default/primary/success/warning/danger/info，round/small/closable） |

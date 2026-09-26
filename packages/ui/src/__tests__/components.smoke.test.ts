@@ -3,6 +3,7 @@ import { describe, it, expect, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { h, nextTick } from 'vue'
 import asideSource from '@ui/components/layout/aside.vue?raw'
+import tabsSource from '@ui/components/tabs/index.vue?raw'
 
 // 重依赖 mock：artplayer 在 jsdom 下无法真实创建播放器，cropperjs 注册浏览器特定能力
 vi.mock('artplayer', () => {
@@ -584,5 +585,31 @@ describe('数据展示组件冒烟', () => {
     // 受控组件：父级响应 v-model 后才切换内容
     await wrapper.setProps({ modelValue: 't2' })
     expect(wrapper.text()).toContain('内容二')
+  })
+
+  it('DTabs 无面板模式（panel=false）只渲染标签行，事件语义不变', async () => {
+    const wrapper = mount(DTabs, {
+      props: {
+        tabs: [{ key: 'a', label: '甲' }, { key: 'b', label: '乙', disabled: true }],
+        modelValue: 'a',
+        panel: false,
+      },
+    })
+    expect(wrapper.find('[role="tabpanel"]').exists()).toBe(false)
+    expect(wrapper.find('[role="tablist"]').exists()).toBe(true)
+    await wrapper.findAll('button')[1].trigger('click')
+    // 禁用标签不触发
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+    await wrapper.findAll('button')[0].trigger('click')
+    // 同 key 不重复触发
+    expect(wrapper.emitted('update:modelValue')).toBeUndefined()
+  })
+
+  it('DTabs 指示条为 24px 居中短条，滚动容器约束注释不得丢失', () => {
+    // 约束注释：bar 是 overflow-x 滚动容器，指示条任何纵向 1px 溢出都会带出纵向滚动条
+    expect(tabsSource).toContain('overflow-x 滚动容器')
+    expect(tabsSource).toContain('bottom: 0')
+    expect(tabsSource).toMatch(/width:\s*24px/)
+    expect(tabsSource).toMatch(/border-radius:\s*2px/)
   })
 })
