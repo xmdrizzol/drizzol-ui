@@ -7,7 +7,6 @@ import { DNotification } from '@ui/components/notification'
 import { DConfirm } from '@ui/components/confirm'
 import DDrawer from '@ui/components/drawer'
 import { showUploadNotification } from '@ui/components/upload'
-import uploadSource from '@ui/components/upload/index.vue?raw'
 
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -206,21 +205,14 @@ describe('upload-notify', () => {
     expect(typeof root.showUploadNotification).toBe('function')
   })
 
-  it('两行式渲染：行1 文件名，行2 进度条 + 百分比；默认头部由库内隐藏', async () => {
+  it('渲染：标题行走默认头部（含图标），正文为进度条 + 百分比', async () => {
     const control = showUploadNotification({ title: '课件.zip' })
     await wait(30)
+    // 标题行：DNotification 默认头部（类型图标 + 文件名）
+    expect(document.querySelector('.d-upload-notify-root .d-notification__title')?.textContent).toBe('课件.zip')
     const root = document.querySelector('.d-upload-notify')!
-    expect(root.querySelector('.d-upload-notify__title')?.textContent).toBe('课件.zip')
-    expect(root.querySelector('.d-upload-notify__icon')).toBeTruthy()
-    expect(root.querySelector('.d-upload-notify__progress-track')).toBeTruthy()
+    expect(root.querySelector('.d-upload-notify__bar')).toBeTruthy()
     expect(root.querySelector('.d-upload-notify__percent')?.textContent).toBe('0%')
-    // customClass 挂上了（宿主侧不再需要 CSS hack）
-    expect(document.querySelector('.d-upload-notify-root .d-notification__header')).toBeTruthy()
-    // jsdom 不注入组件样式，头部隐藏规则做源码级断言（库内消化，而非 .el-* 残留选择器）
-    const rootBlock = uploadSource.match(/\.d-upload-notify-root\s*\{[\s\S]*?\n\}/)?.[0] ?? ''
-    expect(rootBlock).toContain('.d-notification__header')
-    expect(rootBlock).toContain('display: none')
-    expect(rootBlock).not.toContain('.el-')
     control.close()
   })
 

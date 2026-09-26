@@ -17,12 +17,16 @@
         </demo-block>
 
         <demo-block title="上传进度通知" anchor-id="notify"
-            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：两行式进度（状态图标 + 文件名，进度条 + 百分比），点 ✕ 先确认再触发 onCancel；不传 onCancel 则为纯进度展示。"
+            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则为纯进度展示。"
             :code="notifyDoc">
             <div class="component-page__row">
                 <d-button type="primary" @click="simulate(false)">模拟上传（可取消）</d-button>
                 <d-button @click="simulate(true)">纯进度展示（无取消）</d-button>
             </div>
+            <p class="component-page__echo">
+                实现基于 DNotification 的 VNode 正文（机制与手写方式见
+                <router-link to="/components/dnotification">DNotification 演示页 · VNode 正文</router-link>）。
+            </p>
         </demo-block>
     </div>
 </template>
@@ -54,14 +58,18 @@ function simulate(bare: boolean) {
     timer = setInterval(() => {
         percent = Math.min(100, percent + Math.ceil(Math.random() * 12))
         control?.update(percent)
-        if (percent >= 100 && timer) clearInterval(timer)
+        if (percent >= 100 && timer) {
+            clearInterval(timer)
+            // 上传完成由调用方 close()（纯进度模式没有 ✕，更依赖这一步收尾）
+            setTimeout(() => control?.close(), 500)
+        }
     }, 260)
 }
 
 const notifyDoc = `import { showUploadNotification } from '@xmdrizzol/drizzol-ui'
 
 const control = showUploadNotification({
-  title: 'campus-photo-2026.zip',
+  title: 'campus-photo-2026.zip',   // 通知标题（默认"文件上传"）
   // 可选：不传则纯进度展示（无 ✕）；确认弹窗（取消上传/继续上传）确认后触发
   onCancel: () => xhr.abort(),
 })

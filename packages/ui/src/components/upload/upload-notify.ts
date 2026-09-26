@@ -1,7 +1,6 @@
 // 上传进度通知
 import { defineComponent, h, ref } from 'vue'
 import { DConfirm } from '@ui/components/confirm'
-import { DIcon } from '@ui/components/icon'
 import { DNotification } from '@ui/components/notification'
 import type { NotificationHandle } from '@ui/components/notification'
 
@@ -13,7 +12,7 @@ export interface UploadNotifyControl {
 }
 
 interface UploadNotifyOptions {
-    /** 文件名（显示在通知第一行，超长省略） */
+    /** 通知标题（显示在头部行，默认"文件上传"） */
     title?: string
     /**
      * 用户确认取消后的回调（执行真正的取消上传）。
@@ -23,7 +22,7 @@ interface UploadNotifyOptions {
 }
 
 /**
- * 显示上传进度通知（两行式：行1 图标+文件名+取消✕，行2 进度条+百分比）
+ * 显示上传进度通知：头部为标题（DNotification 默认头部，含类型图标），正文为进度条 + 百分比
  * - 可独立于 DUpload 使用：自行封装上传逻辑（如直传 OSS）时复用进度与取消确认
  * - ✕ 仅在传入 onCancel 时渲染；点击先弹确认框（取消上传/继续上传），确认才触发 onCancel
  * - 上传完成由调用方通过返回的 close() 关闭
@@ -32,7 +31,7 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
     const progress = ref(0)
     let handle: NotificationHandle | null = null
 
-    // 右上角 ×：先确认再取消
+    // 正文 ✕：先确认再取消
     const handleCloseClick = () => {
         DConfirm('确定要取消当前上传吗？', '取消上传', {
             type: 'warning',
@@ -49,33 +48,26 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
     }
 
     handle = DNotification({
-        title: '',
+        // 文件名走通知标题行（类型图标由 DNotification 提供）；正文只放进度条
+        title: options.title || '文件上传',
         // 渲染函数组件：内部读取响应式 progress，进度变化时重渲染进度条
         message: h(defineComponent({
             setup() {
                 return () => h('div', { class: 'd-upload-notify' }, [
-                    // 行1：状态图标 + 文件名（超长省略）+ 取消✕（仅传入 onCancel 时渲染）
-                    h('div', { class: 'd-upload-notify__header' }, [
-                        h(DIcon, { name: 'circle-alert', size: 1.2, class: 'd-upload-notify__icon' }),
-                        h('span', { class: 'd-upload-notify__title' }, options.title || '文件上传'),
-                        options.onCancel
-                            ? h('button', {
-                                class: 'd-upload-notify__close',
-                                title: '取消上传',
-                                onClick: handleCloseClick,
-                            }, '✕')
-                            : null,
+                    h('div', { class: 'd-upload-notify__bar' }, [
+                        h('div', {
+                            class: 'd-upload-notify__bar-inner',
+                            style: { width: `${progress.value}%` },
+                        }),
                     ]),
-                    // 行2：进度条（8px 圆角）+ 右对齐百分比
-                    h('div', { class: 'd-upload-notify__progress' }, [
-                        h('div', { class: 'd-upload-notify__progress-track' }, [
-                            h('div', {
-                                class: 'd-upload-notify__progress-inner',
-                                style: { width: `${progress.value}%` },
-                            }),
-                        ]),
-                        h('span', { class: 'd-upload-notify__percent' }, `${progress.value}%`),
-                    ]),
+                    h('span', { class: 'd-upload-notify__percent' }, `${progress.value}%`),
+                    options.onCancel
+                        ? h('button', {
+                            class: 'd-upload-notify__close',
+                            title: '取消上传',
+                            onClick: handleCloseClick,
+                        }, '✕')
+                        : null,
                 ])
             },
         })),

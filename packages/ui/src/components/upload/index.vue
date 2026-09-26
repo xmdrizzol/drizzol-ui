@@ -339,42 +339,39 @@ defineExpose({ openPicker, clearFile, fileInputRef })
 
 <!-- 上传进度通知样式（通知渲染在 body，需全局样式；mixin 由 vite additionalData 注入） -->
 <style lang="scss">
-.d-upload-notify-root {
-    // 进度信息（图标/文件名/百分比）都在消息体内，默认头部（空标题）由库内消化隐藏，
-    // 宿主无需再写 display:none 的覆盖（曾因误用第三方库的残留选择器失效过）
-    .d-notification__header {
-        display: none;
-    }
-}
-
+// 正文：进度条 + 百分比 + 取消✕（仅传入 onCancel 时渲染）；标题行走 DNotification 默认头部
 .d-upload-notify {
     display: flex;
-    flex-direction: column;
-    gap: 10px;
+    align-items: center;
+    gap: 8px;
     width: 100%;
     min-width: 260px;
 
-    // 行1：状态图标 + 文件名（超长省略）+ 取消✕（仅传入 onCancel 时渲染）
-    &__header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    &__icon {
-        flex-shrink: 0;
-        color: var(--dz-primary);
-    }
-
-    &__title {
+    &__bar {
         flex: 1;
-        min-width: 0;
-        font-weight: 600;
-        font-size: 0.875rem;
-        color: var(--dz-text-h);
+        height: 6px;
+        border-radius: 999px;
+        background: var(--dz-bg-secondary);
         overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    }
+
+    &__bar-inner {
+        display: block;
+        height: 100%;
+        border-radius: 999px;
+        background: var(--dz-primary);
+        transition: width 0.15s;
+    }
+
+    &__percent {
+        flex-shrink: 0;
+        font-family: var(--dz-ff-mono);
+        font-size: 0.75rem;
+        color: var(--dz-text-d);
+        // 等宽数字：进度跳动时百分比宽度不抖动
+        font-variant-numeric: tabular-nums;
+        min-width: 34px;
+        text-align: right;
     }
 
     &__close {
@@ -390,38 +387,6 @@ defineExpose({ openPicker, clearFile, fileInputRef })
         &:hover {
             color: var(--dz-text);
         }
-    }
-
-    // 行2：进度条（8px 圆角）+ 右对齐百分比
-    &__progress {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    &__progress-track {
-        flex: 1;
-        height: 8px;
-        border-radius: 999px;
-        background: var(--dz-bg-secondary);
-        overflow: hidden;
-    }
-
-    &__progress-inner {
-        display: block;
-        height: 100%;
-        border-radius: 999px;
-        background: var(--dz-primary);
-        transition: width 0.15s;
-    }
-
-    &__percent {
-        flex-shrink: 0;
-        font-size: 0.8125rem;
-        font-weight: 600;
-        color: var(--dz-text-h);
-        // 等宽数字：进度跳动时百分比宽度不抖动
-        font-variant-numeric: tabular-nums;
     }
 }
 </style>
