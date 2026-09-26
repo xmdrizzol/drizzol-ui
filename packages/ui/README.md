@@ -63,6 +63,7 @@ import { DCard, DButton, message, applyTheme } from '@xmdrizzol/drizzol-ui'
 | `DBadge` | 角标（数值截断 max+、红点、零值/隐藏策略） |
 | `DSkeleton` | 骨架屏（rows/title/avatar，流光动画） |
 | `DEmpty` | 空状态（占位图标 + 描述 + 操作区插槽） |
+| `DProgress` | 进度条（`value` 0-100 自动收敛；`status` 语义色；`text` 百分比与 `#text` 插槽；高度/配色经 `--dz-progress-height/fill/track` 可调，upload-notify 内部同款） |
 | `DCodeBlock` | 代码块承载壳（语言标识 + 复制按钮 + 移动端横滚，恒定深色与正文代码同语言）；不做高亮——纯文本直接传 `code`，或用任意高亮库（Shiki / Prism 等）生成 HTML 经默认插槽传入 |
 | `DIcon` / `DIconSprite` | 图标（内联 53 个 symbol 雪碧图，源自 [Lucide](https://lucide.dev) ISC 许可，含 4 个 `*-fill` 填充版与状态图标（circle-check/circle-alert 等）；根节点渲染一次 sprite） |
 | `DCard` | 卡片（`is-hover` 悬浮） |

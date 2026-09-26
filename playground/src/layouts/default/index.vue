@@ -143,6 +143,7 @@ const navGroups: { label: string; items: { key: string; label: string; to: strin
             { key: '/components/dempty', label: 'DEmpty 空状态', to: '/components/dempty' },
             { key: '/components/dimage', label: 'DImage 图片', to: '/components/dimage' },
             { key: '/components/davatar', label: 'DAvatar 头像', to: '/components/davatar' },
+            { key: '/components/dprogress', label: 'DProgress 进度条', to: '/components/dprogress' },
             { key: '/components/dcodeblock', label: 'DCodeBlock 代码块', to: '/components/dcodeblock' },
         ],
     },

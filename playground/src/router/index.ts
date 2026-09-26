@@ -15,6 +15,7 @@ import DSkeleton from '@/views/components/dskeleton'
 import DEmpty from '@/views/components/dempty'
 import DImage from '@/views/components/dimage'
 import DAvatar from '@/views/components/davatar'
+import DProgress from '@/views/components/dprogress'
 import DPagination from '@/views/components/dpagination'
 import DCodeBlock from '@/views/components/dcodeblock'
 import DTabs from '@/views/components/dtabs'
@@ -66,6 +67,7 @@ const router = createRouter({
     { path: '/components/dempty', name: 'dempty', component: DEmpty },
     { path: '/components/dimage', name: 'dimage', component: DImage },
     { path: '/components/davatar', name: 'davatar', component: DAvatar },
+    { path: '/components/dprogress', name: 'dprogress', component: DProgress },
     { path: '/components/dpagination', name: 'dpagination', component: DPagination },
     { path: '/components/dcodeblock', name: 'dcodeblock', component: DCodeBlock },
     { path: '/components/dtabs', name: 'dtabs', component: DTabs },

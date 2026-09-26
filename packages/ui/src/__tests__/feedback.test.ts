@@ -7,6 +7,7 @@ import { DNotification } from '@ui/components/notification'
 import { DConfirm } from '@ui/components/confirm'
 import DDrawer from '@ui/components/drawer'
 import { showUploadNotification } from '@ui/components/upload'
+import { showUploadNotification as rootShowUploadNotification } from '@ui'
 
 const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
 
@@ -242,9 +243,8 @@ describe('upload-notify', () => {
     document.querySelectorAll('.d-notification').forEach(el => el.remove())
   })
 
-  it('包根可导出（宿主从 @xmdrizzol/drizzol-ui 直接导入）', async () => {
-    const root = await import('@ui')
-    expect(typeof root.showUploadNotification).toBe('function')
+  it('包根可导出（宿主从 @xmdrizzol/drizzol-ui 直接导入）', () => {
+    expect(typeof rootShowUploadNotification).toBe('function')
   })
 
   it('渲染：标题行走默认头部（含图标），正文为进度条 + 百分比', async () => {
@@ -252,9 +252,9 @@ describe('upload-notify', () => {
     await wait(30)
     // 标题行：DNotification 默认头部（类型图标 + 文件名）
     expect(document.querySelector('.d-upload-notify-root .d-notification__title')?.textContent).toBe('课件.zip')
-    const root = document.querySelector('.d-upload-notify')!
-    expect(root.querySelector('.d-upload-notify__bar')).toBeTruthy()
-    expect(root.querySelector('.d-upload-notify__percent')?.textContent).toBe('0%')
+    const root = document.querySelector('.d-upload-notify-root')!
+    expect(root.querySelector('.d-progress__bar')).toBeTruthy()
+    expect(root.querySelector('.d-progress__text')?.textContent).toBe('0%')
     control.close()
   })
 
@@ -262,7 +262,7 @@ describe('upload-notify', () => {
     const control = showUploadNotification({ title: 'x' })
     control.update(150)
     await wait(30)
-    const percent = () => document.querySelector('.d-upload-notify__percent')?.textContent
+    const percent = () => document.querySelector('.d-progress__text')?.textContent
     expect(percent()).toBe('100%')
     control.update(-5)
     await wait(30)

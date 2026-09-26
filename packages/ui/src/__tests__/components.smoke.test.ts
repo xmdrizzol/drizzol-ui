@@ -4,6 +4,7 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { h, nextTick } from 'vue'
 import asideSource from '@ui/components/layout/aside.vue?raw'
 import tabsSource from '@ui/components/tabs/index.vue?raw'
+import { DProgress } from '@ui/components/progress'
 
 // 重依赖 mock：artplayer 在 jsdom 下无法真实创建播放器，cropperjs 注册浏览器特定能力
 vi.mock('artplayer', () => {
@@ -563,6 +564,31 @@ describe('数据展示组件冒烟', () => {
     await wrapper.findAll('button')[2].trigger('click') // 第 2 页
     expect(wrapper.emitted('update:modelValue')?.[0]).toEqual([2])
     expect(wrapper.findAll('.is-active')).toHaveLength(1)
+  })
+
+  it('DProgress 收敛宽度与百分比文本', async () => {
+    const wrapper = mount(DProgress, { props: { value: 150, text: true } })
+    expect(wrapper.text()).toContain('100%')
+    expect(wrapper.find('.d-progress__inner').attributes('style')?.replace(/\s+/g, '')).toContain('width:100%')
+    await wrapper.setProps({ value: 62 })
+    expect(wrapper.text()).toContain('62%')
+    expect(wrapper.find('.d-progress__inner').attributes('style')?.replace(/\s+/g, '')).toContain('width:62%')
+  })
+
+  it('DProgress 状态色类、progressbar 语义与文本插槽', () => {
+    const wrapper = mount(DProgress, {
+      props: { value: 40, status: 'success', text: true },
+      slots: { text: '第 4 / 10 题' },
+    })
+    expect(wrapper.classes()).toContain('d-progress--success')
+    expect(wrapper.attributes('role')).toBe('progressbar')
+    expect(wrapper.attributes('aria-valuenow')).toBe('40')
+    expect(wrapper.text()).toContain('第 4 / 10 题')
+  })
+
+  it('DProgress 默认不显示文本', () => {
+    const wrapper = mount(DProgress, { props: { value: 50 } })
+    expect(wrapper.find('.d-progress__text').exists()).toBe(false)
   })
 
   it('DCodeBlock 渲染代码与复制按钮', () => {

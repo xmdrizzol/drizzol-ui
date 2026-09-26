@@ -18,21 +18,22 @@ DNotification({ title: '提示', message: '有一条新消息', type: 'info' })"
         </demo-block>
 
         <demo-block title="VNode 正文（上传进度）" anchor-id="vnode"
-            code="const progress = ref(0)
+            code="import { DProgress } from '@xmdrizzol/drizzol-ui'
+
+const progress = ref(0)
 const handle = DNotification({
   title: '文件上传',
-  message: h(ProgressComp), // 正文 = 进度条，内部读 progress
+  // 注意：不能直接 h(DProgress, { value: progress.value })——value 会固化为创建时的值；
+  // 包一层渲染函数组件，DProgress 才能拿到最新进度
+  message: h(ProgressComp),
   duration: 0,
-  showClose: false,
 })
 // 上传完成后
 handle.close()">
             <template #desc>
                 <p class="demo-block__desc">
-                    message 传渲染函数组件，内部读取响应式进度实时重渲染；标题行走通知默认头部，
-                    正文只放进度条，走完自动调 <code>close()</code>。
-                </p>
-                <p class="demo-block__desc">
+                    message 传渲染函数组件，内部读取响应式进度实时重渲染（正文就是
+                    <code>d-progress</code>）；标题行走通知默认头部，走完自动调 <code>close()</code>。
                     要开箱即用的同款效果（含 ✕ 取消确认），直接用
                     <router-link to="/components/dupload">showUploadNotification</router-link>（见 DUpload 演示页）。
                 </p>
@@ -46,7 +47,7 @@ handle.close()">
 
 <script setup lang="ts">
 import { h, defineComponent, ref } from 'vue'
-import { DNotification } from '@xmdrizzol/drizzol-ui'
+import { DNotification, DProgress } from '@xmdrizzol/drizzol-ui'
 import DemoBlock from '@/components/demo-block'
 
 function plain() {
@@ -56,15 +57,10 @@ function success() {
     DNotification({ title: '成功', message: '文件已保存', type: 'success' })
 }
 
-// 模拟上传：标题行走通知默认头部，正文只放进度条；进度实时更新，100% 后自动关闭
+// 模拟上传：正文 = DProgress（渲染函数组件包一层保住响应式，直接 h(DProgress, { value: progress.value })
+// 会把 value 固化为创建时的值）；进度实时更新，100% 后自动关闭
 function showProgress() {
     const progress = ref(0)
-    const body = () => h('div', { class: 'dfb-progress' }, [
-        h('div', { class: 'dfb-progress__bar' }, [
-            h('div', { class: 'dfb-progress__inner', style: { width: `${progress.value}%` } }),
-        ]),
-        h('span', { class: 'dfb-progress__text' }, `${progress.value}%`),
-    ])
     const timer = setInterval(() => {
         progress.value = Math.min(100, progress.value + 10)
         if (progress.value >= 100) {
@@ -74,42 +70,8 @@ function showProgress() {
     }, 120)
     const handle = DNotification({
         title: '文件上传',
-        message: h(defineComponent({ setup: () => () => body() })),
+        message: h(defineComponent({ setup: () => () => h(DProgress, { value: progress.value, text: true }) })),
         duration: 0,
-        showClose: false,
     })
 }
 </script>
-
-<!-- 进度条样式：通知为命令式渲染，需全局 -->
-<style lang="scss">
-.dfb-progress {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-width: 260px;
-}
-
-.dfb-progress__bar {
-    flex: 1;
-    height: 6px;
-    border-radius: 99px;
-    background: var(--dz-bg-secondary);
-    overflow: hidden;
-}
-
-.dfb-progress__inner {
-    height: 100%;
-    border-radius: 99px;
-    background: var(--dz-primary);
-    transition: width 0.12s linear;
-}
-
-.dfb-progress__text {
-    font-family: var(--dz-ff-mono);
-    font-size: 0.75rem;
-    color: var(--dz-text-d);
-    min-width: 34px;
-    text-align: right;
-}
-</style>

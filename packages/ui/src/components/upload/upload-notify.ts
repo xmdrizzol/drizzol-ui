@@ -2,6 +2,7 @@
 import { defineComponent, h, ref } from 'vue'
 import { DConfirm } from '@ui/components/confirm'
 import { DNotification } from '@ui/components/notification'
+import { DProgress } from '@ui/components/progress'
 import type { NotificationHandle } from '@ui/components/notification'
 
 export interface UploadNotifyControl {
@@ -22,7 +23,7 @@ interface UploadNotifyOptions {
 }
 
 /**
- * 显示上传进度通知：头部为标题（DNotification 默认头部，含类型图标），正文为进度条 + 百分比
+ * 显示上传进度通知：头部为标题（DNotification 默认头部，含类型图标），正文为 DProgress 进度条 + 百分比
  * - 可独立于 DUpload 使用：自行封装上传逻辑（如直传 OSS）时复用进度与取消确认
  * - 传入 onCancel 时标题行右侧渲染 ✕，点击经 beforeClose 先弹确认框（取消上传/继续上传），
  *   确认才触发 onCancel 并关闭，取消则继续上传
@@ -52,18 +53,10 @@ export function showUploadNotification(options: UploadNotifyOptions): UploadNoti
     handle = DNotification({
         // 文件名走通知标题行（类型图标由 DNotification 提供）；正文只放进度条
         title: options.title || '文件上传',
-        // 渲染函数组件：内部读取响应式 progress，进度变化时重渲染进度条
+        // 渲染函数组件：内部读取响应式 progress，进度变化时 DProgress 重渲染
         message: h(defineComponent({
             setup() {
-                return () => h('div', { class: 'd-upload-notify' }, [
-                    h('div', { class: 'd-upload-notify__bar' }, [
-                        h('div', {
-                            class: 'd-upload-notify__bar-inner',
-                            style: { width: `${progress.value}%` },
-                        }),
-                    ]),
-                    h('span', { class: 'd-upload-notify__percent' }, `${progress.value}%`),
-                ])
+                return () => h(DProgress, { value: progress.value, text: true })
             },
         })),
         // ✕ 仅在传入 onCancel 时渲染（标题行右侧，经 beforeClose 走确认流）；
