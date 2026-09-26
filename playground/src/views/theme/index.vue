@@ -62,6 +62,20 @@ const hello = 'Drizzol UI'</code></pre>
         </section>
 
         <section class="theme-demo__section">
+            <h2>语义色三元组（浅底 / 罩层用）</h2>
+            <p class="theme-demo__hint">
+                写法 <code>rgba(var(--dz-&lt;名&gt;-rgb), &lt;alpha&gt;)</code>：最低支持 Chrome 86 无 <code>color-mix()</code>，
+                浅底、描边、hover 罩层都用三元组表达。<strong>改语义色时必须与 <code>--dz-&lt;名&gt;</code> 成对同步</strong>，否则浅底会停在旧色。
+            </p>
+            <ul class="theme-demo__list">
+                <li v-for="name in rgbVars" :key="name" class="theme-demo__list-item">
+                    <span class="theme-demo__swatch" :style="{ background: `rgba(var(${name}), 0.5)` }"></span>
+                    <code class="theme-demo__var-name">{{ name }}</code>
+                </li>
+            </ul>
+        </section>
+
+        <section class="theme-demo__section">
             <h2>阴影与遮罩</h2>
             <div class="theme-demo__grid theme-demo__grid--shadows">
                 <div
@@ -92,6 +106,12 @@ const semanticVars = [
 
 const shadowVars = [
     '--dz-shadow-sm', '--dz-shadow-md', '--dz-shadow-lg', '--dz-shadow-xl', '--dz-shadow-xxl',
+]
+
+/** 语义色 RGB 三元组（浅底/罩层用，见 README「浏览器兼容性」） */
+const rgbVars = [
+    '--dz-primary-rgb', '--dz-success-rgb', '--dz-warning-rgb', '--dz-danger-rgb',
+    '--dz-gray-7-rgb', '--dz-gray-9-rgb', '--dz-bg-rgb',
 ]
 </script>
 

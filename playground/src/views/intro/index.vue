@@ -32,7 +32,7 @@
                 <li><strong>运行时</strong>：Vue <code>≥ 3.5</code>。提示/通知/确认/抽屉均为库内自研，<strong>不依赖任何第三方 UI 库</strong>。</li>
                 <li><strong>可选</strong>：vue-router（<code>DMenu</code> 的链接能力，未装则回退纯点击项）。</li>
                 <li><strong>构建工具链</strong>：Node <code>≥ 20.19</code>（Vite 8 要求），随仓库 devDependencies 安装。</li>
-                <li><strong>浏览器</strong>：依赖 <code>color-mix()</code>、CSS 变量、IntersectionObserver——即现代常青浏览器（Chrome/Safari/Firefox/Edge 近两年版本）。</li>
+                <li><strong>浏览器</strong>：最低支持 <strong>Chrome 86</strong>（构建产物已声明 <code>build.cssTarget: 'chrome86'</code>，不依赖 <code>color-mix()</code> 等高于该基线的语法）。宿主自建构建同样需要声明，见 README「浏览器兼容性」。</li>
             </ul>
             <h2>内置第三方库与许可证</h2>
             <p>
