@@ -59,6 +59,10 @@ function startLeave() {
 }
 
 function close() {
+    // 幂等守卫：淡出途中重复 close（如上传通知 ✕ 确认放行后，宿主 catch 兜底再 close）
+    // 若不清 startLeave 排下的销毁定时器、startLeave 又因 leaving 早退，emit('destroy') 永不触发，
+    // 通知将以 opacity:0 永久占位，把后续通知顶下去
+    if (leaving.value) return
     if (timer) clearTimeout(timer)
     startLeave()
 }

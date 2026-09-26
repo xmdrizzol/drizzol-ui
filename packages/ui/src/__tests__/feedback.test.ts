@@ -103,6 +103,18 @@ describe('notification', () => {
     expect(beforeClose).not.toHaveBeenCalled()
     expect(document.querySelector('.d-notification')).toBeNull()
   })
+
+  it('close() 幂等：淡出途中重复 close 不留 opacity:0 占位', async () => {
+    const handle = DNotification({ title: 'x', message: 'm', duration: 0 })
+    await wait(30)
+    handle.close()
+    // 240ms 淡出未结束时二次 close（模拟宿主在 ✕ 确认放行后 catch 兜底再 close）
+    handle.close()
+    await wait(400)
+    // 若幂等被破坏，第二次 close 会清掉销毁定时器，节点以 opacity:0 永久占位
+    const leftover = document.querySelector('.d-notification') as HTMLElement | null
+    expect(leftover).toBeNull()
+  })
 })
 
 describe('confirm', () => {
