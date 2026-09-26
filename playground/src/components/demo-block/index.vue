@@ -5,7 +5,7 @@
             <p v-if="desc" class="demo-block__desc">{{ desc }}</p>
         </header>
 
-        <div class="demo-block__body">
+        <div class="demo-block__body" :class="{ 'demo-block__body--bare': bare }">
             <slot />
         </div>
 
@@ -30,10 +30,13 @@ const props = withDefaults(defineProps<{
     code?: string
     /** 语言标识；省略时按内容启发式判断（`<` 开头视为 vue，其余 ts） */
     language?: string
+    /** 去掉演示区外框：用于内容自带完整外观的区块（如 DCodeBlock 深色卡），避免盒套盒 */
+    bare?: boolean
 }>(), {
     desc: '',
     code: '',
     language: '',
+    bare: false,
 })
 
 /** 示例代码语言：模板片段按 vue、脚本片段按 ts 交给 Shiki（可显式覆盖） */
@@ -81,6 +84,13 @@ const resolvedLanguage = computed(() => {
             flex-direction: column;
             gap: 16px;
         }
+    }
+
+    // 无外框模式：内容自带完整外观（DCodeBlock 深色卡等）时不再套一层盒子
+    &__body--bare {
+        padding: 0;
+        border: none;
+        background: transparent;
     }
 
     &__details {

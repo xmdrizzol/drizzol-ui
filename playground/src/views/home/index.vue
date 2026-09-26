@@ -19,7 +19,7 @@
 
         <d-card class="home__usage">
             <h3>快速开始</h3>
-            <pre class="home__code"><code>{{ code }}</code></pre>
+            <d-code-block class="home__code" language="bash" :code="code" />
         <p class="home__note">
             左侧导航查看<strong>主题色板</strong>、<strong>工具函数</strong>、<strong>网络·文件·存储</strong>与各类<strong>组件</strong>示例；
             组件清单与开发约定见仓库 README 与 CLAUDE.md。
@@ -134,15 +134,8 @@ const code = [
     }
 
     &__code {
+        // 落在 DCodeBlock 根元素上：只调外边距，深色卡/头部/高亮随组件
         margin: 12px 0;
-        padding: 16px;
-        border-radius: 8px;
-        background: var(--dz-bg-secondary);
-        overflow-x: auto;
-        font-family: var(--dz-ff-mono);
-        font-size: 0.875rem;
-        line-height: 1.7;
-        color: var(--dz-text);
     }
 
     &__note {

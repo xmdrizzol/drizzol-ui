@@ -37,8 +37,7 @@
                     <li>行距节奏与正文一致</li>
                 </ul>
                 <blockquote>引用：半透明主色罩 + 左侧主色条（内容排版同款）。</blockquote>
-                <pre><code>// 深色代码块（#1e1e1e，与 shiki dark-plus 一致）
-const hello = 'Drizzol UI'</code></pre>
+                <d-code-block language="ts" :code="codeSample" />
                 <table>
                     <thead>
                         <tr><th>表头 th</th><th>斑马纹</th></tr>
@@ -113,6 +112,10 @@ const rgbVars = [
     '--dz-primary-rgb', '--dz-success-rgb', '--dz-warning-rgb', '--dz-danger-rgb',
     '--dz-gray-7-rgb', '--dz-gray-9-rgb', '--dz-bg-rgb',
 ]
+
+/** 排版基础区的代码块示例 */
+const codeSample = `// 深色代码块（#1e1e1e，与 shiki dark-plus 一致）
+const hello = 'Drizzol UI'`
 </script>
 
 <style scoped lang="scss">

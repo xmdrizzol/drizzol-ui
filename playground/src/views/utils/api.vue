@@ -9,21 +9,25 @@
         </header>
 
         <demo-block title="请求实例" anchor-id="request"
+            bare
             desc="默认 request 实例：响应拦截器已解包 res.data，非 2xx 统一 DMessage.error 报错、401 触发清理。">
             <d-code-block language="ts" copyable :code="requestDoc" />
         </demo-block>
 
         <demo-block title="运行时配置" anchor-id="configure"
+            bare
             desc="库构建后 import.meta.env 不存在，baseURL / 401 回调等一律运行时注入（宿主入口调用一次）。">
             <d-code-block language="ts" copyable :code="configureDoc" />
         </demo-block>
 
         <demo-block title="后端契约" anchor-id="contract"
+            bare
             desc="响应统一 { code, msg, data }，code === 200 为成功；不符时改 baseURL 或自行封装 request。">
             <d-code-block language="ts" copyable :code="contractDoc" />
         </demo-block>
 
         <demo-block title="文件上传" anchor-id="upload"
+            bare
             desc="uploadFile / uploadImage 对接文件接口，字段 File + CustomCategory，multipart 头交给浏览器补 boundary。">
             <d-code-block language="ts" copyable :code="uploadDoc" />
         </demo-block>
