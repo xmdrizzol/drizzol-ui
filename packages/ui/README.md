@@ -152,6 +152,7 @@ configureFileAccessPrefix('/api/general/file/access/')
 - **语义色成对维护**：源码里 `--dz-<名>-rgb` 三元组用 `rgb-triplet()` 从同一色板变量派生——改 `$light-*`/`$dark-*` 色板重新编译，浅底/描边/罩层**自动同步**。宿主**运行时覆盖 CSS 变量**时需成对覆盖（如 `--dz-success` 与 `--dz-success-rgb: 82, 196, 26`），因为 CSS 变量无法互相派生（Bootstrap/Tailwind 的三元组令牌同款要求）。
 - **两道自动护栏**：`npm test` 扫源码与构建配置（pre-commit 即拦），`npm run build` 末尾由 `scripts/check-css-baseline.mjs` 扫产物，命中 `inset` / range 媒体查询 / `color-mix` / scoped `:root` / 缺兜底的 `aspect-ratio` / 被引用却无定义的关键帧都直接构建失败。
 - **已知限制**：`d-video` 的 ArtPlayer 运行时注入样式自带 16 处 `inset:`（第三方代码，不经过本库构建），旧内核下播放器内部浮层（如网页全屏）可能偏位；视频容器比例已由本库修复。
+- 完整背景、根因、修复记录与**开发写法速查**（四个模板 + 禁写清单 + 颜色维护）见 [`docs/browser-support.md`](https://github.com/xmdrizzol/drizzol-ui/blob/main/docs/browser-support.md)。
 
 ## 贡献
 

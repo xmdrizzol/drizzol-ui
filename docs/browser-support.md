@@ -203,7 +203,7 @@ background: var(--dz-tag-primary-bg);
    })
    ```
 
-2. **宿主自己的同类写法也要处理**：`color-mix()` 只能用 `rgba()` 静态值替代（可参考本库的 `--dz-*-rgb` 三元组写法）；`aspect-ratio` 建议配 padding 兜底——本库已导出纯函数 `ratioToPaddingTop('16 / 9') → '56.25%'`，可直接复用：
+2. **宿主自己的同类写法也要处理**：`color-mix()` 只能用 `rgba()` 静态值替代（可参考本库的 `--dz-*-rgb` 三元组写法）；`aspect-ratio` 建议配 padding 兜底——本库已导出纯函数 `ratioToPaddingTop('16 / 9') → '56.25%'`，可直接复用。宿主自己的样式开发参照下文「十二、开发写法规范」执行：
 
    ```vue
    <div class="video" :style="{ '--ratio-pad': ratioToPaddingTop(ratio) ?? '' }">…</div>
@@ -237,3 +237,66 @@ grep -c "aspect-ratio" dist/style.css       # 1（带 padding 兜底）
 grep -ao "@keyframes" dist/style.css | wc -l # 22（13 全局 + 9 组件内在用，无重复副本）
 ```
 
+
+## 十二、开发写法规范（新增/修改样式必读）
+
+> 操作性速查：按顺序套下面的模板即可，不需要记住禁写清单的全部 rationale。护栏会兜底——`npm test` 扫源码与构建配置（pre-commit 即拦），`npm run build` 末尾扫产物；违规直接红灯，报错信息带替代写法。机制、根因与修复记录见上文各节。
+
+### 决策顺序：四个日常模板
+
+**1. 引颜色** —— 一律 `--dz-*` 变量，深浅主题自动跟随，禁止写死色值：
+
+```scss
+color: var(--dz-text);
+background: var(--dz-bg-secondary);
+border: 1px solid var(--dz-border);
+```
+
+**2. 半透明罩层** —— 仅限**本该透出内容**的装饰（标签浅底、遮罩、微光、代码块头部、引用块）：
+
+```scss
+background: rgba(var(--dz-primary-rgb), 0.12);
+```
+
+被引用的颜色必须已有 `-rgb` 三元组（现有 primary / success / warning / danger / gray-7 / gray-9 / bg / code-block-text / scrim-strong；新增见下文「颜色维护」）。
+
+**3. 不透明语义浅底 / 卡片底** —— 消息、通知、按钮这类**下面必须是实心的**面，用 mixin，不要写 `background: rgba(...)`（半透明会让卡片透出下层内容）：
+
+```scss
+// $fill 内部罩层强度、$line 描边强度（省略则不动描边）、$shadow 要保留的外阴影
+@include tint-on-bg(--dz-success-rgb, 0.1, 0.4, var(--dz-shadow-sm));
+```
+
+判断标准：这层颜色下面必须是实心的 → 模板 3；本来就该透出内容 → 模板 2。
+
+**4. 铺满定位与响应式**：
+
+```scss
+@include absolute(0, 0, 0, 0); // 铺满父级；禁止 inset: 0
+@include fixed(0, 0, 0, 0);
+@include mobile { … }          // 经典 max-width；禁止 (width <= 768px) range 语法
+```
+
+### 禁写清单（护栏会拦，报错带修复方向）
+
+| 禁写 | 替代 |
+| --- | --- |
+| `color-mix()` | 罩层 `rgba(var(--dz-*-rgb), α)`；不透明浅底 `tint-on-bg` |
+| `inset` 简写、逻辑属性（`margin-inline` 等） | `@include absolute()/fixed()`、物理方向属性 |
+| range 媒体查询 `(width <= …)` | `@include mobile` / 经典 `min-width` |
+| `:is()` / `:where()` / `:has()` | 展开选择器；父级状态用 Vue 响应式 class 绑定 |
+| `dvh/svh/lvh`、独立 `translate/rotate/scale` 属性 | `vh/vw`、`transform` |
+| 裸写 `aspect-ratio` | 参考 `d-video`：`aspect-ratio` + `::before` padding 兜底（`ratioToPaddingTop` 已导出可复用） |
+
+### 颜色维护
+
+- **SCSS 色板重编译**（改 `$light-*` / `$dark-*`）：`--dz-*-rgb` 经 `rgb-triplet()` 同源派生，重新编译自动同步，无需手改。
+- **运行时覆盖 CSS 变量**：必须成对覆盖 `--dz-<名>` 与 `--dz-<名>-rgb`（如 `--dz-success: #7c3aed;` + `--dz-success-rgb: 124, 58, 237;`）——CSS 变量无法互相派生（Bootstrap/Tailwind 三元组同款要求）；只改颜色不改三元组，浅底/描边会停在旧色。
+- **组件内派生变量成对翻转**：仿照 `d-button` 加类型色变量时，`--dz-btn-color` 与 `--dz-btn-rgb` 各变体一起写。
+- 与既有约定叠加：SCSS 写 px（postcss-pxtorem 自动换算，1px 保留）；JS 生成的尺寸走 `pxToRem()`。
+
+### 容差与已知限制
+
+- 可保留（丢了只少一层装饰，不写兜底）：`text-underline-offset`、`scrollbar-width` 等。
+- 第三方：ArtPlayer 运行时注入样式含 16 处 `inset:`（不经过本库构建），旧内核下播放器内部浮层（网页全屏等）可能偏位；宿主如需彻底修复可用 patch-package。
+- 基线上调时的退出路径：`build.cssTarget` 改高 → 禁写清单删对应条目 → （可选）`rgba()` 罩层渐进迁回 `color-mix()`。约束是租金不是房贷，无沉淀技术债。
