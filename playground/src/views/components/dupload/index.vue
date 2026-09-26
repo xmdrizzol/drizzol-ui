@@ -16,7 +16,7 @@
             </div>
         </demo-block>
 
-        <demo-block title="上传进度通知" anchor-id="notify" bare
+        <demo-block title="上传进度通知" anchor-id="notify"
             :code="notifyDoc">
             <template #desc>
                 <p class="demo-block__desc">
