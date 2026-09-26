@@ -15,6 +15,8 @@ export interface NotificationOptions {
     duration?: number
     /** 是否显示右上角关闭按钮，默认 true */
     showClose?: boolean
+    /** 关闭前拦截：仅头部 ✕ 触发（程序化 close() 不经过）；返回 false 或 Promise reject 阻止关闭 */
+    beforeClose?: () => boolean | Promise<boolean>
     /** 附加到根节点的自定义类 */
     customClass?: string
 }

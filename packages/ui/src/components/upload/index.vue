@@ -339,7 +339,7 @@ defineExpose({ openPicker, clearFile, fileInputRef })
 
 <!-- 上传进度通知样式（通知渲染在 body，需全局样式；mixin 由 vite additionalData 注入） -->
 <style lang="scss">
-// 正文：进度条 + 百分比 + 取消✕（仅传入 onCancel 时渲染）；标题行走 DNotification 默认头部
+// 正文：进度条 + 百分比（✕ 在标题行右侧，由 DNotification 的 showClose + beforeClose 提供）
 .d-upload-notify {
     display: flex;
     align-items: center;
@@ -372,21 +372,6 @@ defineExpose({ openPicker, clearFile, fileInputRef })
         font-variant-numeric: tabular-nums;
         min-width: 34px;
         text-align: right;
-    }
-
-    &__close {
-        flex-shrink: 0;
-        border: none;
-        background: none;
-        padding: 0 2px;
-        font-size: 16px;
-        line-height: 1;
-        color: var(--dz-text-l);
-        cursor: pointer;
-
-        &:hover {
-            color: var(--dz-text);
-        }
     }
 }
 </style>

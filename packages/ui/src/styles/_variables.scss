@@ -3,7 +3,8 @@
 /// 颜色 → "r, g, b" 三元组：--dz-*-rgb 令牌从色板变量同源派生，改色板重新编译即自动同步
 ///（宿主运行时覆盖 CSS 变量仍需成对覆盖 --dz-<名>-rgb，见 README「浏览器兼容性」）
 @function rgb-triplet($color) {
-  @return color.red($color), color.green($color), color.blue($color);
+  @return color.channel($color, 'red', $space: rgb), color.channel($color, 'green', $space: rgb),
+    color.channel($color, 'blue', $space: rgb);
 }
 
 /*

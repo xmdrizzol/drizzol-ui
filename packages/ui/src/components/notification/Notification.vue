@@ -3,7 +3,7 @@
         <div class="d-notification__header">
             <DIcon :name="iconMap[type]" class="d-notification__icon" size="1.05" />
             <span v-if="title" class="d-notification__title">{{ title }}</span>
-            <button v-if="showClose" class="d-notification__close" aria-label="关闭" @click="close">&times;</button>
+            <button v-if="showClose" class="d-notification__close" aria-label="关闭" @click="handleHeaderClose">&times;</button>
         </div>
         <div class="d-notification__body">
             <component v-if="isVNode(message)" :is="message" />
@@ -34,6 +34,8 @@ const props = withDefaults(defineProps<{
     duration?: number
     /** 是否显示右上角关闭按钮 */
     showClose?: boolean
+    /** 关闭前拦截：仅头部 ✕ 触发（程序化 close() 不经过）；返回 false 或 Promise reject 阻止关闭 */
+    beforeClose?: () => boolean | Promise<boolean>
     /** 附加到根节点的自定义类 */
     customClass?: string
 }>(), {
@@ -59,6 +61,21 @@ function startLeave() {
 function close() {
     if (timer) clearTimeout(timer)
     startLeave()
+}
+
+/** 头部 ✕：传了 beforeClose 先拦截（返回 false 或 reject 阻止关闭），否则直接关闭 */
+function handleHeaderClose() {
+    if (!props.beforeClose) {
+        close()
+        return
+    }
+    Promise.resolve(props.beforeClose())
+        .then((ok) => {
+            if (ok !== false) close()
+        })
+        .catch(() => {
+            // 拦截方内部失败（如确认框被取消）视为放弃关闭
+        })
 }
 
 onMounted(() => {

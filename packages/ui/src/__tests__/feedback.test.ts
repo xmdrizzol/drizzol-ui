@@ -59,6 +59,48 @@ describe('notification', () => {
     await wait(400)
     expect(document.querySelector('.my-notify')).toBeNull()
   })
+
+  it('beforeClose 返回 false 阻止关闭，返回 true 放行', async () => {
+    let calls = 0
+    const handle = DNotification({
+      title: '拦截测试',
+      message: 'm',
+      duration: 0,
+      beforeClose: () => (calls++, calls < 2 ? false : true),
+    })
+    await wait(30)
+    const closeBtn = document.querySelector('.d-notification__close') as HTMLButtonElement
+    closeBtn.click()
+    await wait(60)
+    expect(calls).toBe(1)
+    expect(document.querySelector('.d-notification')).not.toBeNull() // 被拦截
+    closeBtn.click()
+    await wait(400)
+    expect(document.querySelector('.d-notification')).toBeNull() // 放行
+  })
+
+  it('beforeClose 为异步 Promise：resolve 后关闭', async () => {
+    const handle = DNotification({
+      title: '异步拦截',
+      message: 'm',
+      duration: 0,
+      beforeClose: () => wait(50).then(() => true),
+    })
+    await wait(30)
+    ;(document.querySelector('.d-notification__close') as HTMLButtonElement).click()
+    await wait(400)
+    expect(document.querySelector('.d-notification')).toBeNull()
+  })
+
+  it('程序化 close() 不经过 beforeClose', async () => {
+    const beforeClose = vi.fn(() => false)
+    const handle = DNotification({ title: 'x', message: 'm', duration: 0, beforeClose })
+    await wait(30)
+    handle.close()
+    await wait(400)
+    expect(beforeClose).not.toHaveBeenCalled()
+    expect(document.querySelector('.d-notification')).toBeNull()
+  })
 })
 
 describe('confirm', () => {
@@ -231,16 +273,19 @@ describe('upload-notify', () => {
     control.close()
   })
 
-  it('未传 onCancel 时不渲染取消按钮（纯进度展示）', () => {
+  it('未传 onCancel：头部 ✕ 直接关闭，不走确认框', async () => {
     const control = showUploadNotification({ title: 'x' })
-    expect(document.querySelector('.d-upload-notify__close')).toBeNull()
-    control.close()
+    const closeBtn = document.querySelector('.d-upload-notify-root .d-notification__close') as HTMLButtonElement
+    expect(closeBtn).toBeTruthy()
+    closeBtn.click()
+    await wait(400)
+    expect(document.querySelector('.d-upload-notify-root')).toBeNull()
   })
 
-  it('点 ✕ 先弹确认框，确认后触发 onCancel 并关闭通知', async () => {
+  it('点标题行 ✕ 先弹确认框，确认后触发 onCancel 并关闭通知', async () => {
     const onCancel = vi.fn()
     const control = showUploadNotification({ title: 'x', onCancel })
-    ;(document.querySelector('.d-upload-notify__close') as HTMLButtonElement).click()
+    ;(document.querySelector('.d-upload-notify-root .d-notification__close') as HTMLButtonElement).click()
     await wait(60)
     const confirmBtn = [...document.querySelectorAll('.d-modal__footer button')]
       .find(b => b.textContent?.trim() === '取消上传')
