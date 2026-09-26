@@ -91,7 +91,7 @@ import { DCard, DButton, message, applyTheme } from '@xmdrizzol/drizzol-ui'
 | 提示 | `DMessage`（顶部 toast：success/error/warning/info）、`DNotification`（右上角通知，支持 VNode 正文）、`DConfirm`（基于 DModal 的命令式确认框） |
 | 主题 | `Theme`、`applyTheme`、`initTheme`、`watchSystemTheme`、`isSystemDarkMode`、`THEME_KEY` |
 | 文件 | `getFileAccessUrl`、`resolveAccessUrl`（宽容解析：类型前缀拆解/纯文件名拼接）、`configureFileAccessPrefix`、`configureFileAccessResolver`（完全接管 src → URL）、`configureFileApi`、`uploadFile`、`uploadImage` |
-| 通用 | `pxToRem`、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
+| 通用 | `pxToRem`、`ratioToPaddingTop`（宽高比 → `padding-top` 百分比，`aspect-ratio` 的旧内核兜底）、`formatDate`、`debounce`、`throttle`、cookie（`get/setCookie` 原始串、`get/setJSONCookie` 对象、`get/setUserCookie` userInfo 薄封装、remove 系列） |
 | 组合式 | `useClickOutside`、`useIsMobile`、`useInView`、`useScrollListener` |
 
 ### 请求配置示例
@@ -132,6 +132,25 @@ configureFileAccessPrefix('/api/general/file/access/')
 @use '@xmdrizzol/drizzol-ui/styles/_mixin.scss' as *;
 // vite 可选：与库一致的 additionalData 全局注入
 ```
+
+### 浏览器兼容性（最低 Chrome 86）
+
+产物基线是**最低支持 Chrome 86**，靠"构建声明 + 源码约定 + 产物断言"三层保证：
+
+- **构建声明**：本库 `vite.config.ts` 里 `build.cssTarget: 'chrome86'`。少了它 lightningcss 会按 Vite 默认目标（`baseline-widely-available`，即 chrome111）"现代化"CSS：把 `top/right/bottom/left` 合并成 `inset`、把经典媒体查询改写成 range 语法，旧内核下遮罩/弹窗错位、移动端适配整条失效。
+- **宿主自建构建同样要声明（容易漏）**：宿主打包时会把 `dist/style.css` 当普通依赖 CSS 重新过一遍压缩，用的是宿主自己的 `cssTarget`；不声明就会把这份产物重新压回现代语法，修复被静默抵消。
+
+  ```ts
+  // 宿主 vite.config.ts
+  export default defineConfig({
+    build: { cssTarget: 'chrome86' }, // 与库保持一致
+  })
+  ```
+
+- **源码约定**：不得使用高于基线的语法——`color-mix()`（改用 `rgba(var(--dz-*-rgb), <alpha>)`）、`inset` 简写（用 `@include absolute()/fixed()`）、range 语法媒体查询、逻辑属性（`margin-inline` 等）、`:is()/:where()/:has()`、`dvh/svh/lvh`、独立 `translate/rotate/scale` 属性。`aspect-ratio` 可以用，但必须配 padding 兜底（见 `d-video` 与 `ratioToPaddingTop`）；`text-underline-offset`、`scrollbar-width` 这类"旧内核丢弃后只少一层装饰"的属性属可容忍降级。
+- **语义色成对维护**：`--dz-<名>` 与 `--dz-<名>-rgb`（逗号分隔三元组，如 `--dz-success-rgb: 82, 196, 26`）必须同步修改——浅底、描边、罩层用的都是三元组版本。
+- **两道自动护栏**：`npm test` 扫源码与构建配置（pre-commit 即拦），`npm run build` 末尾由 `scripts/check-css-baseline.mjs` 扫产物，命中 `inset` / range 媒体查询 / `color-mix` / scoped `:root` / 缺兜底的 `aspect-ratio` / 被引用却无定义的关键帧都直接构建失败。
+- **已知限制**：`d-video` 的 ArtPlayer 运行时注入样式自带 16 处 `inset:`（第三方代码，不经过本库构建），旧内核下播放器内部浮层（如网页全屏）可能偏位；视频容器比例已由本库修复。
 
 ## 贡献
 

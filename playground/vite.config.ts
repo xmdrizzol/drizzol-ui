@@ -28,6 +28,11 @@ export default defineConfig({
       }
     }
   },
+  build: {
+    // 与库构建一致的产物基线：最低支持 Chrome 86（见库 README「浏览器兼容性」）。
+    // 不声明的话 lightningcss 压缩器会按 Vite 默认目标把 CSS"现代化"，旧内核下弹窗/底色会失效。
+    cssTarget: 'chrome86'
+  },
   server: {
     host: '0.0.0.0',
     port: 5177

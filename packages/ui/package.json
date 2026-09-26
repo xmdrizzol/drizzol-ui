@@ -45,7 +45,7 @@
     "**/*.scss"
   ],
   "scripts": {
-    "build": "vite build && vue-tsc -p tsconfig.build.json --emitDeclarationOnly && node scripts/copy-styles.mjs",
+    "build": "vite build && vue-tsc -p tsconfig.build.json --emitDeclarationOnly && node scripts/copy-styles.mjs && node scripts/css-dedupe.mjs dist/style.css && node scripts/check-css-baseline.mjs",
     "test": "vitest run",
     "test:watch": "vitest"
   },
