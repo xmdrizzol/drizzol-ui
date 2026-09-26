@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@xmdrizzol/drizzol-ui": "*",
+    "shiki": "^4.4.3",
     "vue": "^3.5.32",
     "vue-router": "^5.0.6"
   },
