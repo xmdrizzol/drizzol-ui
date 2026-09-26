@@ -17,7 +17,7 @@
         </demo-block>
 
         <demo-block title="上传进度通知" anchor-id="notify"
-            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则不出 ✕（纯进度展示，由调用方 close() 收尾）。"
+            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则不出 ✕（纯进度展示，由调用方 close() 收尾）。可连续点击，多个通知独立堆叠。"
             :code="notifyDoc">
             <div class="component-page__row">
                 <d-button type="primary" @click="simulate(false)">模拟上传（可取消）</d-button>
@@ -34,21 +34,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import DemoBlock from '@/components/demo-block'
-import { showUploadNotification, type UploadNotifyControl } from '@xmdrizzol/drizzol-ui'
+import { showUploadNotification } from '@xmdrizzol/drizzol-ui'
 
 const uploadRef = ref('')
 
-// 进度模拟：随机步进到 100；确认取消后停止步进
-let control: UploadNotifyControl | null = null
-let timer: ReturnType<typeof setInterval> | undefined
-
+// 进度模拟：每次调用生成一个独立通知（多个可堆叠），各自持有计时器与句柄；
+// 确认取消后停止自己的计时器；到 100% 由调用方 close() 收尾
 function simulate(bare: boolean) {
-    control?.close()
-    if (timer) clearInterval(timer)
+    let timer: ReturnType<typeof setInterval> | undefined
     let percent = 0
-    control = showUploadNotification({
+    const control = showUploadNotification({
         title: 'campus-photo-2026.zip',
-        // 不传 onCancel：纯进度展示（无 ✕）
+        // 不传 onCancel：不出 ✕（纯进度展示）
         ...(bare ? {} : {
             onCancel: () => {
                 if (timer) clearInterval(timer)
@@ -57,11 +54,11 @@ function simulate(bare: boolean) {
     })
     timer = setInterval(() => {
         percent = Math.min(100, percent + Math.ceil(Math.random() * 12))
-        control?.update(percent)
-        if (percent >= 100 && timer) {
+        control.update(percent)
+        if (percent >= 100) {
             clearInterval(timer)
             // 上传完成由调用方 close()（纯进度模式没有 ✕，更依赖这一步收尾）
-            setTimeout(() => control?.close(), 500)
+            setTimeout(() => control.close(), 500)
         }
     }, 260)
 }
