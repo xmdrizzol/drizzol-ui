@@ -1,6 +1,6 @@
 {
   "name": "@xmdrizzol/drizzol-ui",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Drizzol UI - Vue 3 组件库（组件、工具、样式、主题）",
   "keywords": [
     "vue",

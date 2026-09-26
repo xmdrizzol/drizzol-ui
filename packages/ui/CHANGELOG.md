@@ -1,5 +1,11 @@
 # @xmdrizzol/drizzol-ui
 
+## 0.7.1
+
+### Patch Changes
+
+- 修复 DNotification `close()` 非幂等导致的幽灵通知占位：淡出途中（240ms 内）重复 `close()` 会清掉 `startLeave` 排下的销毁定时器、而 `startLeave` 又因 `leaving` 早退不再补，通知以 `opacity: 0` 永久留在容器中，把后续通知顶下去。典型触发：上传通知 ✕ 确认取消后，上传被 abort、宿主在 catch 里兜底再 `close()` 一次（campus-forum 实测复现）。现在 `close()` 在淡出期间为安全 no-op，并补回归测试。
+
 ## 0.7.0
 
 ### Minor Changes
