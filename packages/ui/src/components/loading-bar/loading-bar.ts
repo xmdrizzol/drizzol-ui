@@ -32,6 +32,10 @@ function ensureMounted() {
     barEl = document.createElement('div')
     barEl.className = 'd-loading-bar'
     barEl.style.display = 'none'
+    // 默认外观必须在挂载时落地：路由钩子调用的是无参 start()，
+    // 若仅在传 options 时才设高度，条会因 height:auto + 子元素 height:100% 坍缩为 0 高不可见
+    barEl.style.height = pxToRem(2)
+    barEl.style.background = 'var(--dz-primary)'
     innerEl = document.createElement('div')
     innerEl.className = 'd-loading-bar__inner'
     innerEl.style.width = '0%'

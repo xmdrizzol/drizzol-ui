@@ -310,6 +310,8 @@ describe('loading-bar', () => {
     // 自增封顶 90%，不会假完成
     expect(parseFloat(inner.style.width)).toBeGreaterThan(0)
     expect(parseFloat(inner.style.width)).toBeLessThanOrEqual(90)
+    // 默认高度必须在挂载时落地：否则 height:auto + 子元素 100% 坍缩为 0，条不可见
+    expect(el.style.height).toBe('0.125rem')
     DLoadingBar.done()
     await wait(800)
     expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
