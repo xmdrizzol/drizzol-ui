@@ -11,22 +11,36 @@
 
         <details v-if="code" class="demo-block__details">
             <summary>示例代码</summary>
-            <pre class="demo-block__code"><code>{{ code }}</code></pre>
+            <d-code-block class="demo-block__code" :code="code" :language="resolvedLanguage" />
         </details>
     </section>
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import { computed } from 'vue'
+
+const props = withDefaults(defineProps<{
     /** 组件标题，如 "DCard 卡片" */
     title: string
     /** 锚点 id（供侧边导航定位） */
     anchorId: string
     /** 一句话说明 */
     desc?: string
-    /** 示例代码（可展开查看） */
+    /** 示例代码（可展开查看，经 DCodeBlock 渲染：Shiki 高亮 + 复制按钮） */
     code?: string
-}>()
+    /** 语言标识；省略时按内容启发式判断（`<` 开头视为 vue，其余 ts） */
+    language?: string
+}>(), {
+    desc: '',
+    code: '',
+    language: '',
+})
+
+/** 示例代码语言：模板片段按 vue、脚本片段按 ts 交给 Shiki（可显式覆盖） */
+const resolvedLanguage = computed(() => {
+    if (props.language) return props.language
+    return /^\s*</.test(props.code) ? 'vue' : 'ts'
+})
 </script>
 
 <style scoped lang="scss">
@@ -85,16 +99,8 @@ defineProps<{
     }
 
     &__code {
+        // 落在 DCodeBlock 根元素上：只覆盖它自带的下外边距，其余样式（深色卡、头部、复制）随组件
         margin: 0;
-        padding: 16px;
-        border-radius: 8px;
-        background: var(--dz-bg);
-        border: 1px solid var(--dz-border);
-        overflow-x: auto;
-        font-family: var(--dz-ff-mono);
-        font-size: 0.8125rem;
-        line-height: 1.7;
-        color: var(--dz-text);
     }
 }
 </style>
