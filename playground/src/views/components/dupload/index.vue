@@ -16,17 +16,21 @@
             </div>
         </demo-block>
 
-        <demo-block title="上传进度通知" anchor-id="notify"
-            desc="showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则不出 ✕（纯进度展示，由调用方 close() 收尾）。可连续点击，多个通知独立堆叠。"
+        <demo-block title="上传进度通知" anchor-id="notify" bare
             :code="notifyDoc">
+            <template #desc>
+                <p class="demo-block__desc">
+                    showUploadNotification 可独立于 DUpload 使用（自行封装上传逻辑/直传场景时复用）：标题行走通知默认头部，
+                    正文为进度条 + 百分比；点 ✕ 先确认再触发 onCancel；不传 onCancel 则不出 ✕（纯进度展示，由调用方
+                    <code>close()</code> 收尾）。可连续点击，多个通知独立堆叠。实现基于 DNotification 的 VNode 正文，
+                    机制与手写方式见
+                    <router-link to="/components/dnotification">DNotification 演示页 · VNode 正文</router-link>。
+                </p>
+            </template>
             <div class="component-page__row">
                 <d-button type="primary" @click="simulate(false)">模拟上传（可取消）</d-button>
                 <d-button @click="simulate(true)">纯进度展示（无取消）</d-button>
             </div>
-            <p class="component-page__echo">
-                实现基于 DNotification 的 VNode 正文（机制与手写方式见
-                <router-link to="/components/dnotification">DNotification 演示页 · VNode 正文</router-link>）。
-            </p>
         </demo-block>
     </div>
 </template>

@@ -18,7 +18,6 @@ DNotification({ title: '提示', message: '有一条新消息', type: 'info' })"
         </demo-block>
 
         <demo-block title="VNode 正文（上传进度）" anchor-id="vnode"
-            desc="message 传渲染函数组件，内部读取响应式进度实时重渲染；标题行走通知默认头部，正文只放进度条；走完自动调 close()。"
             code="const progress = ref(0)
 const handle = DNotification({
   title: '文件上传',
@@ -28,12 +27,15 @@ const handle = DNotification({
 })
 // 上传完成后
 handle.close()">
-            <div class="component-page__row">
-                <d-button type="primary" @click="showProgress">模拟上传通知</d-button>
-                <p class="component-page__echo">
-                    要开箱即用的同款效果（含 ✕ 取消确认），直接用
+            <template #desc>
+                <p class="demo-block__desc">
+                    message 传渲染函数组件，内部读取响应式进度实时重渲染；标题行走通知默认头部，正文只放进度条；
+                    走完自动调 <code>close()</code>。要开箱即用的同款效果（含 ✕ 取消确认），直接用
                     <router-link to="/components/dupload">showUploadNotification</router-link>（见 DUpload 演示页）。
                 </p>
+            </template>
+            <div class="component-page__row">
+                <d-button type="primary" @click="showProgress">模拟上传通知</d-button>
             </div>
         </demo-block>
     </div>

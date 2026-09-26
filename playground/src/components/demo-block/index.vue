@@ -2,7 +2,10 @@
     <section class="demo-block" :id="anchorId">
         <header class="demo-block__header">
             <h2 class="demo-block__title">{{ title }}</h2>
-            <p v-if="desc" class="demo-block__desc">{{ desc }}</p>
+            <!-- #desc 插槽：说明里需要放链接等富文本时用（覆盖 desc prop） -->
+            <slot name="desc">
+                <p v-if="desc" class="demo-block__desc">{{ desc }}</p>
+            </slot>
         </header>
 
         <div class="demo-block__body" :class="{ 'demo-block__body--bare': bare }">
@@ -53,6 +56,12 @@ const resolvedLanguage = computed(() => {
 
     &__header {
         margin-bottom: 12px;
+
+        // 插槽传入的说明段落（作用域在父页面，需 v-slotted 才能吃到本组件的排版）
+        :slotted(.demo-block__desc) {
+            margin: 0;
+            font-size: 0.875rem;
+        }
     }
 
     &__title {
