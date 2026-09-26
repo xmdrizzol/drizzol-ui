@@ -135,24 +135,18 @@ configureFileAccessPrefix('/api/general/file/access/')
 
 ### 浏览器兼容性（最低 Chrome 86）
 
-产物基线是**最低支持 Chrome 86**，靠"构建声明 + 源码约定 + 产物断言"三层保证：
+产物基线为**最低支持 Chrome 86**：源码不使用高于该基线的 CSS 语法，构建声明 `build.cssTarget: 'chrome86'`（否则 Vite 8 默认目标会让压缩器产出旧内核无法解析的 `inset`、range 媒体查询等），并以 `npm test` 扫源码 + `npm run build` 末尾扫产物的双护栏防回归。
 
-- **构建声明**：本库 `vite.config.ts` 里 `build.cssTarget: 'chrome86'`。少了它 lightningcss 会按 Vite 默认目标（`baseline-widely-available`，即 chrome111）"现代化"CSS：把 `top/right/bottom/left` 合并成 `inset`、把经典媒体查询改写成 range 语法，旧内核下遮罩/弹窗错位、移动端适配整条失效。
-- **宿主自建构建同样要声明（容易漏）**：宿主打包时会把 `dist/style.css` 当普通依赖 CSS 重新过一遍压缩，用的是宿主自己的 `cssTarget`；不声明就会把这份产物重新压回现代语法，修复被静默抵消。
+**宿主自建构建同样要声明**，否则打包时会把库产物重新压缩回现代语法、静默抵消兼容性：
 
-  ```ts
-  // 宿主 vite.config.ts
-  export default defineConfig({
-    build: { cssTarget: 'chrome86' }, // 与库保持一致
-  })
-  ```
+```ts
+// 宿主 vite.config.ts
+export default defineConfig({
+  build: { cssTarget: 'chrome86' }, // 与库保持一致
+})
+```
 
-- **源码约定**：不得使用高于基线的语法——`color-mix()`、`inset` 简写（用 `@include absolute()/fixed()`）、range 语法媒体查询、逻辑属性（`margin-inline` 等）、`:is()/:where()/:has()`、`dvh/svh/lvh`、独立 `translate/rotate/scale` 属性。`aspect-ratio` 可以用，但必须配 padding 兜底（见 `d-video` 与 `ratioToPaddingTop`）；`text-underline-offset`、`scrollbar-width` 这类"旧内核丢弃后只少一层装饰"的属性属可容忍降级。
-- **浅底必须是不透明合成**：`color-mix(X p%, var(--dz-bg))` 的结果是**不透明**色，替代写法不能直接用 `background: rgba(X, p)`（那是半透明罩层，消息/通知浮在任意内容之上时会透出下层）。浅底统一用 `@include tint-on-bg(--dz-x-rgb, $fill, $line, $shadow)`（不透明底色 + inset 罩层），文字色之外的描边同样是不透明合成。只有**原本就半透明**的罩层（`d-tag` 底色、代码块头部、引用块、骨架屏微光、`d-video` 遮罩）才继续用 `rgba(var(--dz-*-rgb), <alpha>)`。
-- **语义色成对维护**：源码里 `--dz-<名>-rgb` 三元组用 `rgb-triplet()` 从同一色板变量派生——改 `$light-*`/`$dark-*` 色板重新编译，浅底/描边/罩层**自动同步**。宿主**运行时覆盖 CSS 变量**时需成对覆盖（如 `--dz-success` 与 `--dz-success-rgb: 82, 196, 26`），因为 CSS 变量无法互相派生（Bootstrap/Tailwind 的三元组令牌同款要求）。
-- **两道自动护栏**：`npm test` 扫源码与构建配置（pre-commit 即拦），`npm run build` 末尾由 `scripts/check-css-baseline.mjs` 扫产物，命中 `inset` / range 媒体查询 / `color-mix` / scoped `:root` / 缺兜底的 `aspect-ratio` / 被引用却无定义的关键帧都直接构建失败。
-- **已知限制**：`d-video` 的 ArtPlayer 运行时注入样式自带 16 处 `inset:`（第三方代码，不经过本库构建），旧内核下播放器内部浮层（如网页全屏）可能偏位；视频容器比例已由本库修复。
-- 完整背景、根因、修复记录与**开发写法速查**（四个模板 + 禁写清单 + 颜色维护）见 [`docs/browser-support.md`](https://github.com/xmdrizzol/drizzol-ui/blob/main/docs/browser-support.md)。
+写法规范（四个模板 + 禁写清单 + 语义色成对维护）、修复记录与宿主侧清单详见 [`docs/browser-support.md`](https://github.com/xmdrizzol/drizzol-ui/blob/main/docs/browser-support.md)。
 
 ## 贡献
 

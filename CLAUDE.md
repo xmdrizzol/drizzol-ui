@@ -6,7 +6,7 @@
 
 - `packages/ui/` — `@xmdrizzol/drizzol-ui` 核心库（组件 + 工具 + 样式 + 类型），唯一发布包
 - `playground/` — 演示站（npm workspace，`vite` alias 直接消费库源码）
-- `docs/PLUGIN.md` — 插件包开发规范；`docs/browser-support.md` — 浏览器兼容性需求与修复记录
+- `docs/PLUGIN.md` — 插件包开发规范；`docs/browser-support.md` — 浏览器兼容性说明（基线与机制、修复记录、宿主侧清单、开发写法规范）
 - `.changeset/` — changesets 版本管理
 
 ## 常用命令
