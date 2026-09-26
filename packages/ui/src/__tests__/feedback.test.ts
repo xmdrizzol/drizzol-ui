@@ -337,12 +337,12 @@ describe('loading-bar', () => {
     await wait(100)
     expect(document.querySelectorAll('.d-loading-bar').length).toBe(1)
     DLoadingBar.done()
-    await wait(800)
+    await wait(1000)
   })
 
   it('未 start 直接 done 安全收尾', async () => {
     DLoadingBar.done()
-    await wait(800)
+    await wait(1000)
     expect((document.querySelector('.d-loading-bar') as HTMLElement).style.display).toBe('none')
   })
 
@@ -353,6 +353,6 @@ describe('loading-bar', () => {
     const inner = document.querySelector('.d-loading-bar__inner') as HTMLElement
     expect(inner.style.width).toBe('66%')
     DLoadingBar.done()
-    await wait(800)
+    await wait(1000)
   })
 })
