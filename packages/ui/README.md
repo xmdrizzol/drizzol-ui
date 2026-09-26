@@ -63,7 +63,7 @@ import { DCard, DButton, message, applyTheme } from '@xmdrizzol/drizzol-ui'
 | `DBadge` | 角标（数值截断 max+、红点、零值/隐藏策略） |
 | `DSkeleton` | 骨架屏（rows/title/avatar，流光动画） |
 | `DEmpty` | 空状态（占位图标 + 描述 + 操作区插槽） |
-| `DCodeBlock` | 代码块（语言标识 + 复制按钮，深色高亮风格） |
+| `DCodeBlock` | 代码块承载壳（语言标识 + 复制按钮 + 移动端横滚，恒定深色与正文代码同语言）；不做高亮——纯文本直接传 `code`，或用任意高亮库（Shiki / Prism 等）生成 HTML 经默认插槽传入 |
 | `DIcon` / `DIconSprite` | 图标（内联 53 个 symbol 雪碧图，源自 [Lucide](https://lucide.dev) ISC 许可，含 4 个 `*-fill` 填充版与状态图标（circle-check/circle-alert 等）；根节点渲染一次 sprite） |
 | `DCard` | 卡片（`is-hover` 悬浮） |
 | `DButton` | 按钮（type 六色 default/primary/success/warning/danger/info + link/round/plain/block/small，支持图标插槽） |
